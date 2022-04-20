@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.1.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"liaorj.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.11.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="红日安全代码审计学习项目地址： https:&#x2F;&#x2F;github.com&#x2F;hongriSec&#x2F;PHP-Audit-Labs# 学习就完事了">
+<meta property="og:type" content="article">
+<meta property="og:title" content="红日安全代码审计学习(一)">
+<meta property="og:url" content="https://liaorj.github.io/2022/04/20/%E7%BA%A2%E6%97%A5%E5%AE%89%E5%85%A8%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E5%AD%A6%E4%B9%A0-%E4%B8%80/index.html">
+<meta property="og:site_name" content="LiAoRJ的成长记录">
+<meta property="og:description" content="红日安全代码审计学习项目地址： https:&#x2F;&#x2F;github.com&#x2F;hongriSec&#x2F;PHP-Audit-Labs# 学习就完事了">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204202347838.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204202354607.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204202355795.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204202356483.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204210028203.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204210103549.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204210034481.png">
+<meta property="article:published_time" content="2022-04-20T09:56:46.000Z">
+<meta property="article:modified_time" content="2022-04-20T17:35:23.186Z">
+<meta property="article:author" content="LiAoRJ">
+<meta property="article:tag" content="代码审计">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204202347838.png">
+
+
+<link rel="canonical" href="https://liaorj.github.io/2022/04/20/%E7%BA%A2%E6%97%A5%E5%AE%89%E5%85%A8%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E5%AD%A6%E4%B9%A0-%E4%B8%80/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://liaorj.github.io/2022/04/20/%E7%BA%A2%E6%97%A5%E5%AE%89%E5%85%A8%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E5%AD%A6%E4%B9%A0-%E4%B8%80/","path":"2022/04/20/红日安全代码审计学习-一/","title":"红日安全代码审计学习(一)"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>红日安全代码审计学习(一) | LiAoRJ的成长记录</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">LiAoRJ的成长记录</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录一下吧</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">4</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">5</span></a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BA%A2%E6%97%A5%E5%AE%89%E5%85%A8%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E5%AD%A6%E4%B9%A0"><span class="nav-text">红日安全代码审计学习</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Part1"><span class="nav-text">Part1</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#in-array%E5%87%BD%E6%95%B0%E7%BC%BA%E9%99%B7"><span class="nav-text">in_array函数缺陷</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%A9%E7%94%A8%E5%9C%BA%E6%99%AF%EF%BC%9A"><span class="nav-text">利用场景：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%AE%E5%A4%8D%E5%BB%BA%E8%AE%AE%EF%BC%9A"><span class="nav-text">修复建议：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#filter-var%E5%87%BD%E6%95%B0%E7%BC%BA%E9%99%B7"><span class="nav-text">filter_var函数缺陷</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%A9%E7%94%A8%E5%9C%BA%E6%99%AF%EF%BC%9A-1"><span class="nav-text">利用场景：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%AE%E5%A4%8D%E5%BB%BA%E8%AE%AE%EF%BC%9A-1"><span class="nav-text">修复建议：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B%E5%8C%96%E4%BB%BB%E6%84%8F%E5%AF%B9%E8%B1%A1%E6%BC%8F%E6%B4%9E"><span class="nav-text">实例化任意对象漏洞</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="LiAoRJ"
+      src="/images/touxiang.jpg">
+  <p class="site-author-name" itemprop="name">LiAoRJ</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/LiAoRJ" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;LiAoRJ" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liaorj.github.io/2022/04/20/%E7%BA%A2%E6%97%A5%E5%AE%89%E5%85%A8%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E5%AD%A6%E4%B9%A0-%E4%B8%80/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/touxiang.jpg">
+      <meta itemprop="name" content="LiAoRJ">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LiAoRJ的成长记录">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="红日安全代码审计学习(一) | LiAoRJ的成长记录">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          红日安全代码审计学习(一)
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-04-20 17:56:46" itemprop="dateCreated datePublished" datetime="2022-04-20T17:56:46+08:00">2022-04-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-04-21 01:35:23" itemprop="dateModified" datetime="2022-04-21T01:35:23+08:00">2022-04-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" itemprop="url" rel="index"><span itemprop="name">代码审计</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="红日安全代码审计学习"><a href="#红日安全代码审计学习" class="headerlink" title="红日安全代码审计学习"></a>红日安全代码审计学习</h1><p>项目地址：</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/hongriSec/PHP-Audit-Labs#">https://github.com/hongriSec/PHP-Audit-Labs#</a></p>
+<p>学习就完事了</p>
+<span id="more"></span>
+
+
+<h2 id="Part1"><a href="#Part1" class="headerlink" title="Part1"></a>Part1</h2><h3 id="in-array函数缺陷"><a href="#in-array函数缺陷" class="headerlink" title="in_array函数缺陷"></a><strong>in_array函数缺陷</strong></h3><p>github地址：<a target="_blank" rel="noopener" href="https://github.com/hongriSec/PHP-Audit-Labs/blob/master/Part1/Day1/files/README.md">in_array函数缺陷</a></p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="http://php.net/manual/zh/function.in-array.php"> <strong>in_array</strong> </a>：(PHP 4, PHP 5, PHP 7)</p>
+<p><strong>功能</strong> ：检查数组中是否存在某个值</p>
+<p><strong>定义</strong> ： <code>bool in_array ( mixed $needle , array $haystack [, bool $strict = FALSE ] )</code></p>
+<p>在 <strong>$haystack</strong> 中搜索 <strong>$needle</strong> ，如果第三个参数 <strong>$strict</strong> 的值为 <strong>TRUE</strong> ，则 <strong>in_array()</strong> 函数会进行强检查，检查 <strong>$needle</strong> 的类型是否和 <strong>$haystack</strong> 中的相同。如果找到 <strong>$haystack</strong> ，则返回 <strong>TRUE</strong>，否则返回 <strong>FALSE</strong>。</p>
+</blockquote>
+<p>in_array()第三个参数未设置为true时，是弱匹配。</p>
+<figure class="highlight basic"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">7</span><span class="keyword">shell</span>.php </span><br></pre></td></tr></table></figure>
+
+<p>&#x3D;&#x3D; </p>
+<figure class="highlight basic"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">7 </span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">1</span>,<span class="number">1</span> and if(ascii(substr((select database()),<span class="number">1</span>,<span class="number">1</span>))=<span class="number">112</span>,<span class="number">1</span>,sleep(<span class="number">3</span>)));#</span><br></pre></td></tr></table></figure>
+
+<p>&#x3D;&#x3D; </p>
+<figure class="highlight basic"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">1 </span> </span><br></pre></td></tr></table></figure>
+
+<h4 id="利用场景："><a href="#利用场景：" class="headerlink" title="利用场景："></a>利用场景：</h4><p>文件上传、SQL注入白名单绕过</p>
+<h4 id="修复建议："><a href="#修复建议：" class="headerlink" title="修复建议："></a>修复建议：</h4><p>1、第三个参数设置为 <strong>true</strong></p>
+<p>2、使用正则匹配来处理变量</p>
+<h3 id="filter-var函数缺陷"><a href="#filter-var函数缺陷" class="headerlink" title="filter_var函数缺陷"></a><strong>filter_var函数缺陷</strong></h3><p>github地址：<a target="_blank" rel="noopener" href="https://github.com/hongriSec/PHP-Audit-Labs/blob/master/Part1/Day2/files/README.md">filter_var函数缺陷</a></p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="http://php.net/manual/zh/function.filter-var.php"> <strong>filter_var</strong> </a>： (PHP 5 &gt;&#x3D; 5.2.0, PHP 7)</p>
+<p><strong>功能</strong> ：使用特定的过滤器过滤一个变量</p>
+<p><strong>定义</strong> ：<a target="_blank" rel="noopener" href="http://php.net/manual/zh/language.pseudo-types.php#language.types.mixed">mixed</a> <strong>filter_var</strong> ( <a target="_blank" rel="noopener" href="http://php.net/manual/zh/language.pseudo-types.php#language.types.mixed">mixed</a> <code>$variable</code> [, int <code>$filter</code> &#x3D; FILTER_DEFAULT [, <a target="_blank" rel="noopener" href="http://php.net/manual/zh/language.pseudo-types.php#language.types.mixed">mixed</a> <code>$options</code> ]] )</p>
+</blockquote>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$url = filter<span class="constructor">_var($<span class="params">_GET</span>[&#x27;<span class="params">url</span>&#x27;],FILTER_VALIDATE_URL)</span>;</span><br><span class="line">var<span class="constructor">_dump($<span class="params">url</span>)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>我们用<strong>FILTER_VALIDATE_URL</strong>过滤器做测试。</p>
+<p>可以使用 <strong>:&#x2F;&#x2F;</strong> 来绕过。</p>
+<p>由于原文没有讲清楚为什么可以绕过，本人测试了一下应该是因为filter_var函数在使用<strong>FILTER_VALIDATE_URL</strong>过滤器时，只要参数中含有 <strong>:&#x2F;&#x2F;</strong> 就视作为有效的URL。</p>
+<p><strong><a target="_blank" rel="noopener" href="http://www.baidu.com/">http://www.baidu.com</a> 是有效的URL</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204202347838.png"></p>
+<p><strong><a href="ftp://www.baidu.com是有效url/">ftp://www.baidu.com是有效URL</a></strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204202354607.png"></p>
+<p><strong>0:&#x2F;&#x2F;<a target="_blank" rel="noopener" href="http://www.baidu.com也是有效url,注意这个,这里可以作为一个ssrf的小trick/">www.baidu.com也是有效URL，注意这个，这里可以作为一个SSRF的小trick</a></strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204202355795.png"></p>
+<p><strong>而<a target="_blank" rel="noopener" href="http://www.baidu.com是无效的url/">www.baidu.com是无效的URL</a></strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204202356483.png"></p>
+<h4 id="利用场景：-1"><a href="#利用场景：-1" class="headerlink" title="利用场景："></a>利用场景：</h4><p>XSS绕过</p>
+<p>XSS场景可以使用Javascript伪协议进行绕过</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">javascript</span>://comment％<span class="number">250</span>aalert(<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<p> <strong>&#x2F;&#x2F;</strong> 在JavaScript中表示单行注释， 对**%** 百分号编码成 <strong>%25</strong>，我们这里用了字符 <strong>%0a</strong> ，该字符为换行符，所以 <strong>alert</strong> 语句与注释符 <strong>&#x2F;&#x2F;</strong> 就不在同一行</p>
+<p>程序将浏览器发来的payload：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">javascript</span>://comment％<span class="number">250</span>aalert(<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<p> 先解码成： </p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">javascript</span>://comment%<span class="number">0</span>aalert(<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<p> 存储在可回显在页面上变量中，然后用户点击就会触发<strong>alert</strong>函数，弹窗。</p>
+<p><strong>SSRF trick</strong></p>
+<p><strong>看这篇文章</strong></p>
+<p><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/101058">https://www.anquanke.com/post/id/101058</a></p>
+<h4 id="修复建议：-1"><a href="#修复建议：-1" class="headerlink" title="修复建议："></a>修复建议：</h4><p>对于XSS的话，最好是过滤关键词+实体化编码。</p>
+<p>对于ssrf的话，建议正则匹配吧。</p>
+<h3 id="实例化任意对象漏洞"><a href="#实例化任意对象漏洞" class="headerlink" title="实例化任意对象漏洞"></a>实例化任意对象漏洞</h3><p>[<a target="_blank" rel="noopener" href="https://github.com/hongriSec/PHP-Audit-Labs/blob/master/Part1/Day3/files/README.md">红日安全]代码审计Day3 - 实例化任意对象漏洞</a></p>
+<p>这个漏洞类似于php任意代码执行了</p>
+<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204210028203.png"></p>
+<p>实例化类的类名和传入类的参数均在用户的控制之下，攻击者可以通过该漏洞，调用PHP代码库的任意构造函数。即使代码本身不包含易受攻击的构造函数，我们也可以使用PHP的内置类 <strong>SimpleXMLElement</strong> 来进行 <strong>XXE</strong> 攻击，进而读取目标文件的内容，甚至命令执行。</p>
+<p>先看看 <strong>SimpleXMLElement</strong> 类的定义：</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="http://php.net/manual/zh/class.simplexmlelement.php">SimpleXMLElement</a> ：(PHP 5, PHP 7)</p>
+<p><strong>功能</strong> ：用来表示XML文档中的元素，为PHP的内置类。</p>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204210103549.png"></p>
+<p>data：格式正确的XML字符串，当参数<code>data_is_url</code>是<code>True</code>时，传入一个URL字符串</p>
+<p>options：（可选）用于指定其他Libxml参数。</p>
+<p><strong>SimpleXMLElement</strong> 导致的XXE攻击：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204210034481.png"></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" rel="tag"># 代码审计</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/04/17/SRC%E5%A7%BF%E5%8A%BF(%E4%BA%8C)/" rel="prev" title="SRC姿势(二)">
+                  <i class="fa fa-chevron-left"></i> SRC姿势(二)
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LiAoRJ</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
