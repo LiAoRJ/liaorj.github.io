@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.1.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"liaorj.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.11.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="CSRF定义： 跨站请求伪造 挟制用户在当前已登录的Web应用程序上执行非本意的操作的攻击方法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重新研究一下CSRF的攻击与防御">
+<meta property="og:url" content="https://liaorj.github.io/2022/04/14/%E9%87%8D%E6%96%B0%E7%A0%94%E7%A9%B6%E4%B8%80%E4%B8%8BCSRF%E7%9A%84%E6%94%BB%E5%87%BB%E4%B8%8E%E9%98%B2%E5%BE%A1/index.html">
+<meta property="og:site_name" content="LiAoRJ的成长记录">
+<meta property="og:description" content="CSRF定义： 跨站请求伪造 挟制用户在当前已登录的Web应用程序上执行非本意的操作的攻击方法">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-04-14T05:21:45.000Z">
+<meta property="article:modified_time" content="2022-04-17T06:15:41.784Z">
+<meta property="article:author" content="LiAoRJ">
+<meta property="article:tag" content="漏洞研究">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://liaorj.github.io/2022/04/14/%E9%87%8D%E6%96%B0%E7%A0%94%E7%A9%B6%E4%B8%80%E4%B8%8BCSRF%E7%9A%84%E6%94%BB%E5%87%BB%E4%B8%8E%E9%98%B2%E5%BE%A1/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://liaorj.github.io/2022/04/14/%E9%87%8D%E6%96%B0%E7%A0%94%E7%A9%B6%E4%B8%80%E4%B8%8BCSRF%E7%9A%84%E6%94%BB%E5%87%BB%E4%B8%8E%E9%98%B2%E5%BE%A1/","path":"2022/04/14/重新研究一下CSRF的攻击与防御/","title":"重新研究一下CSRF的攻击与防御"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>重新研究一下CSRF的攻击与防御 | LiAoRJ的成长记录</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">LiAoRJ的成长记录</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录一下吧</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">8</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">23</span></a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#CSRF"><span class="nav-text">CSRF</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#GET%E5%9E%8BCSRF"><span class="nav-text">GET型CSRF</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%B9%8C%E4%BA%91%E7%A4%BE%E5%8C%BA%E6%9F%90%E5%88%A0%E9%99%A4%E5%8A%9F%E8%83%BD%E5%AD%98%E5%9C%A8CSRF%E6%BC%8F%E6%B4%9E%EF%BC%88%E7%AE%80%E5%8D%95%E5%88%A9%E7%94%A8%E9%9C%80%E8%AF%B1%E9%AA%97%E7%AE%A1%E7%90%86%E5%91%98%E8%A7%A6%E5%8F%91%EF%BC%89"><span class="nav-text">乌云社区某删除功能存在CSRF漏洞（简单利用需诱骗管理员触发）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%96%B0%E6%B5%AA%E5%BE%AE%E5%8D%9A%E6%9F%90%E5%A4%84%E5%B0%8F%E5%8A%9F%E8%83%BD%E5%AD%98%E5%9C%A8CSRF%E6%BC%8F%E6%B4%9E%EF%BC%88%E5%8F%AF%E4%BF%AE%E6%94%B9%E7%94%A8%E6%88%B7%E5%BE%AE%E5%8D%9A%E6%9F%90%E5%85%83%E7%B4%A0%EF%BC%89"><span class="nav-text">新浪微博某处小功能存在CSRF漏洞（可修改用户微博某元素）</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#POST%E5%9E%8BCSRF"><span class="nav-text">POST型CSRF</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%B8%AD%E5%9B%BD%E7%BD%91%E7%BB%9C%E7%94%B5%E8%A7%86%E5%8F%B0%E5%AE%98%E6%96%B9CSRF%E5%88%B7%E5%BE%AE%E5%8D%9A%E7%B2%89"><span class="nav-text">中国网络电视台官方CSRF刷微博粉</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%96%B0%E6%B5%AA%E5%BE%AE%E5%8D%9Acsrf%E5%88%B7%E7%B2%89%E4%B8%9D"><span class="nav-text">新浪微博csrf刷粉丝</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%A5%E5%85%85%E4%B8%80%E7%82%B9%E4%B8%9C%E8%A5%BF"><span class="nav-text">补充一点东西</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#GET-CSRF%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95"><span class="nav-text">GET CSRF使用方法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CSRF%E8%A0%95%E8%99%AB"><span class="nav-text">CSRF蠕虫</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%9F%B3%E6%82%A6%E5%8F%B0%E4%B8%80%E5%A4%84CSRF%EF%BC%882%EF%BC%89-%E5%B7%B2%E7%BB%8F%E8%AF%81%E6%98%8E%E5%8F%AF%E6%9E%84%E9%80%A0%E8%A0%95%E8%99%AB"><span class="nav-text">音悦台一处CSRF（2）[已经证明可构造蠕虫]</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#XSS-CSRF%E7%BB%84%E5%90%88%E6%8B%B3"><span class="nav-text">XSS+CSRF组合拳</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%A3%B9%E5%BF%83%E7%90%86%E5%AD%98%E5%82%A8%E5%9E%8BXSS-CSRF%E9%80%A0%E6%88%90%E8%A0%95%E8%99%AB%E6%94%BB%E5%87%BB"><span class="nav-text">壹心理存储型XSS+CSRF造成蠕虫攻击</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8%E4%B8%9A%E7%95%8C%E7%9B%AE%E5%89%8D%E9%98%B2%E5%BE%A1-CSRF-%E6%94%BB%E5%87%BB%E4%B8%BB%E8%A6%81%E6%9C%89%E5%9B%9B%E7%A7%8D%E7%AD%96%E7%95%A5"><span class="nav-text">在业界目前防御 CSRF 攻击主要有四种策略</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="LiAoRJ"
+      src="/images/touxiang.jpg">
+  <p class="site-author-name" itemprop="name">LiAoRJ</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/LiAoRJ" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;LiAoRJ" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liaorj.github.io/2022/04/14/%E9%87%8D%E6%96%B0%E7%A0%94%E7%A9%B6%E4%B8%80%E4%B8%8BCSRF%E7%9A%84%E6%94%BB%E5%87%BB%E4%B8%8E%E9%98%B2%E5%BE%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/touxiang.jpg">
+      <meta itemprop="name" content="LiAoRJ">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LiAoRJ的成长记录">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="重新研究一下CSRF的攻击与防御 | LiAoRJ的成长记录">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          重新研究一下CSRF的攻击与防御
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-04-14 13:21:45" itemprop="dateCreated datePublished" datetime="2022-04-14T13:21:45+08:00">2022-04-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-04-17 14:15:41" itemprop="dateModified" datetime="2022-04-17T14:15:41+08:00">2022-04-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6/" itemprop="url" rel="index"><span itemprop="name">漏洞研究</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="CSRF"><a href="#CSRF" class="headerlink" title="CSRF"></a>CSRF</h1><p><strong>定义：</strong></p>
+<p>跨站请求伪造</p>
+<p>挟制用户在当前已登录的Web应用程序上执行非本意的操作的攻击方法</p>
+<span id="more"></span>
+
+<p><strong>对比XSS：</strong> 跟跨网站脚本(XSS)相比，XSS 利用的是用户对指定网站的信任，CSRF 利用的是网站对用户网页浏览器的信任。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span>.用户C打开浏览器，访问受信任网站<span class="selector-tag">A</span>，输入用户名和密码请求登录网站<span class="selector-tag">A</span>;</span><br><span class="line"><span class="number">2</span>.在用户信息通过验证后，网站<span class="selector-tag">A</span>产生Cookie信息并返回给浏览器，此时用户登录网站<span class="selector-tag">A</span>成功，可以正常发送请求到网站<span class="selector-tag">A</span>;</span><br><span class="line"><span class="number">3</span>.用户未退出网站<span class="selector-tag">A</span>之前，在同一浏览器中，打开一个TAB页访问网站<span class="selector-tag">B</span>;</span><br><span class="line"><span class="number">4</span>.网站<span class="selector-tag">B</span>接收到用户请求后，返回一些攻击性代码，并发出一个请求要求访问第三方站点<span class="selector-tag">A</span>;</span><br><span class="line"><span class="number">5</span>.浏览器在接收到这些攻击性代码后，根据网站<span class="selector-tag">B</span>的请求，在用户不知情的情况下携带Cookie信息，向网站<span class="selector-tag">A</span>发出请求。网站<span class="selector-tag">A</span>并不知道该请求其实是由<span class="selector-tag">B</span>发起的，所以会根据用户C的Cookie信息以C的权限处理该请求，导致来自网站<span class="selector-tag">B</span>的恶意代码被执行。</span><br></pre></td></tr></table></figure>
+
+<p><strong>要被CSRF攻击，必须同时满足两个条件：</strong></p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span>. 登录受信任网站<span class="selector-tag">A</span>，并在本地生成Cookie。</span><br><span class="line"><span class="number">2</span>. 在不登出<span class="selector-tag">A</span>的情况下，访问危险网站<span class="selector-tag">B</span>。</span><br></pre></td></tr></table></figure>
+
+<h2 id="GET型CSRF"><a href="#GET型CSRF" class="headerlink" title="GET型CSRF"></a>GET型CSRF</h2><h5 id="乌云社区某删除功能存在CSRF漏洞（简单利用需诱骗管理员触发）"><a href="#乌云社区某删除功能存在CSRF漏洞（简单利用需诱骗管理员触发）" class="headerlink" title="乌云社区某删除功能存在CSRF漏洞（简单利用需诱骗管理员触发）"></a>乌云社区某删除功能存在CSRF漏洞（简单利用需诱骗管理员触发）</h5><p><a target="_blank" rel="noopener" href="https://wooyun.website/show.php?uid=S8XttXpbELTcgJTjRpr0Gq6dLdNmnRagM9rJmzPt">https://wooyun.website/show.php?uid=S8XttXpbELTcgJTjRpr0Gq6dLdNmnRagM9rJmzPt</a></p>
+<h5 id="新浪微博某处小功能存在CSRF漏洞（可修改用户微博某元素）"><a href="#新浪微博某处小功能存在CSRF漏洞（可修改用户微博某元素）" class="headerlink" title="新浪微博某处小功能存在CSRF漏洞（可修改用户微博某元素）"></a>新浪微博某处小功能存在CSRF漏洞（可修改用户微博某元素）</h5><p><a target="_blank" rel="noopener" href="https://wooyun.website/show.php?uid=6HimWDmTrwk2d0kEhtwey5NJihxQEID4pPWgrsWp">https://wooyun.website/show.php?uid=6HimWDmTrwk2d0kEhtwey5NJihxQEID4pPWgrsWp</a></p>
+<h2 id="POST型CSRF"><a href="#POST型CSRF" class="headerlink" title="POST型CSRF"></a>POST型CSRF</h2><h5 id="中国网络电视台官方CSRF刷微博粉"><a href="#中国网络电视台官方CSRF刷微博粉" class="headerlink" title="中国网络电视台官方CSRF刷微博粉"></a>中国网络电视台官方CSRF刷微博粉</h5><p><a target="_blank" rel="noopener" href="https://wooyun.website/show.php?uid=pmxEDefy2wx977fTMeNj9NCHGkxJ5eTMh3pUlXPh">https://wooyun.website/show.php?uid=pmxEDefy2wx977fTMeNj9NCHGkxJ5eTMh3pUlXPh</a></p>
+<h5 id="新浪微博csrf刷粉丝"><a href="#新浪微博csrf刷粉丝" class="headerlink" title="新浪微博csrf刷粉丝"></a>新浪微博csrf刷粉丝</h5><p><a target="_blank" rel="noopener" href="https://wooyun.website/show.php?uid=eUTLauXnYMYB2oRcmcV6F4krh3q0HyGJF9IcMnyC">https://wooyun.website/show.php?uid=eUTLauXnYMYB2oRcmcV6F4krh3q0HyGJF9IcMnyC</a></p>
+<h2 id="补充一点东西"><a href="#补充一点东西" class="headerlink" title="补充一点东西"></a>补充一点东西</h2><h4 id="GET-CSRF使用方法"><a href="#GET-CSRF使用方法" class="headerlink" title="GET CSRF使用方法"></a>GET CSRF使用方法</h4><p>GET请求不一定必须限制为FORM表单，JS请求进行提交，img、iframe、link等标签，css属性都可以进行GET请求</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">1. script标签利用</span><br><span class="line">&lt;a <span class="attribute">href</span>=<span class="string">&quot;恶意CSRF_URL&quot;</span>&gt;请点击我</span><br><span class="line">2. iframe利用</span><br><span class="line">&lt;iframe <span class="attribute">src</span>=<span class="string">&quot;恶意CSRF_URL&quot;</span>&gt;&lt;/iframe&gt;</span><br><span class="line">3. img标签利用</span><br><span class="line">&lt;img <span class="attribute">src</span>=<span class="string">&quot;恶意CSRF_URL&quot;</span>/&gt;</span><br><span class="line">远程加载图片，这个利用点一般在引入远程图片时，例如 头像</span><br><span class="line">4.link标签利用</span><br><span class="line">&lt;link <span class="attribute">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attribute">type</span>=<span class="string">&#x27;text/css&#x27;</span> <span class="attribute">href</span>=<span class="string">&quot;恶意CSRF_URL&quot;</span>&gt;</span><br><span class="line">4. CSS - backgroud利用</span><br><span class="line">利用 CSS中 background样式中的url来加载远程机器上的内容，从而对url中的内容发送HTTP请求</span><br><span class="line">body</span><br><span class="line">&#123;background:url(<span class="string">&quot;恶意CSRF_URL&quot;</span>);&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="CSRF蠕虫"><a href="#CSRF蠕虫" class="headerlink" title="CSRF蠕虫"></a>CSRF蠕虫</h2><h5 id="音悦台一处CSRF（2）-已经证明可构造蠕虫"><a href="#音悦台一处CSRF（2）-已经证明可构造蠕虫" class="headerlink" title="音悦台一处CSRF（2）[已经证明可构造蠕虫]"></a>音悦台一处CSRF（2）[已经证明可构造蠕虫]</h5><p><a target="_blank" rel="noopener" href="https://wooyun.website/show.php?uid=0uuWjJIpThFyMfSHQaiWRvV9YutUbbnmD9NAz6MD">https://wooyun.website/show.php?uid=0uuWjJIpThFyMfSHQaiWRvV9YutUbbnmD9NAz6MD</a></p>
+<h2 id="XSS-CSRF组合拳"><a href="#XSS-CSRF组合拳" class="headerlink" title="XSS+CSRF组合拳"></a>XSS+CSRF组合拳</h2><p>普通的CSRF需要诱导受害者点击构造的CSRF连接，但当CSRF与XSS组合之后，就能实现无意识的攻击了</p>
+<h5 id="壹心理存储型XSS-CSRF造成蠕虫攻击"><a href="#壹心理存储型XSS-CSRF造成蠕虫攻击" class="headerlink" title="壹心理存储型XSS+CSRF造成蠕虫攻击"></a>壹心理存储型XSS+CSRF造成蠕虫攻击</h5><p><a target="_blank" rel="noopener" href="https://wooyun.website/show.php?uid=wWfl0XRqzAeneYfhEsjb0tmnQ71JE6xqubtOH5kl">https://wooyun.website/show.php?uid=wWfl0XRqzAeneYfhEsjb0tmnQ71JE6xqubtOH5kl</a></p>
+<h2 id="在业界目前防御-CSRF-攻击主要有四种策略"><a href="#在业界目前防御-CSRF-攻击主要有四种策略" class="headerlink" title="在业界目前防御 CSRF 攻击主要有四种策略"></a>在业界目前防御 CSRF 攻击主要有四种策略</h2><ol>
+<li>验证 HTTP Referer 字段；</li>
+<li>在请求地址中添加 token 并验证；</li>
+<li>在 HTTP 头中自定义属性并验证；</li>
+<li>Chrome 浏览器端启用 SameSite cookie</li>
+</ol>
+<p>对于绕过的方法，之后再讲</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6/" rel="tag"># 漏洞研究</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/04/14/SRC%E5%A7%BF%E5%8A%BF(%E4%B8%80)/" rel="prev" title="SRC姿势(一)">
+                  <i class="fa fa-chevron-left"></i> SRC姿势(一)
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/04/16/go%E5%85%8D%E6%9D%80%E6%80%9D%E8%B7%AF%E7%A0%94%E7%A9%B6/" rel="next" title="go免杀思路研究">
+                  go免杀思路研究 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LiAoRJ</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.1.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"liaorj.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.11.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="红日安全代码审计学习项目地址： https:&#x2F;&#x2F;github.com&#x2F;hongriSec&#x2F;PHP-Audit-Labs# 记录一下自己的学习过程 顺便加上一些自己的理解">
+<meta property="og:type" content="article">
+<meta property="og:title" content="红日安全代码审计学习(一)">
+<meta property="og:url" content="https://liaorj.github.io/2022/04/20/%E7%BA%A2%E6%97%A5%E5%AE%89%E5%85%A8%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E5%AD%A6%E4%B9%A0(%E4%B8%80)/index.html">
+<meta property="og:site_name" content="LiAoRJ的成长记录">
+<meta property="og:description" content="红日安全代码审计学习项目地址： https:&#x2F;&#x2F;github.com&#x2F;hongriSec&#x2F;PHP-Audit-Labs# 记录一下自己的学习过程 顺便加上一些自己的理解">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204202347838.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204202354607.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204202355795.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204202356483.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204210028203.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204210103549.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204210034481.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204220113952.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204220131557.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204220134822.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204230021968.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204230119878.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204231609346.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204231919587.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204231947807.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204231952107.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204231956690.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204232044601.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204232129558.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204232133969.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204232134254.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204232135110.png">
+<meta property="article:published_time" content="2022-04-20T09:56:46.000Z">
+<meta property="article:modified_time" content="2022-04-23T13:48:43.751Z">
+<meta property="article:author" content="LiAoRJ">
+<meta property="article:tag" content="代码审计">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204202347838.png">
+
+
+<link rel="canonical" href="https://liaorj.github.io/2022/04/20/%E7%BA%A2%E6%97%A5%E5%AE%89%E5%85%A8%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E5%AD%A6%E4%B9%A0(%E4%B8%80)/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://liaorj.github.io/2022/04/20/%E7%BA%A2%E6%97%A5%E5%AE%89%E5%85%A8%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E5%AD%A6%E4%B9%A0(%E4%B8%80)/","path":"2022/04/20/红日安全代码审计学习(一)/","title":"红日安全代码审计学习(一)"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>红日安全代码审计学习(一) | LiAoRJ的成长记录</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">LiAoRJ的成长记录</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录一下吧</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">8</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">23</span></a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BA%A2%E6%97%A5%E5%AE%89%E5%85%A8%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E5%AD%A6%E4%B9%A0"><span class="nav-text">红日安全代码审计学习</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Part1"><span class="nav-text">Part1</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#in-array%E5%87%BD%E6%95%B0%E7%BC%BA%E9%99%B7"><span class="nav-text">in_array函数缺陷</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%A9%E7%94%A8%E5%9C%BA%E6%99%AF%EF%BC%9A"><span class="nav-text">利用场景：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%AE%E5%A4%8D%E5%BB%BA%E8%AE%AE%EF%BC%9A"><span class="nav-text">修复建议：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#filter-var%E5%87%BD%E6%95%B0%E7%BC%BA%E9%99%B7"><span class="nav-text">filter_var函数缺陷</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%A9%E7%94%A8%E5%9C%BA%E6%99%AF%EF%BC%9A-1"><span class="nav-text">利用场景：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%AE%E5%A4%8D%E5%BB%BA%E8%AE%AE%EF%BC%9A-1"><span class="nav-text">修复建议：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B%E5%8C%96%E4%BB%BB%E6%84%8F%E5%AF%B9%E8%B1%A1%E6%BC%8F%E6%B4%9E"><span class="nav-text">实例化任意对象漏洞</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%A9%E7%94%A8%E5%9C%BA%E6%99%AF%EF%BC%9A-2"><span class="nav-text">利用场景：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%AE%E5%A4%8D%E5%BB%BA%E8%AE%AE%EF%BC%9A-2"><span class="nav-text">修复建议：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#strpos%E4%BD%BF%E7%94%A8%E4%B8%8D%E5%BD%93%E5%BC%95%E5%8F%91%E6%BC%8F%E6%B4%9E"><span class="nav-text">strpos使用不当引发漏洞</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%A9%E7%94%A8%E5%9C%BA%E6%99%AF%EF%BC%9A-3"><span class="nav-text">利用场景：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%AE%E5%A4%8D%E5%BB%BA%E8%AE%AE%EF%BC%9A-3"><span class="nav-text">修复建议：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#escapeshellarg%E4%B8%8Eescapeshellcmd%E4%BD%BF%E7%94%A8%E4%B8%8D%E5%BD%93"><span class="nav-text">escapeshellarg与escapeshellcmd使用不当</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%A9%E7%94%A8%E5%9C%BA%E6%99%AF%EF%BC%9A-4"><span class="nav-text">利用场景：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%AE%E5%A4%8D%E5%BB%BA%E8%AE%AE%EF%BC%9A-4"><span class="nav-text">修复建议：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A3%E5%88%99%E4%BD%BF%E7%94%A8%E4%B8%8D%E5%BD%93%E5%AF%BC%E8%87%B4%E7%9A%84%E8%B7%AF%E5%BE%84%E7%A9%BF%E8%B6%8A%E9%97%AE%E9%A2%98"><span class="nav-text">正则使用不当导致的路径穿越问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%A9%E7%94%A8%E5%9C%BA%E6%99%AF%EF%BC%9A-5"><span class="nav-text">利用场景：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%AE%E5%A4%8D%E5%BB%BA%E8%AE%AE%EF%BC%9A-5"><span class="nav-text">修复建议：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#parse-str%E5%87%BD%E6%95%B0%E7%BC%BA%E9%99%B7"><span class="nav-text">parse_str函数缺陷</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%A9%E7%94%A8%E5%9C%BA%E6%99%AF%EF%BC%9A-6"><span class="nav-text">利用场景：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%AE%E5%A4%8D%E5%BB%BA%E8%AE%AE%EF%BC%9A-6"><span class="nav-text">修复建议：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#preg-replace%E5%87%BD%E6%95%B0%E4%B9%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C"><span class="nav-text">preg_replace函数之命令执行</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%A9%E7%94%A8%E5%9C%BA%E6%99%AF%EF%BC%9A-7"><span class="nav-text">利用场景：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%AE%E5%A4%8D%E5%BB%BA%E8%AE%AE%EF%BC%9A-7"><span class="nav-text">修复建议：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#str-replace%E5%87%BD%E6%95%B0%E8%BF%87%E6%BB%A4%E4%B8%8D%E5%BD%93"><span class="nav-text">str_replace函数过滤不当</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%A9%E7%94%A8%E5%9C%BA%E6%99%AF%EF%BC%9A-8"><span class="nav-text">利用场景：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%AE%E5%A4%8D%E5%BB%BA%E8%AE%AE%EF%BC%9A-8"><span class="nav-text">修复建议：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A8%8B%E5%BA%8F%E6%9C%AA%E6%81%B0%E5%BD%93exit%E5%AF%BC%E8%87%B4%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-text">程序未恰当exit导致的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%A9%E7%94%A8%E5%9C%BA%E6%99%AF%EF%BC%9A-9"><span class="nav-text">利用场景：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%AE%E5%A4%8D%E5%BB%BA%E8%AE%AE%EF%BC%9A-9"><span class="nav-text">修复建议：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#unserialize%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E"><span class="nav-text">unserialize反序列化漏洞</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%A9%E7%94%A8%E5%9C%BA%E6%99%AF%EF%BC%9A-10"><span class="nav-text">利用场景：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%AE%E5%A4%8D%E5%BB%BA%E8%AE%AE%EF%BC%9A-10"><span class="nav-text">修复建议：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AF%E7%94%A8htmlentities%E5%87%BD%E6%95%B0%E5%BC%95%E5%8F%91%E7%9A%84%E6%BC%8F%E6%B4%9E"><span class="nav-text">误用htmlentities函数引发的漏洞</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%A9%E7%94%A8%E5%9C%BA%E6%99%AF%EF%BC%9A-11"><span class="nav-text">利用场景：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%AE%E5%A4%8D%E5%BB%BA%E8%AE%AE%EF%BC%9A-11"><span class="nav-text">修复建议：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E5%AE%9A%E5%9C%BA%E5%90%88%E4%B8%8Baddslashes%E5%87%BD%E6%95%B0%E7%9A%84%E7%BB%95%E8%BF%87"><span class="nav-text">特定场合下addslashes函数的绕过</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%A9%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-text">利用场景:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%AE%E5%A4%8D%E5%BB%BA%E8%AE%AE%EF%BC%9A-12"><span class="nav-text">修复建议：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8E%E5%8F%98%E9%87%8F%E8%A6%86%E7%9B%96%E5%88%B0getshell"><span class="nav-text">从变量覆盖到getshell</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%A9%E7%94%A8%E5%9C%BA%E6%99%AF%EF%BC%9A-12"><span class="nav-text">利用场景：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%AE%E5%A4%8D%E5%BB%BA%E8%AE%AE%EF%BC%9A-13"><span class="nav-text">修复建议：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SERVER-%E2%80%98PHP-SELF%E2%80%99-%E5%AF%BC%E8%87%B4%E7%9A%84%E9%98%B2%E5%BE%A1%E5%A4%B1%E6%95%88%E9%97%AE%E9%A2%98"><span class="nav-text">$_SERVER[‘PHP_SELF’]导致的防御失效问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%A9%E7%94%A8%E5%9C%BA%E6%99%AF%EF%BC%9A-13"><span class="nav-text">利用场景：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%AE%E5%A4%8D%E5%BB%BA%E8%AE%AE%EF%BC%9A-14"><span class="nav-text">修复建议：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3-REQUESTS%E6%95%B0%E7%BB%84"><span class="nav-text">深入理解$_REQUESTS数组</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%A9%E7%94%A8%E5%9C%BA%E6%99%AF%EF%BC%9A-14"><span class="nav-text">利用场景：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%AE%E5%A4%8D%E5%BB%BA%E8%AE%AE%EF%BC%9A-15"><span class="nav-text">修复建议：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Raw-MD5-Hash%E5%BC%95%E5%8F%91%E7%9A%84%E6%B3%A8%E5%85%A5"><span class="nav-text">Raw MD5 Hash引发的注入</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%A9%E7%94%A8%E5%9C%BA%E6%99%AF%EF%BC%9A-15"><span class="nav-text">利用场景：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%AE%E5%A4%8D%E5%BB%BA%E8%AE%AE%EF%BC%9A-16"><span class="nav-text">修复建议：</span></a></li></ol></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="LiAoRJ"
+      src="/images/touxiang.jpg">
+  <p class="site-author-name" itemprop="name">LiAoRJ</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/LiAoRJ" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;LiAoRJ" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liaorj.github.io/2022/04/20/%E7%BA%A2%E6%97%A5%E5%AE%89%E5%85%A8%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E5%AD%A6%E4%B9%A0(%E4%B8%80)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/touxiang.jpg">
+      <meta itemprop="name" content="LiAoRJ">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LiAoRJ的成长记录">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="红日安全代码审计学习(一) | LiAoRJ的成长记录">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          红日安全代码审计学习(一)
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-04-20 17:56:46" itemprop="dateCreated datePublished" datetime="2022-04-20T17:56:46+08:00">2022-04-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-04-23 21:48:43" itemprop="dateModified" datetime="2022-04-23T21:48:43+08:00">2022-04-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" itemprop="url" rel="index"><span itemprop="name">代码审计</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="红日安全代码审计学习"><a href="#红日安全代码审计学习" class="headerlink" title="红日安全代码审计学习"></a>红日安全代码审计学习</h1><p>项目地址：</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/hongriSec/PHP-Audit-Labs#">https://github.com/hongriSec/PHP-Audit-Labs#</a></p>
+<p>记录一下自己的学习过程</p>
+<p>顺便加上一些自己的理解</p>
+<span id="more"></span>
+
+
+<h2 id="Part1"><a href="#Part1" class="headerlink" title="Part1"></a>Part1</h2><h3 id="in-array函数缺陷"><a href="#in-array函数缺陷" class="headerlink" title="in_array函数缺陷"></a><strong>in_array函数缺陷</strong></h3><p>github地址：<a target="_blank" rel="noopener" href="https://github.com/hongriSec/PHP-Audit-Labs/blob/master/Part1/Day1/files/README.md">in_array函数缺陷</a></p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="http://php.net/manual/zh/function.in-array.php"> <strong>in_array</strong> </a>：(PHP 4, PHP 5, PHP 7)</p>
+<p><strong>功能</strong> ：检查数组中是否存在某个值</p>
+<p><strong>定义</strong> ： <code>bool in_array ( mixed $needle , array $haystack [, bool $strict = FALSE ] )</code></p>
+<p>在 <strong>$haystack</strong> 中搜索 <strong>$needle</strong> ，如果第三个参数 <strong>$strict</strong> 的值为 <strong>TRUE</strong> ，则 <strong>in_array()</strong> 函数会进行强检查，检查 <strong>$needle</strong> 的类型是否和 <strong>$haystack</strong> 中的相同。如果找到 <strong>$haystack</strong> ，则返回 <strong>TRUE</strong>，否则返回 <strong>FALSE</strong>。</p>
+</blockquote>
+<p>in_array()第三个参数未设置为true时，是弱匹配。</p>
+<figure class="highlight basic"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">7</span><span class="keyword">shell</span>.php </span><br></pre></td></tr></table></figure>
+
+<p>&#x3D;&#x3D; </p>
+<figure class="highlight basic"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">7 </span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">1</span>,<span class="number">1</span> and if(ascii(substr((select database()),<span class="number">1</span>,<span class="number">1</span>))=<span class="number">112</span>,<span class="number">1</span>,sleep(<span class="number">3</span>)));#</span><br></pre></td></tr></table></figure>
+
+<p>&#x3D;&#x3D; </p>
+<figure class="highlight basic"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">1 </span> </span><br></pre></td></tr></table></figure>
+
+<h4 id="利用场景："><a href="#利用场景：" class="headerlink" title="利用场景："></a>利用场景：</h4><p>文件上传、SQL注入白名单绕过</p>
+<h4 id="修复建议："><a href="#修复建议：" class="headerlink" title="修复建议："></a>修复建议：</h4><p>1、第三个参数设置为 <strong>true</strong></p>
+<p>2、使用正则匹配来处理变量</p>
+<h3 id="filter-var函数缺陷"><a href="#filter-var函数缺陷" class="headerlink" title="filter_var函数缺陷"></a><strong>filter_var函数缺陷</strong></h3><p>github地址：<a target="_blank" rel="noopener" href="https://github.com/hongriSec/PHP-Audit-Labs/blob/master/Part1/Day2/files/README.md">filter_var函数缺陷</a></p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="http://php.net/manual/zh/function.filter-var.php"> <strong>filter_var</strong> </a>： (PHP 5 &gt;&#x3D; 5.2.0, PHP 7)</p>
+<p><strong>功能</strong> ：使用特定的过滤器过滤一个变量</p>
+<p><strong>定义</strong> ：<a target="_blank" rel="noopener" href="http://php.net/manual/zh/language.pseudo-types.php#language.types.mixed">mixed</a> <strong>filter_var</strong> ( <a target="_blank" rel="noopener" href="http://php.net/manual/zh/language.pseudo-types.php#language.types.mixed">mixed</a> <code>$variable</code> [, int <code>$filter</code> &#x3D; FILTER_DEFAULT [, <a target="_blank" rel="noopener" href="http://php.net/manual/zh/language.pseudo-types.php#language.types.mixed">mixed</a> <code>$options</code> ]] )</p>
+</blockquote>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$url = filter<span class="constructor">_var($<span class="params">_GET</span>[&#x27;<span class="params">url</span>&#x27;],FILTER_VALIDATE_URL)</span>;</span><br><span class="line">var<span class="constructor">_dump($<span class="params">url</span>)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>我们用<strong>FILTER_VALIDATE_URL</strong>过滤器做测试。</p>
+<p>可以使用 <strong>:&#x2F;&#x2F;</strong> 来绕过。</p>
+<p>由于原文没有讲清楚为什么可以绕过，本人测试了一下应该是因为filter_var函数在使用<strong>FILTER_VALIDATE_URL</strong>过滤器时，只要参数中含有 <strong>:&#x2F;&#x2F;</strong> 就视作为有效的URL。</p>
+<p><strong><a target="_blank" rel="noopener" href="http://www.baidu.com/">http://www.baidu.com</a> 是有效的URL</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204202347838.png"></p>
+<p><strong><a href="ftp://www.baidu.com是有效url/">ftp://www.baidu.com是有效URL</a></strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204202354607.png"></p>
+<p><strong>0:&#x2F;&#x2F;<a target="_blank" rel="noopener" href="http://www.baidu.com也是有效url,注意这个,这里可以作为一个ssrf的小trick/">www.baidu.com也是有效URL，注意这个，这里可以作为一个SSRF的小trick</a></strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204202355795.png"></p>
+<p><strong>而<a target="_blank" rel="noopener" href="http://www.baidu.com是无效的url/">www.baidu.com是无效的URL</a></strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204202356483.png"></p>
+<h4 id="利用场景：-1"><a href="#利用场景：-1" class="headerlink" title="利用场景："></a>利用场景：</h4><p>XSS绕过</p>
+<p>XSS场景可以使用Javascript伪协议进行绕过</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">javascript</span>://comment％<span class="number">250</span>aalert(<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<p> <strong>&#x2F;&#x2F;</strong> 在JavaScript中表示单行注释， 对**%** 百分号编码成 <strong>%25</strong>，我们这里用了字符 <strong>%0a</strong> ，该字符为换行符，所以 <strong>alert</strong> 语句与注释符 <strong>&#x2F;&#x2F;</strong> 就不在同一行</p>
+<p>程序将浏览器发来的payload：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">javascript</span>://comment％<span class="number">250</span>aalert(<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<p> 先解码成： </p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">javascript</span>://comment%<span class="number">0</span>aalert(<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<p> 存储在可回显在页面上变量中，然后用户点击就会触发<strong>alert</strong>函数，弹窗。</p>
+<p><strong>SSRF trick</strong></p>
+<p><strong>看这篇文章</strong></p>
+<p><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/101058">https://www.anquanke.com/post/id/101058</a></p>
+<h4 id="修复建议：-1"><a href="#修复建议：-1" class="headerlink" title="修复建议："></a>修复建议：</h4><p>对于XSS的话，最好是过滤关键词+实体化编码。</p>
+<p>对于ssrf的话，建议正则匹配吧。</p>
+<h3 id="实例化任意对象漏洞"><a href="#实例化任意对象漏洞" class="headerlink" title="实例化任意对象漏洞"></a>实例化任意对象漏洞</h3><p>[<a target="_blank" rel="noopener" href="https://github.com/hongriSec/PHP-Audit-Labs/blob/master/Part1/Day3/files/README.md">红日安全]代码审计Day3 - 实例化任意对象漏洞</a></p>
+<p>这个漏洞类似于php任意代码执行了</p>
+<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204210028203.png"></p>
+<p>实例化类的类名和传入类的参数均在用户的控制之下，攻击者可以通过该漏洞，调用PHP代码库的任意构造函数。即使代码本身不包含易受攻击的构造函数，我们也可以使用PHP的内置类 <strong>SimpleXMLElement</strong> 来进行 <strong>XXE</strong> 攻击，进而读取目标文件的内容，甚至命令执行。</p>
+<p>先看看 <strong>SimpleXMLElement</strong> 类的定义：</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="http://php.net/manual/zh/class.simplexmlelement.php">SimpleXMLElement</a> ：(PHP 5, PHP 7)</p>
+<p><strong>功能</strong> ：用来表示XML文档中的元素，为PHP的内置类。</p>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204210103549.png"></p>
+<p>data：格式正确的XML字符串，当参数<code>data_is_url</code>是<code>True</code>时，传入一个URL字符串</p>
+<p>options：（可选）用于指定其他Libxml参数。</p>
+<p><strong>SimpleXMLElement</strong> 导致的XXE攻击：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204210034481.png"></p>
+<h4 id="利用场景：-2"><a href="#利用场景：-2" class="headerlink" title="利用场景："></a>利用场景：</h4><p>XXE</p>
+<h4 id="修复建议：-2"><a href="#修复建议：-2" class="headerlink" title="修复建议："></a>修复建议：</h4><p>可以修改代码，不要用这种可控的参数形式。</p>
+<p>然后提一下对XXE漏洞进行修复，可以禁止加载XML实体对象。</p>
+<h3 id="strpos使用不当引发漏洞"><a href="#strpos使用不当引发漏洞" class="headerlink" title="strpos使用不当引发漏洞"></a>strpos使用不当引发漏洞</h3><p>[<a target="_blank" rel="noopener" href="https://github.com/hongriSec/PHP-Audit-Labs/blob/master/Part1/Day4/files/README.md">红日安全]代码审计Day4 - strpos使用不当引发漏洞</a>&#96;</p>
+<p>结合具体场景代码</p>
+<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204220113952.png"></p>
+<p>代码在 <strong>第8行</strong> 和 <strong>第9行</strong> 使用 <strong>strpos</strong> 函数来防止输入的参数含有 &lt; 和 &gt; 符号，猜测开发者应该是考虑到非法字符注入问题。</p>
+<blockquote>
+<p><strong><a target="_blank" rel="noopener" href="http://php.net/manual/zh/function.strpos.php">strpos</a></strong> — 查找字符串首次出现的位置</p>
+<p>作用：主要是用来查找字符在字符串中首次出现的位置。</p>
+<p>结构：<code>int strpos ( string $haystack , mixed $needle [, int $offset = 0 ] )</code></p>
+</blockquote>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="title function_ invoke__">var_dump</span>(<span class="title function_ invoke__">strpos</span>(<span class="string">&#x27;abcd&#x27;</span>,<span class="string">&#x27;a&#x27;</span>));   <span class="comment">#0</span></span><br><span class="line"><span class="title function_ invoke__">var_dump</span>(<span class="title function_ invoke__">strpos</span>(<span class="string">&#x27;abcd&#x27;</span>,<span class="string">&#x27;x&#x27;</span>));   <span class="comment">#false</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>上面场景代码中核心判断代码是</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(!strpos($user,&#x27;&lt;&#x27;) || !strpos($user,&#x27;&gt;&#x27;)) &amp;&amp; (!strpos($pass,&#x27;&lt;&#x27;) || !strpos($pass,&#x27;&gt;&#x27;))</span><br></pre></td></tr></table></figure>
+
+<p>作者考虑到可能有黑客会在登陆点进行SQL注入测试，所以判断了一下是否出现 <strong>‘&lt;’** 或 **’&gt;’</strong> 若出现则strpos函数获得出现位置，再配合  <strong>!</strong>  取反得到false</p>
+<p>先不说strpos函数的问题，这段代码的逻辑就有问题，如果$user只出现了&gt;或&lt;号但$pass没有出现&gt;或&lt;号，那么依然可以判定成功。</p>
+<p>例如这样</p>
+<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204220131557.png"></p>
+<p>再说回strpos函数的绕过，因为strpos函数是取字符位置，但是如果取到了位置为<strong>0</strong>，那么通过！取反得到的就会是<strong>true</strong>了，就会导致判断成功，代码如下</p>
+<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204220134822.png"></p>
+<h4 id="利用场景：-3"><a href="#利用场景：-3" class="headerlink" title="利用场景："></a>利用场景：</h4><p>ctf印象中见过</p>
+<h4 id="修复建议：-3"><a href="#修复建议：-3" class="headerlink" title="修复建议："></a>修复建议：</h4><p>代码逻辑优化</p>
+<p>或者登录验证那块不要这么写了（真要防止SQL注入，这样写会不会太儿戏了。。。）</p>
+<h3 id="escapeshellarg与escapeshellcmd使用不当"><a href="#escapeshellarg与escapeshellcmd使用不当" class="headerlink" title="escapeshellarg与escapeshellcmd使用不当"></a>escapeshellarg与escapeshellcmd使用不当</h3><p>[<a target="_blank" rel="noopener" href="https://github.com/hongriSec/PHP-Audit-Labs/blob/master/Part1/Day5/files/README.md">红日安全]代码审计Day5 - escapeshellarg与escapeshellcmd使用不当</a></p>
+<p>原理：</p>
+<p><strong>escapeshellarg()</strong> </p>
+<p>将转码任何已经存在的单引号</p>
+<p>例如：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$test</span> = <span class="string">&quot;127.0.0.1&#x27; -v -d a=1&quot;</span>;</span><br><span class="line"><span class="keyword">echo</span>(<span class="title function_ invoke__">escapeshellarg</span>(<span class="variable">$test</span>));</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>输出：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;127.0.0.1&#x27;</span>\<span class="string">&#x27;&#x27;</span> -v -d a=<span class="number">1</span><span class="string">&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>这里稍微解释一下</p>
+<p>其实是变成了三个字符串的连接</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;127.0.0.1&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\<span class="string">&#x27; #这里是escapeshellarg函数的效果 原来的单引号前面加上\转义</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;-v -d a=1&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>escapeshellcmd</strong>函数</p>
+<p><strong>escapeshellcmd()</strong> 对字符串中可能会欺骗  shell 命令执行任意命令的字符进行转义。</p>
+<p>反斜线（\）会在以下字符之前插入：   <code>&amp;#;</code>|*?~&lt;&gt;^()[]{}$`, <code>\x0A</code>   和 <code>\xFF</code>。 <code>&#39;</code> 和 <code>&quot;</code>   仅在不配对儿的时候被转义。   </p>
+<p>当**escapeshellarg()<strong>与</strong>escapeshellcmd()**一起使用时就会出现参数逃逸漏洞</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$test</span> = <span class="string">&quot;127.0.0.1&#x27; -v -d a=1&quot;</span>;</span><br><span class="line"><span class="variable">$test2</span> = <span class="title function_ invoke__">escapeshellarg</span>(<span class="variable">$test</span>);</span><br><span class="line"><span class="keyword">echo</span>(<span class="title function_ invoke__">escapeshellcmd</span>(<span class="variable">$test2</span>));</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>输出：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;127.0.0.1&#x27;</span>\\<span class="string">&#x27;&#x27;</span> -v -d a=<span class="number">1</span>\<span class="string">&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>依然是变成了三个部分</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;1270.0.1&#x27;</span> <span class="comment">#没有发生转义 单引号是配对的</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\\<span class="string">&#x27;&#x27;</span>  <span class="comment">#从之前的\&#x27; 变成 \\&#x27; 这回是反斜线被转义了 所以单引号是多出来的正好与之前的第三部分的第一个单引号配对了</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-v -d a=<span class="number">1</span>\<span class="string">&#x27; #因为第二部分配对了 导致第三部分的单引号多余了 所以根据函数规则 未匹配的单引号会加上反斜线转义</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="利用场景：-4"><a href="#利用场景：-4" class="headerlink" title="利用场景："></a>利用场景：</h4><p>参数逃逸导致远程代码执行</p>
+<p>ctf也有遇到过</p>
+<h4 id="修复建议：-4"><a href="#修复建议：-4" class="headerlink" title="修复建议："></a>修复建议：</h4><p>不建议大家同时使用 <strong>escapeshellcmd()</strong> 和 <strong>escapeshellarg()</strong> 函数对参数进行过滤</p>
+<h3 id="正则使用不当导致的路径穿越问题"><a href="#正则使用不当导致的路径穿越问题" class="headerlink" title="正则使用不当导致的路径穿越问题"></a>正则使用不当导致的路径穿越问题</h3><p>[<a target="_blank" rel="noopener" href="https://github.com/hongriSec/PHP-Audit-Labs/blob/master/Part1/Day6/files/README.md">红日安全]代码审计Day6 - 正则使用不当导致的路径穿越问题</a></p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="http://php.net/manual/zh/function.preg-replace.php"><strong>preg_replace</strong></a>：(PHP 4, PHP 5, PHP 7)</p>
+<p><strong>功能</strong> ： 函数执行一个正则表达式的搜索和替换</p>
+<p><strong>定义</strong> ： <code>mixed preg_replace ( mixed $pattern , mixed $replacement , mixed $subject [, int $limit = -1 [, int &amp;$count ]] )</code></p>
+<p>搜索 <strong>subject</strong> 中匹配 <strong>pattern</strong> 的部分， 如果匹配成功将其替换成 <strong>replacement</strong> 。</p>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204230021968.png"></p>
+<p>本质上是对正则表达式的绕过</p>
+<p><strong>preg_replace</strong> 中的 <strong>pattern</strong> 部分 ，该正则表达式并未起到过滤目录路径字符的作用。<code>[^a-z.-_]</code>  表示匹配除了 <strong>a</strong> 字符到 <strong>z</strong> 字符、**.** 字符到 <strong>_</strong> 字符之间的所有字符。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">../../ config.php</span><br></pre></td></tr></table></figure>
+
+<p>即可删除config.php文件</p>
+<h4 id="利用场景：-5"><a href="#利用场景：-5" class="headerlink" title="利用场景："></a>利用场景：</h4><p>本质是对正则的绕过，只要正则写的不完善，都可以进行绕过尝试。</p>
+<p>CTF中也有出现过。</p>
+<h4 id="修复建议：-5"><a href="#修复建议：-5" class="headerlink" title="修复建议："></a>修复建议：</h4><p>结合业务修改完善正则表达式。</p>
+<h3 id="parse-str函数缺陷"><a href="#parse-str函数缺陷" class="headerlink" title="parse_str函数缺陷"></a>parse_str函数缺陷</h3><p>[<a target="_blank" rel="noopener" href="https://github.com/hongriSec/PHP-Audit-Labs/blob/master/Part1/Day7/files/README.md">红日安全]代码审计Day7 - parse_str函数缺陷</a></p>
+<p>这个函数的缺陷实际上导致的是一个<strong>变量覆盖</strong>漏洞。</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="http://php.net/manual/zh/function.parse-str.php"> <strong>parse_str</strong> </a></p>
+<p><strong>功能</strong> ：parse_str的作用就是解析字符串并且注册成变量，它在注册变量之前不会验证当前变量是否存在，所以会直接覆盖掉当前作用域中原有的变量。</p>
+<p><strong>定义</strong> ：<code>void parse_str( string $encoded_string [, array &amp;$result ] )</code></p>
+<p>如果 <strong>encoded_string</strong> 是 URL 传入的查询字符串（query string），则将它解析为变量并设置到当前作用域（如果提供了 result 则会设置到该数组里 ）。</p>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204230119878.png"></p>
+<h4 id="利用场景：-6"><a href="#利用场景：-6" class="headerlink" title="利用场景："></a>利用场景：</h4><p>白盒审计</p>
+<p>ctf遇到过</p>
+<h4 id="修复建议：-6"><a href="#修复建议：-6" class="headerlink" title="修复建议："></a>修复建议：</h4><p>在注册变量前先判断变量是否存在</p>
+<h3 id="preg-replace函数之命令执行"><a href="#preg-replace函数之命令执行" class="headerlink" title="preg_replace函数之命令执行"></a>preg_replace函数之命令执行</h3><p>[<a target="_blank" rel="noopener" href="https://github.com/hongriSec/PHP-Audit-Labs/blob/master/Part1/Day8/files/README.md">红日安全]代码审计Day8 - preg_replace函数之命令执行</a></p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="http://php.net/manual/zh/function.preg-replace.php"><strong>preg_replace</strong></a>：(PHP 5.5)</p>
+<p><strong>功能</strong> ： 函数执行一个正则表达式的搜索和替换</p>
+<p><strong>定义</strong> ： <code>mixed preg_replace ( mixed $pattern , mixed $replacement , mixed $subject [, int $limit = -1 [, int &amp;$count ]] )</code></p>
+<p>搜索 <strong>subject</strong> 中匹配 <strong>pattern</strong> 的部分， 如果匹配成功以 <strong>replacement</strong> 进行替换</p>
+</blockquote>
+<ul>
+<li><strong>$pattern</strong> 存在 <strong>&#x2F;e</strong> 模式修正符，允许代码执行</li>
+<li><strong>&#x2F;e</strong> 模式修正符，是 **preg_replace() ** 将 <strong>$replacement</strong> 当做php代码来执行</li>
+</ul>
+<p>总结就是 php5.5版本以下，<strong>preg_replace</strong>函数有一个&#x2F;e模式，开启了就会导致代码执行。</p>
+<p><strong>经典问题案例：</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_ invoke__">header</span>(<span class="string">&quot;Content-Type: text/plain&quot;</span>);</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">complexStrtolower</span>(<span class="params"> <span class="variable">$regex</span>, <span class="variable">$value</span></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_ invoke__">preg_replace</span>(<span class="string">&#x27;/(&#x27;</span>. <span class="variable">$regex</span>.<span class="string">&#x27;)/ei&#x27;</span>,<span class="string">&#x27;strtolower(&quot;\1&quot;)&#x27;</span>,<span class="variable">$value</span>);</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">foreach</span> (<span class="variable">$_GET</span> <span class="keyword">as</span> <span class="variable">$regex</span> =&gt; <span class="variable">$value</span>)&#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="title function_ invoke__">complexStrtolower</span>(<span class="variable">$regex</span>, <span class="variable">$value</span>).<span class="string">&quot;n&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>preg_replace 使用了 &#x2F;e 模式，导致可以代码执行，我们可以控制第一个和第三个参数，第二个参数固定为 ‘strtolower(“\1”)’ 字符串。</p>
+<p>上面的命令执行，相当于 <strong>eval(‘strtolower(“\1”);’)</strong></p>
+<p>如何进行命令执行其他恶意代码？</p>
+<p>这里要用到一个PHP的小<strong>trick</strong>，<strong>反向引用</strong>。</p>
+<p>看了几篇文章，感觉讲的不是很清楚，这里解释一下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">反向引用</span><br><span class="line">对一个正则表达式模式或部分模式 两边添加圆括号 将导致相关 匹配存储到一个临时缓冲区 中，</span><br><span class="line">所捕获的每个子匹配都按照在正则表达式模式中从左到右出现的顺序存储。</span><br><span class="line">缓冲区编号从 1 开始，最多可存储 99 个捕获的子表达式。每个缓冲区都可以使用 <span class="string">&#x27;\n&#x27;</span> 访问，</span><br><span class="line">其中 n 为一个标识特定缓冲区的一位或两位十进制数。</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="built_in">static</span> <span class="function"><span class="keyword">function</span> <span class="title">camelize</span>(<span class="params"><span class="variable">$word</span></span>) </span>&#123;</span><br><span class="line">   <span class="keyword">return</span> <span class="title function_ invoke__">preg_replace</span>(<span class="string">&#x27;/(^|_)([a-z])/e&#x27;</span>, <span class="string">&#x27;strtoupper(&quot;\2&quot;)&#x27;</span>, <span class="variable">$word</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面这段代码，就是捕获匹配的 <code>(^|_)</code> 和 <code>([a-z])</code> 部分。它们从 1 开始编号，因此您有反向引用 1 和 2。</p>
+<p>1是正则  **(^|_) ** 所匹配到的东西，2是  <strong>([a-z])</strong>  所匹配到的东西。这里还有一个隐藏点 <strong>0 是整个匹配的字符串</strong> 很多文章没讲到这个。</p>
+<p>回到上面的代码中</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_ invoke__">preg_replace</span>(<span class="string">&#x27;/(&#x27;</span>. <span class="variable">$regex</span>.<span class="string">&#x27;)/ei&#x27;</span>,<span class="string">&#x27;strtolower(&quot;\1&quot;)&#x27;</span>,<span class="variable">$value</span>);</span><br></pre></td></tr></table></figure>
+
+<p>第二个参数中的\\1，实际上就是\1，配合反向引用的规则，\1就是指第一个子匹配项。</p>
+<p>那上面的命令执行，就相当于 <strong>eval(‘strtolower(“满足正则表达式的$value”);’)</strong></p>
+<p>官方 <strong>payload</strong> 为： <strong>&#x2F;?.*&#x3D;{${phpinfo()}}</strong></p>
+<p><strong>.</strong>* 正则匹配任意多个字符</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">原先的语句： <span class="title function_ invoke__">preg_replace</span>(<span class="string">&#x27;/(&#x27;</span> . <span class="variable">$regex</span> . <span class="string">&#x27;)/ei&#x27;</span>, <span class="string">&#x27;strtolower(&quot;\\1&quot;)&#x27;</span>, <span class="variable">$value</span>);</span><br><span class="line">变成了语句： <span class="title function_ invoke__">preg_replace</span>(<span class="string">&#x27;/(.*)/ei&#x27;</span>, <span class="string">&#x27;strtolower(&quot;\\1&quot;)&#x27;</span>, &#123;$&#123;<span class="title function_ invoke__">phpinfo</span>()&#125;&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>但是这个payload是有问题的</p>
+<p>以**.<em><strong>作为参数名是非法的，会自动转化成</strong>_</em>**</p>
+<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204231609346.png"></p>
+<p>图片来自：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/HelloCTF/p/13184476.html">https://www.cnblogs.com/HelloCTF/p/13184476.html</a></p>
+<p>稍微修改以下payload即可</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\S*=<span class="variable">$&#123;phpinfo()&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>\S</strong>* 正则匹配任意多个非空白符</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">`\C`、`\D`、`\H`、`\N`、`\S`、`\V`、`\X` 都能代替</span><br></pre></td></tr></table></figure>
+
+<p>匹配到 <strong>{${phpinfo()}}</strong> 或者 <strong>${phpinfo()}</strong> ，才能执行 phpinfo 函数，这是一个小坑。这实际上是 PHP可变变量 的原因。在PHP中双引号包裹的字符串中可以解析变量，而单引号则不行。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> <span class="variable">$a</span> = <span class="string">&quot;hello&quot;</span>;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;a=<span class="subst">$a</span>&quot;</span>;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;\n&quot;</span>;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&#x27;a=$a&#x27;</span>;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>输出：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a=hello </span><br><span class="line">a=<span class="variable">$a</span>		</span><br></pre></td></tr></table></figure>
+
+<p>为什么要匹配到 <strong>{${phpinfo()}}</strong> 或者 <strong>${phpinfo()}</strong> ，才能执行 <strong>phpinfo</strong> 函数，这是一个小坑。这实际上是 <a target="_blank" rel="noopener" href="http://php.net/manual/zh/language.variables.variable.php">PHP可变变量</a> 的原因。在PHP中双引号包裹的字符串中可以解析变量，而单引号则不行。 <strong>${phpinfo()}</strong> 中的 <strong>phpinfo()</strong> 会被当做变量先执行，执行后，即变成 <strong>${1}</strong> (phpinfo()成功执行返回true)。</p>
+<h4 id="利用场景：-7"><a href="#利用场景：-7" class="headerlink" title="利用场景："></a>利用场景：</h4><p>PHP版本有限制，可能见到的机会不多。</p>
+<p>ctf出现过作为考点的题目</p>
+<h4 id="修复建议：-7"><a href="#修复建议：-7" class="headerlink" title="修复建议："></a>修复建议：</h4><p>避免使用 <strong>&#x2F;e</strong> 模式修正符</p>
+<h3 id="str-replace函数过滤不当"><a href="#str-replace函数过滤不当" class="headerlink" title="str_replace函数过滤不当"></a>str_replace函数过滤不当</h3><p>[<a target="_blank" rel="noopener" href="https://github.com/hongriSec/PHP-Audit-Labs/blob/master/Part1/Day9/files/README.md">红日安全]代码审计Day9 - str_replace函数过滤不当</a></p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="http://php.net/manual/zh/function.str-replace.php"> str_replace </a>：(PHP 4, PHP 5, PHP 7)</p>
+<p><strong>功能</strong> ：子字符串替换</p>
+<p><strong>定义</strong> ： <code>mixed str_replace ( mixed $search , mixed $replace , mixed $subject [, int &amp;$count ] )</code></p>
+<p>该函数返回一个字符串或者数组。如下：</p>
+<p>str_replace(字符串1，字符串2，字符串3)：将字符串3中出现的所有字符串1换成字符串2。</p>
+<p>str_replace(数组1，字符串1，字符串2)：将字符串2中出现的所有数组1中的值，换成字符串1。</p>
+<p>str_replace(数组1，数组2，字符串1)：将字符串1中出现的所有数组1一一对应，替换成数组2的值，多余的替换成空字符串。</p>
+</blockquote>
+<p>本质是过滤不严谨</p>
+<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204231919587.png"></p>
+<p>以上代码是将 <strong>..&#x2F;</strong> 字符替换成空，然后进行路径拼接</p>
+<p>payload：**….&#x2F;&#x2F;** 或者 <strong>…&#x2F;.&#x2F;</strong> ，在经过程序的 <strong>str_replace</strong> 函数处理后，都会变成 <strong>..&#x2F;</strong> </p>
+<h4 id="利用场景：-8"><a href="#利用场景：-8" class="headerlink" title="利用场景："></a>利用场景：</h4><p>任意文件读取，任意文件删除……</p>
+<h4 id="修复建议：-8"><a href="#修复建议：-8" class="headerlink" title="修复建议："></a>修复建议：</h4><p>结合业务场景进行过滤</p>
+<h3 id="程序未恰当exit导致的问题"><a href="#程序未恰当exit导致的问题" class="headerlink" title="程序未恰当exit导致的问题"></a>程序未恰当exit导致的问题</h3><p>[<a target="_blank" rel="noopener" href="https://github.com/hongriSec/PHP-Audit-Labs/blob/master/Part1/Day10/files/README.md">红日安全]代码审计Day10 - 程序未恰当exit导致的问题</a></p>
+<p>本质上代码逻辑有问题，在本应该立即exit退出的地方，没有退出函数，使得程序继续运行，出现非预期的情况。</p>
+<h4 id="利用场景：-9"><a href="#利用场景：-9" class="headerlink" title="利用场景："></a>利用场景：</h4><p>重装漏洞</p>
+<h4 id="修复建议：-9"><a href="#修复建议：-9" class="headerlink" title="修复建议："></a>修复建议：</h4><p>在正确的地方退出程序即可，使用 <strong>die</strong> 、 <strong>exit</strong> 等函数。</p>
+<h3 id="unserialize反序列化漏洞"><a href="#unserialize反序列化漏洞" class="headerlink" title="unserialize反序列化漏洞"></a>unserialize反序列化漏洞</h3><p>[<a target="_blank" rel="noopener" href="https://github.com/hongriSec/PHP-Audit-Labs/blob/master/Part1/Day11/files/README.md">红日安全]代码审计Day11 - unserialize反序列化漏洞</a></p>
+<p>这个可以说是打ctf之前经常能见到。</p>
+<p>这里直接推几篇文章</p>
+<p>这一篇就够了</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/solitudi/article/details/113588692">https://blog.csdn.net/solitudi/article/details/113588692</a></p>
+<h4 id="利用场景：-10"><a href="#利用场景：-10" class="headerlink" title="利用场景："></a>利用场景：</h4><p>构造POP链rce</p>
+<p>ctf</p>
+<h4 id="修复建议：-10"><a href="#修复建议：-10" class="headerlink" title="修复建议："></a>修复建议：</h4><p>不要把用户的输入或者是用户可控的参数值直接放进反序列化的操作中</p>
+<h3 id="误用htmlentities函数引发的漏洞"><a href="#误用htmlentities函数引发的漏洞" class="headerlink" title="误用htmlentities函数引发的漏洞"></a>误用htmlentities函数引发的漏洞</h3><p>[<a target="_blank" rel="noopener" href="https://github.com/hongriSec/PHP-Audit-Labs/blob/master/Part1/Day12/files/README.md">红日安全]代码审计Day12 - 误用htmlentities函数引发的漏洞</a></p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="http://php.net/manual/zh/function.htmlentities.php">htmlentities</a> — 将字符转换为 HTML 转义字符</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">string</span> <span class="title function_ invoke__">htmlentities</span> ( <span class="keyword">string</span> <span class="variable">$string</span> [, <span class="keyword">int</span> <span class="variable">$flags</span> = ENT_COMPAT | ENT_HTML401 [, <span class="keyword">string</span> <span class="variable">$encoding</span> = <span class="title function_ invoke__">ini_get</span>(<span class="string">&quot;default_charset&quot;</span>) [, <span class="keyword">bool</span> <span class="variable">$double_encode</span> = <span class="literal">true</span> ]]] )</span><br></pre></td></tr></table></figure>
+
+<p>作用：在写PHP代码时，不能在字符串中直接写实体字符，PHP提供了一个将HTML特殊字符转换成实体字符的函数 htmlentities()。</p>
+</blockquote>
+<p>注：<strong>htmlentities()</strong> 并不能转换所有的特殊字符，是转换除了空格之外的特殊字符，且单引号和双引号需要单独控制（通过第二个参数）。第2个参数取值有3种，分别如下：</p>
+<ul>
+<li>ENT_COMPAT（默认值）：只转换双引号。</li>
+<li>ENT_QUOTES：两种引号都转换。</li>
+<li>ENT_NOQUOTES：两种引号都不转换。</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204231947807.png"></p>
+<h4 id="利用场景：-11"><a href="#利用场景：-11" class="headerlink" title="利用场景："></a>利用场景：</h4><p>当参数没设置清楚会导致出现SQL注入、XSS。</p>
+<h4 id="修复建议：-11"><a href="#修复建议：-11" class="headerlink" title="修复建议："></a>修复建议：</h4><p><strong>htmlentities</strong> 这个函数使用的时候，尽量加上可选参数，并且选择 <strong>ENT_QUOTES</strong> 转换单引号和双引号 参数。</p>
+<h3 id="特定场合下addslashes函数的绕过"><a href="#特定场合下addslashes函数的绕过" class="headerlink" title="特定场合下addslashes函数的绕过"></a>特定场合下addslashes函数的绕过</h3><p>[<a target="_blank" rel="noopener" href="https://github.com/hongriSec/PHP-Audit-Labs/blob/master/Part1/Day13/files/README.md">红日安全]代码审计Day13 - 特定场合下addslashes函数的绕过</a></p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="http://php.net/manual/zh/function.addslashes.php">addslashes</a> — 使用反斜线引用字符串</p>
+<figure class="highlight autoit"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">string</span> addslashes ( <span class="built_in">string</span> $str )</span><br></pre></td></tr></table></figure>
+
+<p>作用：在单引号（’）、双引号（”）、反斜线（\）与 NULL（ <strong>NULL</strong> 字符）字符之前加上反斜线。</p>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204231952107.png"></p>
+<p>具体案例：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204231956690.png"></p>
+<p>代码 <strong>第33行</strong> ，通过 <strong>POST</strong> 方式传入 <strong>user</strong> 和 <strong>passwd</strong> 两个参数，通过 <strong>isValid()</strong> 来判断登陆是否合法。我们跟进一下 <strong>isValid()</strong> 这个函数，该函数主要功能代码在 <strong>第12行-第22行</strong> ，我们看到 <strong>13行</strong> 和 <strong>14行</strong> 调用 <strong>sanitizeInput()</strong> 针对 <strong>user</strong> 和 <strong>password</strong> 进行相关处理。</p>
+<p>跟进一下 <strong>sanitizeInput()</strong> ，主要功能代码在 <strong>第24行-第29行</strong> ，这里针对输入的数据调用 <strong>addslashes</strong> 函数进行处理，然后再针对处理后的内容进行长度的判断，如果长度大于20，就只截取前20个字符。</p>
+<p>滤了单引号，正常情况下是没有注入了，那为什么还能导致注入了，原因实际上出在了 <strong>substr</strong> 函数</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="http://php.net/manual/zh/function.substr.php">substr</a> — 返回字符串的子串</p>
+<figure class="highlight autoit"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">string</span> substr ( <span class="built_in">string</span> $string , <span class="built_in">int</span> $start [, <span class="built_in">int</span> $length ] )</span><br></pre></td></tr></table></figure>
+
+<p>作用：返回字符串 <code>string</code> 由 <code>start</code> 和 <code>length</code> 参数指定的子字符串。</p>
+</blockquote>
+<p>代码中length默认为20</p>
+<p>我们里可以用他默认的长度为20，设计一个payload</p>
+<p>正常情况输入</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">user=<span class="number">1234567890123456789</span><span class="string">&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>会被转换成</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">user=<span class="number">1234567890123456789</span>\<span class="string">&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>但是经过substr函数的截取</p>
+<p>又变成了</p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">user</span><span class="operator">=</span><span class="number">1234567890123456789</span>\</span><br></pre></td></tr></table></figure>
+
+<p>再结合具体代码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select <span class="title function_ invoke__">count</span>(p) <span class="keyword">from</span> user u where user = <span class="string">&#x27;1234567890123456789\&#x27; AND password = &#x27;</span><span class="variable">$pass</span><span class="string">&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>\将本来是用来闭合user的单引号转义成了正常的单引号，所以签名的单引号与$pass的前一个单引号进行了闭合。</p>
+<p>这里我们让 <strong>pass&#x3D;or 1&#x3D;1#</strong> ，那么最后的sql语句如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select <span class="title function_ invoke__">count</span>(p) <span class="keyword">from</span> user where user = <span class="string">&#x27;1234567890123456789\&#x27; AND password = &#x27;</span><span class="keyword">or</span> <span class="number">1</span>=<span class="number">1</span><span class="comment">#&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>sql注入成功。</p>
+<h4 id="利用场景"><a href="#利用场景" class="headerlink" title="利用场景:"></a>利用场景:</h4><p>白盒审计</p>
+<p>ctf</p>
+<h4 id="修复建议：-12"><a href="#修复建议：-12" class="headerlink" title="修复建议："></a>修复建议：</h4><p>结合程序逻辑进行代码优化。</p>
+<h3 id="从变量覆盖到getshell"><a href="#从变量覆盖到getshell" class="headerlink" title="从变量覆盖到getshell"></a>从变量覆盖到getshell</h3><p>[<a target="_blank" rel="noopener" href="https://github.com/hongriSec/PHP-Audit-Labs/blob/master/Part1/Day14/files/README.md">红日安全]代码审计Day14 - 从变量覆盖到getshell</a></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204232044601.png"></p>
+<p>在 <strong>第10-11行</strong> 处， <strong>Carrot</strong> 类的构造方法将超全局数组 <strong>$_GET</strong> 进行变量注册，这样即可覆盖 <strong>第8行</strong> 已定义的 <strong>$this-&gt;</strong> 变量。而在 <strong>第16行</strong> 处的析构函数中， <strong>file_put_contents</strong> 函数的第一个参数又是由 <strong>$this-&gt;</strong> 变量拼接的，这就导致我们可以控制写入文件的位置，最终造成任意文件写入问题。下面我们试着使用 <strong>payload</strong> ：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">id=../<span class="keyword">var</span>/www/html/shell.php&amp;shell=<span class="string">&#x27;,)%0a&lt;?php phpinfo();?&gt;//</span></span><br></pre></td></tr></table></figure>
+
+<p>shell.php文件中内容：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">array</span>(</span><br><span class="line">    <span class="string">&#x27;id&#x27;</span> =&gt; <span class="string">&#x27;../var/www/html/shell.php&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;lost&#x27;</span> =&gt; <span class="number">0</span>,</span><br><span class="line">    <span class="string">&#x27;bought&#x27;</span> =&gt; <span class="number">0</span>,</span><br><span class="line">    <span class="string">&#x27;shell&#x27;</span> =&gt; <span class="string">&#x27;\&#x27;,)</span></span><br><span class="line"><span class="string">&lt;?php phpinfo();?&gt;//&#x27;</span>,</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>这里注意，shell变量中的反斜杠\是自动加上的，是给我们传入shell参数的内容中的单引号转义的。</p>
+<h4 id="利用场景：-12"><a href="#利用场景：-12" class="headerlink" title="利用场景："></a>利用场景：</h4><p>变脸覆盖的场景有写shell还有覆盖session登录等等</p>
+<h4 id="修复建议：-13"><a href="#修复建议：-13" class="headerlink" title="修复建议："></a>修复建议：</h4><p>检测变量名是否为PHP原有的超全局数组，如果是则直接退出并告知变量不允许</p>
+<h3 id="SERVER-‘PHP-SELF’-导致的防御失效问题"><a href="#SERVER-‘PHP-SELF’-导致的防御失效问题" class="headerlink" title="$_SERVER[‘PHP_SELF’]导致的防御失效问题"></a>$_SERVER[‘PHP_SELF’]导致的防御失效问题</h3><p>[<a target="_blank" rel="noopener" href="https://github.com/hongriSec/PHP-Audit-Labs/blob/master/Part1/Day15/files/README.md">红日安全]代码审计Day15 - $_SERVER[‘PHP_SELF’]导致的防御失效问题</a></p>
+<p>PHP自带的**$_SERVER[‘PHP_SELF’]** 参数是可以控制</p>
+<p><strong>PHP_SELF</strong> 指当前的页面绝对地址，比如我们的网站：<a target="_blank" rel="noopener" href="http://www.test.com/redict/index.php%EF%BC%8C%E9%82%A3%E4%B9%88**PHP_SELF**%E5%B0%B1%E6%98%AF">http://www.test.com/redict/index.php，那么**PHP_SELF**就是</a> &#x2F;redict&#x2F;index.php 。</p>
+<p>但有个小问题很多人没有注意到，当<strong>URL</strong>是<strong>PATH_INFO</strong>的时候，比如：<a target="_blank" rel="noopener" href="http://www.test.com/redict/index.php/admin%EF%BC%8C%E9%82%A3%E4%B9%88**PHP_SELF**%E5%B0%B1%E6%98%AF/redict/index.php/admin">http://www.test.com/redict/index.php/admin，那么**PHP_SELF**就是/redict/index.php/admin</a> 也就是说，其实 <strong>PHP_SELF</strong> 有一部分是我们可以控制的。</p>
+<h4 id="利用场景：-13"><a href="#利用场景：-13" class="headerlink" title="利用场景："></a>利用场景：</h4><p>任意URL跳转</p>
+<p>有一个关于 <strong>360webscan</strong> 的防护脚本一个历史漏洞，正是使用了 <strong>$_SERVER[‘PHP_SELF’]</strong> 这个变量，导致可以绕过360webscan防护脚本的防护，脚本的防护效果失效。</p>
+<h4 id="修复建议：-14"><a href="#修复建议：-14" class="headerlink" title="修复建议："></a>修复建议：</h4><p>使用 <strong>$_SERVER[‘SCRIPT_NAME’]</strong> 代替即可</p>
+<h3 id="深入理解-REQUESTS数组"><a href="#深入理解-REQUESTS数组" class="headerlink" title="深入理解$_REQUESTS数组"></a>深入理解$_REQUESTS数组</h3><p>[<a target="_blank" rel="noopener" href="https://github.com/hongriSec/PHP-Audit-Labs/blob/master/Part1/Day16/files/README.md">红日安全]代码审计Day16 - 深入理解$_REQUESTS数组</a></p>
+<p>超全局数组 <strong>$_REQUEST</strong> 中的数据，是 <strong>$_GET</strong> 、 <strong>$_POST</strong> 、 <strong>$_COOKIE</strong> 的合集，而且数据是复制过去的，并不是引用。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204232129558.png"></p>
+<p>所以很多时候仅仅是对**$_GET** 、 <strong>$_POST</strong>的传参做了限制，但利用时的变量确实使用**$_REQUEST**传入的，相当于并没有进行过滤。</p>
+<h4 id="利用场景：-14"><a href="#利用场景：-14" class="headerlink" title="利用场景："></a>利用场景：</h4><p>XSS，SQL注入等</p>
+<h4 id="修复建议：-15"><a href="#修复建议：-15" class="headerlink" title="修复建议："></a><strong>修复建议：</strong></h4><p>优化参数处理逻辑。</p>
+<h3 id="Raw-MD5-Hash引发的注入"><a href="#Raw-MD5-Hash引发的注入" class="headerlink" title="Raw MD5 Hash引发的注入"></a>Raw MD5 Hash引发的注入</h3><p>[<a target="_blank" rel="noopener" href="https://github.com/hongriSec/PHP-Audit-Labs/blob/master/Part1/Day17/files/README.md">红日安全]代码审计Day17 - Raw MD5 Hash引发的注入</a></p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="http://php.net/manual/zh/function.md5.php">md5</a> — 计算字符串的 MD5 散列值</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">string</span> <span class="title function_ invoke__">md5</span> ( <span class="keyword">string</span> <span class="variable">$str</span> [, <span class="keyword">bool</span> <span class="variable">$raw_output</span> = <span class="literal">false</span> ] )</span><br></pre></td></tr></table></figure>
+
+<p>如果可选的 <code>raw_output</code> 被设置为 <strong>TRUE</strong>，那么 MD5 报文摘要将以16字节长度的原始二进制格式返回。</p>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204232133969.png"></p>
+<p>案例：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204232134254.png"></p>
+<p>我可以控制的点有两个变量，一个是 <strong>$user</strong> ，一个是 <strong>$pass</strong> ，**$pass** 经过了 <strong>md5</strong> 的处理，但是返回字段不是标准的md5值，**$user** 经过了 <strong>addslashes</strong> 函数的处理，无法引入特殊符号去闭合。</p>
+<p>如果我们经过 <strong>$pass &#x3D; md5($this-&gt;password, true);</strong> 处理之后的值逃逸出一个反斜杆，那么实际上带入到数据库的值就如下所示：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select <span class="title function_ invoke__">count</span>(p) <span class="keyword">from</span> user s where password=<span class="string">&#x27;xxxxxx\&#x27; and user=&#x27;</span>xxx<span class="comment">#&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204232135110.png" alt="3"></p>
+<p>发现 <strong>md5(128, true)</strong> 最后的结果带有反斜杠。</p>
+<p>payload如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">user= OR <span class="number">1</span>=<span class="number">1</span><span class="comment">#&amp;passwd=128</span></span><br></pre></td></tr></table></figure>
+
+<p>带入到数据库查询的语句如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select <span class="title function_ invoke__">count</span>(p) <span class="keyword">from</span> user s where password=<span class="string">&#x27;v�a�n���l���q��\&#x27; and user=&#x27;</span> OR <span class="number">1</span>=<span class="number">1</span><span class="comment">#&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="利用场景：-15"><a href="#利用场景：-15" class="headerlink" title="利用场景："></a>利用场景：</h4><p>CTF遇见过</p>
+<h4 id="修复建议：-16"><a href="#修复建议：-16" class="headerlink" title="修复建议："></a>修复建议：</h4><p>建议在使用 <strong>md5</strong> 函数的时候，不要将 <strong>$raw_output</strong> 字段设置为<strong>true</strong> 。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" rel="tag"># 代码审计</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/04/17/SRC%E5%A7%BF%E5%8A%BF(%E4%BA%8C)/" rel="prev" title="SRC姿势(二)">
+                  <i class="fa fa-chevron-left"></i> SRC姿势(二)
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/04/23/%E6%B8%B8%E6%88%8F%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E2%80%94%E2%80%94%E5%BE%85%E8%A1%A5%E5%85%85/" rel="next" title="游戏漏洞挖掘——待补充">
+                  游戏漏洞挖掘——待补充 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LiAoRJ</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
