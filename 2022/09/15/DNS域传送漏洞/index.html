@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.1.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"liaorj.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.11.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="漏洞描述备份服务器需要利用“域传送”从主服务器上复制数据，然后更新自身的数据库，以达到数据同步的目的，这样是为了增加冗余，万一主服务器挂了还有备份服务器顶着。 而“域传送”漏洞则是由于dns配置不当，本来只有备份服务器能获得主服务器的数据，由于漏洞导致任意client都能通过“域传送”获得主服务器的数据（zone数据库信息）。 这样，攻击者就能获得某个域的所有记录，用于子域名的信息收集，甚至整个网">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DNS域传送漏洞">
+<meta property="og:url" content="https://liaorj.github.io/2022/09/15/DNS%E5%9F%9F%E4%BC%A0%E9%80%81%E6%BC%8F%E6%B4%9E/index.html">
+<meta property="og:site_name" content="LiAoRJ的成长记录">
+<meta property="og:description" content="漏洞描述备份服务器需要利用“域传送”从主服务器上复制数据，然后更新自身的数据库，以达到数据同步的目的，这样是为了增加冗余，万一主服务器挂了还有备份服务器顶着。 而“域传送”漏洞则是由于dns配置不当，本来只有备份服务器能获得主服务器的数据，由于漏洞导致任意client都能通过“域传送”获得主服务器的数据（zone数据库信息）。 这样，攻击者就能获得某个域的所有记录，用于子域名的信息收集，甚至整个网">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-09-15T09:57:27.000Z">
+<meta property="article:modified_time" content="2022-09-15T10:14:50.904Z">
+<meta property="article:author" content="LiAoRJ">
+<meta property="article:tag" content="漏洞研究">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://liaorj.github.io/2022/09/15/DNS%E5%9F%9F%E4%BC%A0%E9%80%81%E6%BC%8F%E6%B4%9E/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://liaorj.github.io/2022/09/15/DNS%E5%9F%9F%E4%BC%A0%E9%80%81%E6%BC%8F%E6%B4%9E/","path":"2022/09/15/DNS域传送漏洞/","title":"DNS域传送漏洞"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>DNS域传送漏洞 | LiAoRJ的成长记录</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">LiAoRJ的成长记录</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录一下吧</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">8</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">24</span></a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E6%8F%8F%E8%BF%B0"><span class="nav-text">漏洞描述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8"><span class="nav-text">漏洞利用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Win%E4%BD%BF%E7%94%A8nslookup"><span class="nav-text">Win使用nslookup</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux%E4%BD%BF%E7%94%A8Dig"><span class="nav-text">Linux使用Dig</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BF%AE%E5%A4%8D%E5%BB%BA%E8%AE%AE"><span class="nav-text">修复建议</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="LiAoRJ"
+      src="/images/touxiang.jpg">
+  <p class="site-author-name" itemprop="name">LiAoRJ</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/LiAoRJ" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;LiAoRJ" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liaorj.github.io/2022/09/15/DNS%E5%9F%9F%E4%BC%A0%E9%80%81%E6%BC%8F%E6%B4%9E/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/touxiang.jpg">
+      <meta itemprop="name" content="LiAoRJ">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LiAoRJ的成长记录">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="DNS域传送漏洞 | LiAoRJ的成长记录">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          DNS域传送漏洞
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-09-15 17:57:27 / 修改时间：18:14:50" itemprop="dateCreated datePublished" datetime="2022-09-15T17:57:27+08:00">2022-09-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6/" itemprop="url" rel="index"><span itemprop="name">漏洞研究</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="漏洞描述"><a href="#漏洞描述" class="headerlink" title="漏洞描述"></a><strong>漏洞描述</strong></h1><p>备份服务器需要利用“域传送”从主服务器上复制数据，然后更新自身的数据库，以达到数据同步的目的，这样是为了增加冗余，万一主服务器挂了还有备份服务器顶着。</p>
+<p>而“域传送”漏洞则是由于dns配置不当，本来只有备份服务器能获得主服务器的数据，由于漏洞导致任意client都能通过“域传送”获得主服务器的数据（zone数据库信息）。</p>
+<p>这样，攻击者就能获得某个域的所有记录，用于<strong>子域名的信息收集</strong>，甚至整个网络拓扑都暴露无遗，凭借这份网络蓝图，攻击者可以节省很多扫描时间以及信息收集的时间，还提升了准确度等等。</p>
+<p>大的互联网厂商通常将内部网络与外部互联网隔离开，一个重要的手段是使用 Private DNS。如果内部 DNS 泄露，将造成极大的安全风险。风险控制不当甚至造成整个内部网络沦陷。</p>
+<h1 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a><strong>漏洞利用</strong></h1><h2 id="Win使用nslookup"><a href="#Win使用nslookup" class="headerlink" title="Win使用nslookup"></a>Win使用nslookup</h2><p>失败例子：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&gt; nslookup</span><br><span class="line">DNS request timed out.</span><br><span class="line">    timeout was <span class="number">2</span> seconds.</span><br><span class="line">默认服务器:  UnKnown</span><br><span class="line"><span class="function">Address:  114.114.114.114</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">&gt; <span class="title">server</span> <span class="title">ss2.bjfu.edu.cn</span></span></span><br><span class="line"><span class="function">默认服务器:  <span class="title">ss2.bjfu.edu.cn</span></span></span><br><span class="line"><span class="function"><span class="title">Address</span>:  202.204.112.67</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">&gt; <span class="title">ls</span> <span class="title">bjfu.edu.cn</span></span></span><br><span class="line"><span class="function">[<span class="title">ss2.bjfu.edu.cn</span>]</span></span><br><span class="line"><span class="function">*** 无法列出域 <span class="title">bjfu.edu.cn</span>: <span class="title">Query</span> <span class="title">refused</span></span></span><br><span class="line"><span class="function"><span class="title">DNS</span> 服务器拒绝将区域 <span class="title">bjfu.edu.cn</span> 传送到你的计算机。如果这不正确，</span></span><br><span class="line"><span class="function">请检查 <span class="title">IP</span> 地址 202.204.112.67 的 <span class="title">DNS</span> 服务器上 <span class="title">bjfu.edu.cn</span> 的</span></span><br><span class="line"><span class="function">区域传送安全设置。</span></span><br></pre></td></tr></table></figure>
+
+<p>说明 bjfu.edu.cn存在域传送漏洞</p>
+<p>成功例子：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">&gt; nslookup</span><br><span class="line">默认服务器:  public1.<span class="number">114</span>dns.com</span><br><span class="line"><span class="function">Address:  114.114.114.114</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">&gt; <span class="title">server</span> <span class="title">ring.cugb.edu.cn</span></span></span><br><span class="line"><span class="function">默认服务器:  <span class="title">ring.cugb.edu.cn</span></span></span><br><span class="line"><span class="function"><span class="title">Address</span>:  202.204.105.1</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">&gt; <span class="title">ls</span> <span class="title">cugb.edu.cn</span></span></span><br><span class="line"><span class="function">[<span class="title">ring.cugb.edu.cn</span>]</span></span><br><span class="line"><span class="function"> <span class="title">cugb.edu.cn</span>.                   <span class="title">NS</span>     <span class="title">server</span> = <span class="title">ring.cugb.edu.cn</span></span></span><br><span class="line"><span class="function"> <span class="title">cugb.edu.cn</span>.                   <span class="title">A</span>      127.0.0.1</span></span><br><span class="line"><span class="function"> <span class="title">acm</span>                            <span class="title">A</span>      121.194.86.2</span></span><br><span class="line"><span class="function"> <span class="title">bbs</span>                            <span class="title">A</span>      202.204.105.172</span></span><br><span class="line"><span class="function"> <span class="title">bm</span>                             <span class="title">A</span>      202.204.105.179</span></span><br><span class="line"><span class="function"> <span class="title">bsbm</span>                           <span class="title">A</span>      202.204.105.17</span></span><br><span class="line"><span class="function"> <span class="title">bslt</span>                           <span class="title">A</span>      202.204.109.241</span></span><br><span class="line"><span class="function"> <span class="title">cas</span>                            <span class="title">A</span>      202.204.105.97</span></span><br><span class="line"><span class="function"> <span class="title">ce</span>                             <span class="title">A</span>      202.204.99.249</span></span><br><span class="line"><span class="function"> <span class="title">chushi</span>                         <span class="title">A</span>      202.204.105.243</span></span><br><span class="line"><span class="function"> <span class="title">cj</span>                             <span class="title">A</span>      202.204.96.111</span></span><br><span class="line"><span class="function"> <span class="title">cms</span>                            <span class="title">A</span>      202.204.105.179</span></span><br><span class="line"><span class="function"> <span class="title">computer</span>                       <span class="title">A</span>      202.204.96.202</span></span><br><span class="line"><span class="function"> <span class="title">csc</span>                            <span class="title">A</span>      202.204.97.60</span></span><br><span class="line"><span class="function"> <span class="title">cugblx</span>                         <span class="title">A</span>      202.204.105.173</span></span><br><span class="line"><span class="function">.</span></span><br><span class="line"><span class="function">.</span></span><br><span class="line"><span class="function">.</span></span><br><span class="line"><span class="function">.</span></span><br><span class="line"><span class="function"> <span class="title">yx</span>                             <span class="title">A</span>      202.204.105.179</span></span><br><span class="line"><span class="function"> <span class="title">zhsh</span>                           <span class="title">A</span>      202.204.105.198</span></span><br><span class="line"><span class="function"> <span class="title">zzb</span>                            <span class="title">A</span>      202.204.105.243</span></span><br><span class="line"><span class="function">&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Linux使用Dig"><a href="#Linux使用Dig" class="headerlink" title="Linux使用Dig"></a>Linux使用Dig</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">~$ </span><span class="language-bash">dig XXXXX.edu.cn ns</span></span><br><span class="line"></span><br><span class="line">; &lt;&lt;&gt;&gt; DiG 9.11.3-1ubuntu1.16-Ubuntu &lt;&lt;&gt;&gt; xxxxx.edu.cn ns</span><br><span class="line">;; global options: +cmd</span><br><span class="line">;; Got answer:</span><br><span class="line">;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 44008</span><br><span class="line">;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 2</span><br><span class="line"></span><br><span class="line">;; OPT PSEUDOSECTION:</span><br><span class="line">; EDNS: version: 0, flags:; udp: 4096</span><br><span class="line">; COOKIE: 7b96a2ecff97071d7fe4f76322f985176c55e8d3420dab (good)</span><br><span class="line">;; QUESTION SECTION:</span><br><span class="line">;XXXXX.edu.cn.                  IN      NS</span><br><span class="line"></span><br><span class="line">;; ANSWER SECTION:</span><br><span class="line">XXXXX.edu.cn.           3600    IN      NS      XXXXX.XXXXX.edu.cn.</span><br><span class="line"></span><br><span class="line">;; ADDITIONAL SECTION:</span><br><span class="line">XXXXX.XXXX.edu.cn.      172786  IN      A       XXX.XXX.XXX.XXX</span><br><span class="line"></span><br><span class="line">;; Query time: 867 msec</span><br><span class="line">;; SERVER: XXX.XXX.XXX.XXX#53(XXX.XXX.XXX.XXX)</span><br><span class="line">;; WHEN: Thu Sep 15 18:08:05 CST 2022</span><br><span class="line">;; MSG SIZE  rcvd: 104</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">~$ </span><span class="language-bash">dig axfr @XXXX.XXXXX.edu.cn XXXXX.edu.cn</span></span><br><span class="line"></span><br><span class="line">; &lt;&lt;&gt;&gt; DiG 9.11.3-1ubuntu1.16-Ubuntu &lt;&lt;&gt;&gt; axfr @XXXXX.XXXXX.edu.cn XXXXX.edu.cn</span><br><span class="line">; (1 server found)</span><br><span class="line">;; global options: +cmd</span><br><span class="line">; Transfer failed.</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>dig axfr @XXXX.XXXXX.edu.cn XXXXX.edu.cn</p>
+<p>@XXXX.XXXXX.edu.cn 为刚刚NS所查到的DNS服务器域名</p>
+<p>XXXXX.edu.cn 目标网站</p>
+</blockquote>
+<h1 id="修复建议"><a href="#修复建议" class="headerlink" title="修复建议"></a>修复建议</h1><p>区域传送是 DNS 常用的功能，为保证使用安全，应严格限制允许区域传送的主机，例如一个主 DNS 服务器应该只允许它的备用 DNS 服务器执行区域传送功能。</p>
+<p>在相应的 zone、options 中添加 allow-transfer，对执行此操作的服务器进行限制。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6/" rel="tag"># 漏洞研究</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/09/07/%E8%AE%B0%E4%B8%80%E6%AC%A1CS%E6%9E%B6%E6%9E%84%E5%AE%A2%E6%88%B7%E7%AB%AF%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E6%B3%84%E9%9C%B2%E5%AF%BC%E8%87%B4%E7%9A%84%E5%86%85%E7%BD%91%E6%B2%A6%E9%99%B7/" rel="prev" title="记一次C/S架构客户端配置文件泄露导致的内网沦陷">
+                  <i class="fa fa-chevron-left"></i> 记一次C/S架构客户端配置文件泄露导致的内网沦陷
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LiAoRJ</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

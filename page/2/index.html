@@ -81,7 +81,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">8</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">23</span></a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">8</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">24</span></a></li>
   </ul>
 </nav>
 
@@ -126,7 +126,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-count">24</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -171,6 +171,105 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://liaorj.github.io/2022/08/05/%E6%94%BB%E9%98%B2%E6%BC%94%E7%BB%83%E4%B9%8B%E4%BA%91%E5%87%BD%E6%95%B0%E7%9A%84%E5%88%A9%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/touxiang.jpg">
+      <meta itemprop="name" content="LiAoRJ">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LiAoRJ的成长记录">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | LiAoRJ的成长记录">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/08/05/%E6%94%BB%E9%98%B2%E6%BC%94%E7%BB%83%E4%B9%8B%E4%BA%91%E5%87%BD%E6%95%B0%E7%9A%84%E5%88%A9%E7%94%A8/" class="post-title-link" itemprop="url">攻防演练之云函数的利用</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-08-05 17:56:46" itemprop="dateCreated datePublished" datetime="2022-08-05T17:56:46+08:00">2022-08-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-08-12 15:28:20" itemprop="dateModified" datetime="2022-08-12T15:28:20+08:00">2022-08-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BA%A2%E9%98%9F%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD/" itemprop="url" rel="index"><span itemprop="name">红队基础设施</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="攻防演练之云函数的利用"><a href="#攻防演练之云函数的利用" class="headerlink" title="攻防演练之云函数的利用"></a>攻防演练之云函数的利用</h1><p>云函数（Serverless CloudFunction，SCF）是云计算厂商为企业和开发者们提供的无服务器执行环境，可在无需购买和管理服务器的情况下运行代码是实时文件处理和数据处理等场景下理想的计算平台。只需使用 SCF平台支持的语言编写核心代码并设置代码运行的条件，即可在某云基础设施上弹性、安全地运行代码。</p>
+<p>由于云函数无法长驻，调用的时候创建，执行完之后立即就销毁，所以无法直接保存状态。也正是这一点，让我们无法代理像 SSH 这种需要长连接的服务，只能代理 HTTP(s) 这种无状态的协议。</p>
+<p>云函数不能直接调用，同时还需要创建一个触发器来触发云函数，为了方便，我们选择使用API 网关触发器，只需要一个 HTTP 请求就能触发。</p>
+<p><strong>腾讯云函数地址：</strong></p>
+<p><a target="_blank" rel="noopener" href="https://console.cloud.tencent.com/scf/index">https://console.cloud.tencent.com/scf/index</a></p>
+<p>利用云函数的多出口、无需服务器承载的特性，我们可以在实战攻防演练中实现隐藏自身。</p>
+<p>具体应用如下：</p>
+<h3 id="1、利用云函数API配置蚁剑实现隐藏自身IP连接Webshell"><a href="#1、利用云函数API配置蚁剑实现隐藏自身IP连接Webshell" class="headerlink" title="1、利用云函数API配置蚁剑实现隐藏自身IP连接Webshell"></a>1、<strong>利用云函数API配置蚁剑实现隐藏自身IP连接Webshell</strong></h3><p> 首先创建云函数：</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/08/05/%E6%94%BB%E9%98%B2%E6%BC%94%E7%BB%83%E4%B9%8B%E4%BA%91%E5%87%BD%E6%95%B0%E7%9A%84%E5%88%A9%E7%94%A8/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -971,95 +1070,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2022/04/20/%E7%BA%A2%E6%97%A5%E5%AE%89%E5%85%A8%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E5%AD%A6%E4%B9%A0(%E4%B8%80)/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://liaorj.github.io/2022/04/17/SRC%E5%A7%BF%E5%8A%BF(%E4%BA%8C)/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/touxiang.jpg">
-      <meta itemprop="name" content="LiAoRJ">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="LiAoRJ的成长记录">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | LiAoRJ的成长记录">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/04/17/SRC%E5%A7%BF%E5%8A%BF(%E4%BA%8C)/" class="post-title-link" itemprop="url">SRC姿势(二)</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2022-04-17 14:34:57 / 修改时间：14:38:07" itemprop="dateCreated datePublished" datetime="2022-04-17T14:34:57+08:00">2022-04-17</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/SRC%E5%A7%BF%E5%8A%BF/" itemprop="url" rel="index"><span itemprop="name">SRC姿势</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="SRC姿势-二"><a href="#SRC姿势-二" class="headerlink" title="SRC姿势(二)"></a>SRC姿势(二)</h1><p>新增漏洞银行分享和挖百度的大佬的分享</p>
-<p>未来将会收集点国外赏金猎人的思路。</p>
-<p>github地址：<a target="_blank" rel="noopener" href="https://github.com/LiAoRJ/src">LiAoRJ&#x2F;src: SRC姿势收集 (github.com)</a></p>
-
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/04/17/SRC%E5%A7%BF%E5%8A%BF(%E4%BA%8C)/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
