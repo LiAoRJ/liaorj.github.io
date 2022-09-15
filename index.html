@@ -81,7 +81,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">8</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">24</span></a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">8</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">25</span></a></li>
   </ul>
 </nav>
 
@@ -126,7 +126,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-count">25</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -171,6 +171,99 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://liaorj.github.io/2022/09/15/%E6%9C%AA%E8%AE%BE%E7%BD%AEspf%E5%AF%BC%E8%87%B4%E7%9A%84%E9%82%AE%E7%AE%B1%E4%BB%BB%E6%84%8F%E4%BC%AA%E9%80%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/touxiang.jpg">
+      <meta itemprop="name" content="LiAoRJ">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LiAoRJ的成长记录">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | LiAoRJ的成长记录">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/09/15/%E6%9C%AA%E8%AE%BE%E7%BD%AEspf%E5%AF%BC%E8%87%B4%E7%9A%84%E9%82%AE%E7%AE%B1%E4%BB%BB%E6%84%8F%E4%BC%AA%E9%80%A0/" class="post-title-link" itemprop="url">未设置spf导致的邮箱任意伪造</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-09-15 18:17:40 / 修改时间：18:19:58" itemprop="dateCreated datePublished" datetime="2022-09-15T18:17:40+08:00">2022-09-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6/" itemprop="url" rel="index"><span itemprop="name">漏洞研究</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="未设置spf导致的邮箱任意伪造"><a href="#未设置spf导致的邮箱任意伪造" class="headerlink" title="未设置spf导致的邮箱任意伪造"></a>未设置spf导致的邮箱任意伪造</h1><h2 id="spf的解释"><a href="#spf的解释" class="headerlink" title="spf的解释:"></a>spf的解释:</h2><p>SPF 记录是一种域名服务（DNS）记录，用于标识哪些邮件服务器可以代表您的域名发送电子邮件。SPF 记录的目的是为了防止垃圾邮件发送者在您的域名上，使用伪造的发件人地址发送邮件。</p>
+<p>原理:未设置spf导致的邮件任意伪造,可以用来钓鱼社工,本身就是高危</p>
+<p>若您未对您的域名添加 SPF 解析记录，则黑客可以仿冒以该域名为后缀的邮箱，来发送垃圾邮件。</p>
+<p>其实它的危害比它自身邮箱伪造危害更大。</p>
+<h2 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用:"></a>漏洞利用:</h2><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nslookup -<span class="built_in">type</span>=txt 域名</span><br></pre></td></tr></table></figure>
+
+<p>如果没有v&#x3D;spf1或者没spf就存在邮件伪造漏洞。</p>
+
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/09/15/%E6%9C%AA%E8%AE%BE%E7%BD%AEspf%E5%AF%BC%E8%87%B4%E7%9A%84%E9%82%AE%E7%AE%B1%E4%BB%BB%E6%84%8F%E4%BC%AA%E9%80%A0/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1022,105 +1115,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2022/08/11/KKCMS%20v1.32%E5%AE%A1%E8%AE%A1/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://liaorj.github.io/2022/08/10/%E7%86%8A%E6%B5%B7CMS%E5%AE%A1%E8%AE%A1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/touxiang.jpg">
-      <meta itemprop="name" content="LiAoRJ">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="LiAoRJ的成长记录">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | LiAoRJ的成长记录">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/08/10/%E7%86%8A%E6%B5%B7CMS%E5%AE%A1%E8%AE%A1/" class="post-title-link" itemprop="url">熊海CMS V1.0审计</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2022-08-10 23:34:36" itemprop="dateCreated datePublished" datetime="2022-08-10T23:34:36+08:00">2022-08-10</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2022-08-12 15:23:13" itemprop="dateModified" datetime="2022-08-12T15:23:13+08:00">2022-08-12</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" itemprop="url" rel="index"><span itemprop="name">代码审计</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="熊海CMS-V1-0审计"><a href="#熊海CMS-V1-0审计" class="headerlink" title="熊海CMS V1.0审计"></a>熊海CMS V1.0审计</h1><p>vscode+phpsuty</p>
-<h2 id="SQL注入"><a href="#SQL注入" class="headerlink" title="SQL注入"></a>SQL注入</h2><p><a target="_blank" rel="noopener" href="http://127.0.0.1/xhcms/admin/?r=login">http://127.0.0.1/xhcms/admin/?r=login</a></p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">user=admin*&amp;password=<span class="number">123456</span>&amp;login=yes</span><br></pre></td></tr></table></figure>
-
-<h2 id="前台文件包含"><a href="#前台文件包含" class="headerlink" title="前台文件包含"></a>前台文件包含</h2><p><a target="_blank" rel="noopener" href="http://127.0.0.1/xhcms/index.php?r=../../phpinfo">http://127.0.0.1/xhcms/index.php?r=../../phpinfo</a></p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$file</span>=<span class="title function_ invoke__">addslashes</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;r&#x27;</span>]); <span class="comment">//接收文件名</span></span><br><span class="line"><span class="variable">$action</span>=<span class="variable">$file</span>==<span class="string">&#x27;&#x27;</span>?<span class="string">&#x27;index&#x27;</span>:<span class="variable">$file</span>; <span class="comment">//判断为空或者等于index</span></span><br><span class="line"><span class="keyword">include</span>(<span class="string">&#x27;files/&#x27;</span>.<span class="variable">$action</span>.<span class="string">&#x27;.php&#x27;</span>); <span class="comment">//载入相应文件</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="后台文件包含"><a href="#后台文件包含" class="headerlink" title="后台文件包含"></a>后台文件包含</h2><p><a target="_blank" rel="noopener" href="http://127.0.0.1/xhcms/admin/index.php?r=../../../phpinfo">http://127.0.0.1/xhcms/admin/index.php?r=../../../phpinfo</a></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/08/10/%E7%86%8A%E6%B5%B7CMS%E5%AE%A1%E8%AE%A1/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>

@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>未设置spf导致的邮箱任意伪造</title>
+      <link href="/2022/09/15/%E6%9C%AA%E8%AE%BE%E7%BD%AEspf%E5%AF%BC%E8%87%B4%E7%9A%84%E9%82%AE%E7%AE%B1%E4%BB%BB%E6%84%8F%E4%BC%AA%E9%80%A0/"/>
+      <url>/2022/09/15/%E6%9C%AA%E8%AE%BE%E7%BD%AEspf%E5%AF%BC%E8%87%B4%E7%9A%84%E9%82%AE%E7%AE%B1%E4%BB%BB%E6%84%8F%E4%BC%AA%E9%80%A0/</url>
+      
+        <content type="html"><![CDATA[<h1 id="未设置spf导致的邮箱任意伪造"><a href="#未设置spf导致的邮箱任意伪造" class="headerlink" title="未设置spf导致的邮箱任意伪造"></a>未设置spf导致的邮箱任意伪造</h1><h2 id="spf的解释"><a href="#spf的解释" class="headerlink" title="spf的解释:"></a>spf的解释:</h2><p>SPF 记录是一种域名服务（DNS）记录，用于标识哪些邮件服务器可以代表您的域名发送电子邮件。SPF 记录的目的是为了防止垃圾邮件发送者在您的域名上，使用伪造的发件人地址发送邮件。</p><p>原理:未设置spf导致的邮件任意伪造,可以用来钓鱼社工,本身就是高危</p><p>若您未对您的域名添加 SPF 解析记录，则黑客可以仿冒以该域名为后缀的邮箱，来发送垃圾邮件。</p><p>其实它的危害比它自身邮箱伪造危害更大。</p><h2 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用:"></a>漏洞利用:</h2><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nslookup -<span class="built_in">type</span>=txt 域名</span><br></pre></td></tr></table></figure><p>如果没有v&#x3D;spf1或者没spf就存在邮件伪造漏洞。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 漏洞研究 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 漏洞研究 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>DNS域传送漏洞</title>
       <link href="/2022/09/15/DNS%E5%9F%9F%E4%BC%A0%E9%80%81%E6%BC%8F%E6%B4%9E/"/>
       <url>/2022/09/15/DNS%E5%9F%9F%E4%BC%A0%E9%80%81%E6%BC%8F%E6%B4%9E/</url>
