@@ -20,16 +20,27 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"liaorj.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.11.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="业务安全之短信&amp;邮箱轰炸本文参考于 挖洞技巧：绕过短信&amp;邮箱轰炸限制以及后续-安全客 - 安全资讯平台 (anquanke.com) 补充部分自己的思路以及部分作者未写出的利用工具。 尊重作者权益，故此文不标原创。 0x01 特殊符号绕过短信&amp;邮箱轰炸限制Request 1phone&#x3D;111*****123 或 email&#x3D;test@aa.com  Response 1&amp;#">
+    <meta name="description" content="业务安全之验证码短信&amp;邮箱验证码轰炸本文参考于 挖洞技巧：绕过短信&amp;邮箱轰炸限制以及后续-安全客 - 安全资讯平台 (anquanke.com) 补充部分自己的思路以及部分作者未写出的利用工具。 尊重作者权益，故此文不标原创。 0x01 特殊符号绕过短信&amp;邮箱轰炸限制Request 1phone&#x3D;111*****123 或 email&#x3D;test@aa.com  Respon">
 <meta property="og:type" content="article">
-<meta property="og:title" content="业务安全之短信&amp;邮箱轰炸">
+<meta property="og:title" content="业务安全之验证码">
 <meta property="og:url" content="https://liaorj.github.io/2022/09/28/%E4%B8%9A%E5%8A%A1%E5%AE%89%E5%85%A8%E4%B9%8B%E7%9F%AD%E4%BF%A1%E8%BD%B0%E7%82%B8/index.html">
 <meta property="og:site_name" content="LiAoRJ的成长记录">
-<meta property="og:description" content="业务安全之短信&amp;邮箱轰炸本文参考于 挖洞技巧：绕过短信&amp;邮箱轰炸限制以及后续-安全客 - 安全资讯平台 (anquanke.com) 补充部分自己的思路以及部分作者未写出的利用工具。 尊重作者权益，故此文不标原创。 0x01 特殊符号绕过短信&amp;邮箱轰炸限制Request 1phone&#x3D;111*****123 或 email&#x3D;test@aa.com  Response 1&amp;#">
+<meta property="og:description" content="业务安全之验证码短信&amp;邮箱验证码轰炸本文参考于 挖洞技巧：绕过短信&amp;邮箱轰炸限制以及后续-安全客 - 安全资讯平台 (anquanke.com) 补充部分自己的思路以及部分作者未写出的利用工具。 尊重作者权益，故此文不标原创。 0x01 特殊符号绕过短信&amp;邮箱轰炸限制Request 1phone&#x3D;111*****123 或 email&#x3D;test@aa.com  Respon">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/LiAoRJ/Pic@master/image-20220928235849226.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/LiAoRJ/Pic@master/image20220929111.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/LiAoRJ/Pic@master/image20220929112.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/LiAoRJ/Pic@master/image20220929113.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/LiAoRJ/Pic@master/image20220929114.png">
+<meta property="og:image" content="c:/Users/13473/AppData/Roaming/Typora/typora-user-images/image20220929115.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/LiAoRJ/Pic@master/image20220929116.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/LiAoRJ/Pic@master/image20220929117.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/LiAoRJ/Pic@master/image20220929118.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/LiAoRJ/Pic@master/image20220929119.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/LiAoRJ/Pic@master/image202209291110.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/LiAoRJ/Pic@master/image202209291111.png">
 <meta property="article:published_time" content="2022-09-28T13:34:56.000Z">
-<meta property="article:modified_time" content="2022-09-28T16:29:36.464Z">
+<meta property="article:modified_time" content="2022-09-29T08:16:04.786Z">
 <meta property="article:author" content="LiAoRJ">
 <meta property="article:tag" content="漏洞研究">
 <meta name="twitter:card" content="summary">
@@ -40,10 +51,10 @@
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://liaorj.github.io/2022/09/28/%E4%B8%9A%E5%8A%A1%E5%AE%89%E5%85%A8%E4%B9%8B%E7%9F%AD%E4%BF%A1%E8%BD%B0%E7%82%B8/","path":"2022/09/28/业务安全之短信轰炸/","title":"业务安全之短信&邮箱轰炸"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://liaorj.github.io/2022/09/28/%E4%B8%9A%E5%8A%A1%E5%AE%89%E5%85%A8%E4%B9%8B%E7%9F%AD%E4%BF%A1%E8%BD%B0%E7%82%B8/","path":"2022/09/28/业务安全之短信轰炸/","title":"业务安全之验证码"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>业务安全之短信&邮箱轰炸 | LiAoRJ的成长记录</title>
+<title>业务安全之验证码 | LiAoRJ的成长记录</title>
   
 
 
@@ -119,7 +130,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%9A%E5%8A%A1%E5%AE%89%E5%85%A8%E4%B9%8B%E7%9F%AD%E4%BF%A1-amp-%E9%82%AE%E7%AE%B1%E8%BD%B0%E7%82%B8"><span class="nav-text">业务安全之短信&amp;邮箱轰炸</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-%E7%89%B9%E6%AE%8A%E7%AC%A6%E5%8F%B7%E7%BB%95%E8%BF%87%E7%9F%AD%E4%BF%A1-amp-%E9%82%AE%E7%AE%B1%E8%BD%B0%E7%82%B8%E9%99%90%E5%88%B6"><span class="nav-text">0x01 特殊符号绕过短信&amp;邮箱轰炸限制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-%E4%BF%AE%E6%94%B9%E8%BF%94%E5%9B%9E%E5%80%BC%E7%BB%95%E8%BF%87%E7%9F%AD%E4%BF%A1-amp-%E9%82%AE%E7%AE%B1%E8%BD%B0%E7%82%B8%E9%99%90%E5%88%B6"><span class="nav-text">0x02 修改返回值绕过短信&amp;邮箱轰炸限制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-%E4%BF%AE%E6%94%B9IP%E7%BB%95%E8%BF%87%E7%9F%AD%E4%BF%A1-amp-%E9%82%AE%E7%AE%B1%E8%BD%B0%E7%82%B8%E9%99%90%E5%88%B6"><span class="nav-text">0x03 修改IP绕过短信&amp;邮箱轰炸限制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x04-%E4%BF%AE%E6%94%B9Cookie%E7%BB%95%E8%BF%87%E7%9F%AD%E4%BF%A1-amp-%E9%82%AE%E7%AE%B1%E8%BD%B0%E7%82%B8%E9%99%90%E5%88%B6"><span class="nav-text">0x04 修改Cookie绕过短信&amp;邮箱轰炸限制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x05-%E5%8F%82%E6%95%B0%E6%B1%A1%E6%9F%93%E7%BB%95%E8%BF%87%E7%9F%AD%E4%BF%A1-amp-%E9%82%AE%E7%AE%B1%E8%BD%B0%E7%82%B8%E9%99%90%E5%88%B6"><span class="nav-text">0x05 参数污染绕过短信&amp;邮箱轰炸限制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x06-%E5%B9%B6%E5%8F%91%E7%BB%95%E8%BF%87%E7%9F%AD%E4%BF%A1-amp-%E9%82%AE%E7%AE%B1%E8%BD%B0%E7%82%B8%E9%99%90%E5%88%B6"><span class="nav-text">0x06 并发绕过短信&amp;邮箱轰炸限制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x07-%E9%80%9A%E8%BF%87%E5%86%99%E8%84%9A%E6%9C%AC%E5%AE%9A%E6%97%B6%E5%8F%91%E5%8C%85%E7%BB%95%E8%BF%87%E7%9F%AD%E4%BF%A1-amp-%E9%82%AE%E7%AE%B1%E8%BD%B0%E7%82%B8%E9%99%90%E5%88%B6"><span class="nav-text">0x07 通过写脚本定时发包绕过短信&amp;邮箱轰炸限制</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%9A%E5%8A%A1%E5%AE%89%E5%85%A8%E4%B9%8B%E9%AA%8C%E8%AF%81%E7%A0%81"><span class="nav-text">业务安全之验证码</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9F%AD%E4%BF%A1-amp-%E9%82%AE%E7%AE%B1%E9%AA%8C%E8%AF%81%E7%A0%81%E8%BD%B0%E7%82%B8"><span class="nav-text">短信&amp;邮箱验证码轰炸</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01-%E7%89%B9%E6%AE%8A%E7%AC%A6%E5%8F%B7%E7%BB%95%E8%BF%87%E7%9F%AD%E4%BF%A1-amp-%E9%82%AE%E7%AE%B1%E8%BD%B0%E7%82%B8%E9%99%90%E5%88%B6"><span class="nav-text">0x01 特殊符号绕过短信&amp;邮箱轰炸限制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x02-%E4%BF%AE%E6%94%B9%E8%BF%94%E5%9B%9E%E5%80%BC%E7%BB%95%E8%BF%87%E7%9F%AD%E4%BF%A1-amp-%E9%82%AE%E7%AE%B1%E8%BD%B0%E7%82%B8%E9%99%90%E5%88%B6"><span class="nav-text">0x02 修改返回值绕过短信&amp;邮箱轰炸限制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x03-%E4%BF%AE%E6%94%B9IP%E7%BB%95%E8%BF%87%E7%9F%AD%E4%BF%A1-amp-%E9%82%AE%E7%AE%B1%E8%BD%B0%E7%82%B8%E9%99%90%E5%88%B6"><span class="nav-text">0x03 修改IP绕过短信&amp;邮箱轰炸限制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x04-%E4%BF%AE%E6%94%B9Cookie%E7%BB%95%E8%BF%87%E7%9F%AD%E4%BF%A1-amp-%E9%82%AE%E7%AE%B1%E8%BD%B0%E7%82%B8%E9%99%90%E5%88%B6"><span class="nav-text">0x04 修改Cookie绕过短信&amp;邮箱轰炸限制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x05-%E5%8F%82%E6%95%B0%E6%B1%A1%E6%9F%93%E7%BB%95%E8%BF%87%E7%9F%AD%E4%BF%A1-amp-%E9%82%AE%E7%AE%B1%E8%BD%B0%E7%82%B8%E9%99%90%E5%88%B6"><span class="nav-text">0x05 参数污染绕过短信&amp;邮箱轰炸限制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x06-%E5%B9%B6%E5%8F%91%E7%BB%95%E8%BF%87%E7%9F%AD%E4%BF%A1-amp-%E9%82%AE%E7%AE%B1%E8%BD%B0%E7%82%B8%E9%99%90%E5%88%B6"><span class="nav-text">0x06 并发绕过短信&amp;邮箱轰炸限制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x07-%E9%80%9A%E8%BF%87%E5%86%99%E8%84%9A%E6%9C%AC%E5%AE%9A%E6%97%B6%E5%8F%91%E5%8C%85%E7%BB%95%E8%BF%87%E7%9F%AD%E4%BF%A1-amp-%E9%82%AE%E7%AE%B1%E8%BD%B0%E7%82%B8%E9%99%90%E5%88%B6"><span class="nav-text">0x07 通过写脚本定时发包绕过短信&amp;邮箱轰炸限制</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9F%AD%E4%BF%A1-amp-%E9%82%AE%E7%AE%B1%E9%AA%8C%E8%AF%81%E7%A0%81%E8%BD%AC%E5%8F%91"><span class="nav-text">短信&amp;邮箱验证码转发</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01-%E4%BF%AE%E6%94%B9%E8%AF%B7%E6%B1%82%E5%8C%85%E5%AE%9E%E7%8E%B0%E7%9F%AD%E4%BF%A1-amp-%E9%82%AE%E7%AE%B1%E9%AA%8C%E8%AF%81%E7%A0%81%E8%BD%AC%E5%8F%91"><span class="nav-text">0x01 修改请求包实现短信&amp;邮箱验证码转发</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B%E4%B8%80"><span class="nav-text">案例一</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x02-%E7%89%B9%E6%AE%8A%E5%AD%97%E7%AC%A6%E5%AE%9E%E7%8E%B0%E7%9F%AD%E4%BF%A1-amp-%E9%82%AE%E7%AE%B1%E9%AA%8C%E8%AF%81%E7%A0%81%E8%BD%AC%E5%8F%91"><span class="nav-text">0x02 特殊字符实现短信&amp;邮箱验证码转发</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B%E4%BA%8C"><span class="nav-text">案例二</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9F%AD%E4%BF%A1-amp-%E9%82%AE%E7%AE%B1%E9%AA%8C%E8%AF%81%E7%A0%81%E5%BC%B1%E8%80%A6%E5%90%88"><span class="nav-text">短信&amp;邮箱验证码弱耦合</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01-%E9%AA%8C%E8%AF%81%E7%A0%81%E6%9C%AA%E4%B8%8E%E8%AF%B7%E6%B1%82%E5%AE%BF%E4%B8%BB%E7%BB%91%E5%AE%9A"><span class="nav-text">0x01 验证码未与请求宿主绑定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x02-%E9%AA%8C%E8%AF%81%E7%A0%81%E6%9C%AA%E4%B8%8E%E7%89%B9%E5%AE%9A%E5%8A%9F%E8%83%BD%E7%82%B9%E7%BB%91%E5%AE%9A"><span class="nav-text">0x02 验证码未与特定功能点绑定</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9F%AD%E4%BF%A1-amp-%E9%82%AE%E7%AE%B1%E9%AA%8C%E8%AF%81%E7%A0%81%E5%9B%9E%E6%98%BE"><span class="nav-text">短信&amp;邮箱验证码回显</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9F%AD%E4%BF%A1-amp-%E9%82%AE%E7%AE%B1%E9%AA%8C%E8%AF%81%E7%A0%81DDOS"><span class="nav-text">短信&amp;邮箱验证码DDOS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9F%AD%E4%BF%A1-amp-%E9%82%AE%E7%AE%B1%E9%AA%8C%E8%AF%81%E7%A0%81%E5%86%85%E5%AE%B9%E5%8F%AF%E6%8E%A7"><span class="nav-text">短信&amp;邮箱验证码内容可控</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -202,12 +213,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="业务安全之短信&邮箱轰炸 | LiAoRJ的成长记录">
+      <meta itemprop="name" content="业务安全之验证码 | LiAoRJ的成长记录">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          业务安全之短信&邮箱轰炸
+          业务安全之验证码
         </h1>
 
         <div class="post-meta-container">
@@ -225,7 +236,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2022-09-29 00:29:36" itemprop="dateModified" datetime="2022-09-29T00:29:36+08:00">2022-09-29</time>
+      <time title="修改时间：2022-09-29 16:16:04" itemprop="dateModified" datetime="2022-09-29T16:16:04+08:00">2022-09-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -247,11 +258,11 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h1 id="业务安全之短信-amp-邮箱轰炸"><a href="#业务安全之短信-amp-邮箱轰炸" class="headerlink" title="业务安全之短信&amp;邮箱轰炸"></a>业务安全之短信&amp;邮箱轰炸</h1><p>本文参考于</p>
+        <h1 id="业务安全之验证码"><a href="#业务安全之验证码" class="headerlink" title="业务安全之验证码"></a>业务安全之验证码</h1><h2 id="短信-amp-邮箱验证码轰炸"><a href="#短信-amp-邮箱验证码轰炸" class="headerlink" title="短信&amp;邮箱验证码轰炸"></a>短信&amp;邮箱验证码轰炸</h2><p>本文参考于</p>
 <p><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/93878">挖洞技巧：绕过短信&amp;邮箱轰炸限制以及后续-安全客 - 安全资讯平台 (anquanke.com)</a></p>
 <p>补充部分自己的思路以及部分作者未写出的利用工具。</p>
 <p>尊重作者权益，故此文不标原创。</p>
-<h2 id="0x01-特殊符号绕过短信-amp-邮箱轰炸限制"><a href="#0x01-特殊符号绕过短信-amp-邮箱轰炸限制" class="headerlink" title="0x01 特殊符号绕过短信&amp;邮箱轰炸限制"></a>0x01 特殊符号绕过短信&amp;邮箱轰炸限制</h2><p>Request</p>
+<h3 id="0x01-特殊符号绕过短信-amp-邮箱轰炸限制"><a href="#0x01-特殊符号绕过短信-amp-邮箱轰炸限制" class="headerlink" title="0x01 特殊符号绕过短信&amp;邮箱轰炸限制"></a>0x01 特殊符号绕过短信&amp;邮箱轰炸限制</h3><p>Request</p>
 <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">phone=<span class="number">111</span>*****<span class="number">123</span> 或 email=test@aa.com</span><br></pre></td></tr></table></figure>
 
 <p>Response</p>
@@ -261,9 +272,9 @@
 <p>Request</p>
 <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">phone=<span class="number">111</span>*****<span class="number">123</span> 或 email=test@aa.com</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">%</span><span class="language-bash">00</span></span><br><span class="line"><span class="meta prompt_">%</span><span class="language-bash">0a</span></span><br><span class="line"><span class="meta prompt_">%</span><span class="language-bash">a0</span></span><br><span class="line">\n</span><br><span class="line">空格</span><br><span class="line">\r</span><br><span class="line">86</span><br><span class="line">+</span><br><span class="line">-</span><br><span class="line">,</span><br><span class="line">.</span><br><span class="line">;</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash"></span></span><br><span class="line"><span class="language-bash">@</span></span><br><span class="line">+86</span><br><span class="line">086</span><br><span class="line">0086</span><br><span class="line">26个英文字符</span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">%</span><span class="language-bash">00</span></span><br><span class="line"><span class="meta prompt_">%</span><span class="language-bash">0a</span></span><br><span class="line"><span class="meta prompt_">%</span><span class="language-bash">a0</span></span><br><span class="line">\n</span><br><span class="line">空格</span><br><span class="line">\r</span><br><span class="line">86</span><br><span class="line">+</span><br><span class="line">-</span><br><span class="line">,</span><br><span class="line">.</span><br><span class="line">;</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash"></span></span><br><span class="line"><span class="language-bash">@</span></span><br><span class="line">0</span><br><span class="line">+86</span><br><span class="line">086</span><br><span class="line">0086</span><br><span class="line">26个英文字符</span><br><span class="line">......</span><br></pre></td></tr></table></figure>
 
-<h2 id="0x02-修改返回值绕过短信-amp-邮箱轰炸限制"><a href="#0x02-修改返回值绕过短信-amp-邮箱轰炸限制" class="headerlink" title="0x02 修改返回值绕过短信&amp;邮箱轰炸限制"></a>0x02 修改返回值绕过短信&amp;邮箱轰炸限制</h2><p>Request</p>
+<h3 id="0x02-修改返回值绕过短信-amp-邮箱轰炸限制"><a href="#0x02-修改返回值绕过短信-amp-邮箱轰炸限制" class="headerlink" title="0x02 修改返回值绕过短信&amp;邮箱轰炸限制"></a>0x02 修改返回值绕过短信&amp;邮箱轰炸限制</h3><p>Request</p>
 <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">phone=<span class="number">111</span>*****<span class="number">123</span> 或 email=test@aa.com</span><br></pre></td></tr></table></figure>
 
 <p>Response</p>
@@ -273,7 +284,7 @@
 <p>拦截返回包，将Response中的status值修改为1</p>
 <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&quot;status&quot;:&quot;<span class="number">1</span>&quot;,&quot;message&quot;:&quot;发送太过频繁&quot;&#125;</span><br></pre></td></tr></table></figure>
 
-<h2 id="0x03-修改IP绕过短信-amp-邮箱轰炸限制"><a href="#0x03-修改IP绕过短信-amp-邮箱轰炸限制" class="headerlink" title="0x03 修改IP绕过短信&amp;邮箱轰炸限制"></a>0x03 修改IP绕过短信&amp;邮箱轰炸限制</h2><p>Request</p>
+<h3 id="0x03-修改IP绕过短信-amp-邮箱轰炸限制"><a href="#0x03-修改IP绕过短信-amp-邮箱轰炸限制" class="headerlink" title="0x03 修改IP绕过短信&amp;邮箱轰炸限制"></a>0x03 修改IP绕过短信&amp;邮箱轰炸限制</h3><p>Request</p>
 <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">phone=<span class="number">111</span>*****<span class="number">123</span> 或 email=test@aa.com</span><br></pre></td></tr></table></figure>
 
 <p>Response</p>
@@ -285,7 +296,7 @@
 
 <p>使用请看以下文章</p>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_43168364/article/details/108604163">(71条消息) 【渗透测试】—如何用burpsuite伪造IP_通地塔的博客-CSDN博客_burpsuite ip伪造</a></p>
-<h2 id="0x04-修改Cookie绕过短信-amp-邮箱轰炸限制"><a href="#0x04-修改Cookie绕过短信-amp-邮箱轰炸限制" class="headerlink" title="0x04 修改Cookie绕过短信&amp;邮箱轰炸限制"></a>0x04 修改Cookie绕过短信&amp;邮箱轰炸限制</h2><p>Request</p>
+<h3 id="0x04-修改Cookie绕过短信-amp-邮箱轰炸限制"><a href="#0x04-修改Cookie绕过短信-amp-邮箱轰炸限制" class="headerlink" title="0x04 修改Cookie绕过短信&amp;邮箱轰炸限制"></a>0x04 修改Cookie绕过短信&amp;邮箱轰炸限制</h3><p>Request</p>
 <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Cookie：JSESSIONID=xxxxxxxxxx</span><br><span class="line">phone=<span class="number">111</span>*****<span class="number">123</span> 或 email=test@aa.com</span><br></pre></td></tr></table></figure>
 
 <p>Response</p>
@@ -301,7 +312,7 @@
 <p>Request</p>
 <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Cookie：JSESSIONID=yyyyyyyyyy</span><br><span class="line">phone=<span class="number">111</span>*****<span class="number">123</span> 或 email=test@aa.com</span><br></pre></td></tr></table></figure>
 
-<h2 id="0x05-参数污染绕过短信-amp-邮箱轰炸限制"><a href="#0x05-参数污染绕过短信-amp-邮箱轰炸限制" class="headerlink" title="0x05 参数污染绕过短信&amp;邮箱轰炸限制"></a>0x05 参数污染绕过短信&amp;邮箱轰炸限制</h2><p>Request</p>
+<h3 id="0x05-参数污染绕过短信-amp-邮箱轰炸限制"><a href="#0x05-参数污染绕过短信-amp-邮箱轰炸限制" class="headerlink" title="0x05 参数污染绕过短信&amp;邮箱轰炸限制"></a>0x05 参数污染绕过短信&amp;邮箱轰炸限制</h3><p>Request</p>
 <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">phone=<span class="number">111</span>*****<span class="number">123</span> 或 email=test@aa.com</span><br></pre></td></tr></table></figure>
 
 <p>Response</p>
@@ -316,7 +327,7 @@
 <p>还可以这样</p>
 <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">phone=<span class="number">111</span>*****<span class="number">123</span>,<span class="number">111</span>*****<span class="number">456</span>,<span class="number">111</span>*****<span class="number">789</span></span><br></pre></td></tr></table></figure>
 
-<h2 id="0x06-并发绕过短信-amp-邮箱轰炸限制"><a href="#0x06-并发绕过短信-amp-邮箱轰炸限制" class="headerlink" title="0x06 并发绕过短信&amp;邮箱轰炸限制"></a>0x06 并发绕过短信&amp;邮箱轰炸限制</h2><p>推一个burp插件</p>
+<h3 id="0x06-并发绕过短信-amp-邮箱轰炸限制"><a href="#0x06-并发绕过短信-amp-邮箱轰炸限制" class="headerlink" title="0x06 并发绕过短信&amp;邮箱轰炸限制"></a>0x06 并发绕过短信&amp;邮箱轰炸限制</h3><p>推一个burp插件</p>
 <p>turbo intruder</p>
 <p>可在 burpsuite 的 BApp Store 直接安装该插件</p>
 <p><strong>团员成员十二</strong>的案例里有</p>
@@ -324,13 +335,46 @@
 
 <p>注意下数据包里要加个 <strong>req:%s</strong></p>
 <p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/Pic@master/image-20220928235849226.png" alt="image-20220928235849226"></p>
-<h2 id="0x07-通过写脚本定时发包绕过短信-amp-邮箱轰炸限制"><a href="#0x07-通过写脚本定时发包绕过短信-amp-邮箱轰炸限制" class="headerlink" title="0x07 通过写脚本定时发包绕过短信&amp;邮箱轰炸限制"></a>0x07 通过写脚本定时发包绕过短信&amp;邮箱轰炸限制</h2><p>Request</p>
+<h3 id="0x07-通过写脚本定时发包绕过短信-amp-邮箱轰炸限制"><a href="#0x07-通过写脚本定时发包绕过短信-amp-邮箱轰炸限制" class="headerlink" title="0x07 通过写脚本定时发包绕过短信&amp;邮箱轰炸限制"></a>0x07 通过写脚本定时发包绕过短信&amp;邮箱轰炸限制</h3><p>Request</p>
 <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">phone=<span class="number">111</span>****<span class="number">1234</span> 或 email=test@aa.com</span><br></pre></td></tr></table></figure>
 
 <p>Response</p>
 <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&quot;status&quot;:&quot;<span class="number">0</span>&quot;,&quot;message&quot;:&quot;请<span class="number">60</span>s后再发送&quot;&#125;</span><br></pre></td></tr></table></figure>
 
-<p>用python写个脚本加个  time.sleep(60) 即可</p>
+<p>用python写个脚本加个  time.sleep(60) 每60s后发包即可</p>
+<h2 id="短信-amp-邮箱验证码转发"><a href="#短信-amp-邮箱验证码转发" class="headerlink" title="短信&amp;邮箱验证码转发"></a>短信&amp;邮箱验证码转发</h2><p>两个案例来自<strong>团队成员十二</strong></p>
+<p><a target="_blank" rel="noopener" href="https://www.yuque.com/shier-mfbht/qh4bgb/zcee3k#BUoUk">关于验证码的那些漏洞 · 语雀 (yuque.com)</a></p>
+<h3 id="0x01-修改请求包实现短信-amp-邮箱验证码转发"><a href="#0x01-修改请求包实现短信-amp-邮箱验证码转发" class="headerlink" title="0x01 修改请求包实现短信&amp;邮箱验证码转发"></a>0x01 修改请求包实现短信&amp;邮箱验证码转发</h3><h4 id="案例一"><a href="#案例一" class="headerlink" title="案例一"></a>案例一</h4><p>用户绑定了手机号，正常来说是获取绑定手机号的短信，通过burp修改成其他手机号</p>
+<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/Pic@master/image20220929111.png" alt="image20220929111.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/Pic@master/image20220929112.png" alt="image20220929112"></p>
+<p>把这个手机号改成其他手机号的</p>
+<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/Pic@master/image20220929113.png" alt="image20220929113"></p>
+<p>点击提交，抓包改成其他刚刚接收短信的手机号</p>
+<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/Pic@master/image20220929114.png" alt="image20220929114"></p>
+<p><img src="C:/Users/13473/AppData/Roaming/Typora/typora-user-images/image20220929115.png" alt="image20220929115"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/Pic@master/image20220929116.png" alt="image20220929116"></p>
+<h3 id="0x02-特殊字符实现短信-amp-邮箱验证码转发"><a href="#0x02-特殊字符实现短信-amp-邮箱验证码转发" class="headerlink" title="0x02 特殊字符实现短信&amp;邮箱验证码转发"></a>0x02 特殊字符实现短信&amp;邮箱验证码转发</h3><h4 id="案例二"><a href="#案例二" class="headerlink" title="案例二"></a>案例二</h4><p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/Pic@master/image20220929117.png" alt="image20220929117"></p>
+<p>加个逗号后面接上需要转发的手机号，因为开发可能使用数组就导致同时把验证码发给两个手机号</p>
+<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/Pic@master/image20220929118.png" alt="image20220929118"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/Pic@master/image20220929119.png" alt="image20220929119"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/Pic@master/image202209291110.png" alt="image202209291110"></p>
+<p>参数污染也可能实现转发</p>
+<p>Request</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">phone=<span class="number">111</span>*****<span class="number">123</span>&amp;phone=<span class="number">111</span>*****<span class="number">456</span>&amp;phone=<span class="number">111</span>*****<span class="number">789</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="短信-amp-邮箱验证码弱耦合"><a href="#短信-amp-邮箱验证码弱耦合" class="headerlink" title="短信&amp;邮箱验证码弱耦合"></a>短信&amp;邮箱验证码弱耦合</h2><h3 id="0x01-验证码未与请求宿主绑定"><a href="#0x01-验证码未与请求宿主绑定" class="headerlink" title="0x01 验证码未与请求宿主绑定"></a>0x01 验证码未与请求宿主绑定</h3><p>手机号1点击获取验证码，得到验证码未ZXCV。</p>
+<p>手机号2输入验证码ZXCV，成功通过验证。</p>
+<h3 id="0x02-验证码未与特定功能点绑定"><a href="#0x02-验证码未与特定功能点绑定" class="headerlink" title="0x02 验证码未与特定功能点绑定"></a>0x02 验证码未与特定功能点绑定</h3><p>找回密码处获取短信验证码</p>
+<p>然后到登陆处使用刚刚获取的短信验证码，成功通过验证。</p>
+<h2 id="短信-amp-邮箱验证码回显"><a href="#短信-amp-邮箱验证码回显" class="headerlink" title="短信&amp;邮箱验证码回显"></a>短信&amp;邮箱验证码回显</h2><p>案例来自十二</p>
+<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/Pic@master/image202209291111.png" alt="image202209291111"></p>
+<h2 id="短信-amp-邮箱验证码DDOS"><a href="#短信-amp-邮箱验证码DDOS" class="headerlink" title="短信&amp;邮箱验证码DDOS"></a>短信&amp;邮箱验证码DDOS</h2><p>这个例子是个特例</p>
+<p>案例如下</p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/bc51fc289183?u_atoken=7337f173-439c-47c2-ae10-b7eceb28aa9d&u_asession=01T1XYawYxKinxgLOgswmN4SxsPeORc9m-OvCb1h8Am_YLeTUZDIjrS7MznqA0tA3pX0KNBwm7Lovlpxjd_P_q4JsKWYrT3W_NKPr8w6oU7K-__37-IxkbiZHOUE679OjcUBcpB774y4TuQmJJbY9S9WBkFo3NEHBv0PZUm6pbxQU&u_asig=05AKYiLESMHAo-kt1XbMg8Mu4d_4Ci01t9Tn3jaR-LS_Jg99UvDhhQPkLHjIquOvbDNNgl6MwQW4N8sVqZ2aN3kFi8B3t56ACBt6dmXHuTeeZwx0-QB0JHCCs4-_GP7mbapok-jCD7EMpAuYbWE_53WnTBwijoncj2ieJldOg2HYn9JS7q8ZD7Xtz2Ly-b0kmuyAKRFSVJkkdwVUnyHAIJzd_RbxytOLLrXsmeDzqBkcLaFtq__lSu47s-yuENVXKy1oWpdObHCERm5o7Dzs12Ce3h9VXwMyh6PgyDIVSG1W8dP12iFCsO6HfEPhTVm656dWNJIO-aMLAZsZClNrtgVKz3tRodObGx604qzX-elZsxsDf-sS5n-6ptyqfFCyeUmWspDxyAEEo4kbsryBKb9Q&u_aref=FiMpBl0WtsYyCGmbWtckinelm1Q=">一张验证码引发对DOS的思考 - 简书 (jianshu.com)</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/Adminxe/article/details/105918280">(71条消息) 渗透测试之验证码参数可控造成的 DDOS 攻击漏洞_Adminxe的博客-CSDN博客</a></p>
+<p>刷新验证码，若发现在请求头中有对验证码参数可控的操作，可以尝试是否能引发DDOS</p>
+<h2 id="短信-amp-邮箱验证码内容可控"><a href="#短信-amp-邮箱验证码内容可控" class="headerlink" title="短信&amp;邮箱验证码内容可控"></a>短信&amp;邮箱验证码内容可控</h2><p>经典TikTok案例</p>
+<p><a target="_blank" rel="noopener" href="https://www.freebuf.com/vuls/224963.html">https://www.freebuf.com/vuls/224963.html</a></p>
 
     </div>
 
