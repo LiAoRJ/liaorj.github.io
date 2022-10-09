@@ -81,7 +81,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">8</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">28</span></a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">8</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">29</span></a></li>
   </ul>
 </nav>
 
@@ -126,7 +126,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-count">29</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -171,6 +171,101 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://liaorj.github.io/2022/08/21/%E6%94%BB%E9%98%B2%E6%BC%94%E7%BB%83%E4%B8%AD%E8%BE%B9%E7%95%8C%E8%AE%BE%E5%A4%87%E7%9A%84%E6%B8%97%E9%80%8F%E6%8E%A2%E7%B4%A2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/touxiang.jpg">
+      <meta itemprop="name" content="LiAoRJ">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LiAoRJ的成长记录">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | LiAoRJ的成长记录">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/08/21/%E6%94%BB%E9%98%B2%E6%BC%94%E7%BB%83%E4%B8%AD%E8%BE%B9%E7%95%8C%E8%AE%BE%E5%A4%87%E7%9A%84%E6%B8%97%E9%80%8F%E6%8E%A2%E7%B4%A2/" class="post-title-link" itemprop="url">攻防演练中边界设备的渗透探索</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-08-21 10:41:22 / 修改时间：15:50:27" itemprop="dateCreated datePublished" datetime="2022-08-21T10:41:22+08:00">2022-08-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%94%BB%E9%98%B2%E6%BC%94%E7%BB%83/" itemprop="url" rel="index"><span itemprop="name">攻防演练</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="攻防演练中边界设备的渗透探索"><a href="#攻防演练中边界设备的渗透探索" class="headerlink" title="攻防演练中边界设备的渗透探索"></a>攻防演练中边界设备的渗透探索</h1><p>在攻防演练中，在互联网上获得一些路由器、防火墙等网络设备的弱口令时没有深入利用下去，此前看到过Tide安全团队的文章，利用边界设备搭建VPN隧道，借此机会，深入研究一下。</p>
+<h2 id="（1）H3C-ER系列路由器"><a href="#（1）H3C-ER系列路由器" class="headerlink" title="（1）H3C ER系列路由器"></a>（1）H3C ER系列路由器</h2><blockquote>
+<p>以H3C ER系列路由器为例子搭建L2TP隧道</p>
+</blockquote>
+<p>（1）配置网络服务器（ER路由器）地址池</p>
+<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202208211051693.png" alt="image-20220821105052422"></p>
+<p>（2）配置拨号认证账户密码</p>
+<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202208211052353.png" alt="image-20220821105213294"></p>
+<p>（3）配置LAC相关信息，VPN登录认证的账号密码可与拨号认证账号密码一致，设置L2TP服务器地址,也就是网络设备出口IP地址。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/LiAoRJ/pic/202208211054820.png" alt="image-20220821105418654"></p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/08/21/%E6%94%BB%E9%98%B2%E6%BC%94%E7%BB%83%E4%B8%AD%E8%BE%B9%E7%95%8C%E8%AE%BE%E5%A4%87%E7%9A%84%E6%B8%97%E9%80%8F%E6%8E%A2%E7%B4%A2/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1022,98 +1117,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2022/04/24/%E9%80%9A%E7%94%A8%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E6%80%9D%E8%B7%AF/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://liaorj.github.io/2022/04/24/SRC%E5%A7%BF%E5%8A%BF(%E4%BA%94)/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/touxiang.jpg">
-      <meta itemprop="name" content="LiAoRJ">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="LiAoRJ的成长记录">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | LiAoRJ的成长记录">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/04/24/SRC%E5%A7%BF%E5%8A%BF(%E4%BA%94)/" class="post-title-link" itemprop="url">SRC姿势(五)</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2022-04-24 23:16:03" itemprop="dateCreated datePublished" datetime="2022-04-24T23:16:03+08:00">2022-04-24</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2022-04-25 00:46:02" itemprop="dateModified" datetime="2022-04-25T00:46:02+08:00">2022-04-25</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/SRC%E5%A7%BF%E5%8A%BF/" itemprop="url" rel="index"><span itemprop="name">SRC姿势</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          内容已加密，请输入密码
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/04/24/SRC%E5%A7%BF%E5%8A%BF(%E4%BA%94)/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
